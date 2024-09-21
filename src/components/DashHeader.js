@@ -30,6 +30,15 @@ const DashHeader = () => {
         error
     }] = useSendLogoutMutation()
 
+    const logoutHandler = async () => {
+        try {
+            await sendLogout().unwrap()
+            navigate('/', {replace: true})
+        } catch(error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         if (isSuccess) navigate('/')
     }, [isSuccess, navigate])
@@ -38,6 +47,7 @@ const DashHeader = () => {
     const onNewUserClicked = () => navigate('/dash/users/new')
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
+    
 
     let dashClass = null
     if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
@@ -102,7 +112,9 @@ const DashHeader = () => {
         <button
             className="icon-button"
             title="Logout"
-            onClick={sendLogout}
+            onClick={logoutHandler}
+            
+            
         >
             <FontAwesomeIcon icon={faRightFromBracket} />
         </button>
