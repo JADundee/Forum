@@ -85,15 +85,6 @@ const Public = () => {
         )
     }
 
-    /* const registerHandler = async () => {
-        try {
-            await newUserButton().unwrap()
-            navigate('/register', {replace: true})
-        } catch(error) {
-            console.log(error)
-        }
-    } */
-
         let buttonContent
         if (isLoading) {
             buttonContent = <p>Logging Out...</p>
@@ -154,13 +145,6 @@ const Public = () => {
                 </label>
                 
             </form>
-            {/* <button
-                className="icon-button"
-                title="Register"
-                onClick={registerHandler}
-            >
-           Register
-           </button> */}
            <div className={`dash-header__container ${dashClass}`}>
                     <Link to="/register">
                         <h1 className="dash-header__title">Register</h1>

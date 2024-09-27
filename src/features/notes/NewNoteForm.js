@@ -30,7 +30,7 @@ const NewNoteForm = ({ users }) => {
 
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
-    const onUserIdChanged = e => setUserId(e.target.value)
+   /*  const onUserIdChanged = e => setUserId(e.target.value) */
 
     const canSave = [title, text, userId].every(Boolean) && !isLoading
 
@@ -41,14 +41,14 @@ const NewNoteForm = ({ users }) => {
         }
     }
 
-    const options = users.map(user => {
+    /* const options = users.map(user => {
         return (
             <option
                 key={user.id}
                 value={user.id}
             > {user.username}</option >
         )
-    })
+    }) */
 
     const errClass = isError ? "errmsg" : "offscreen"
     const validTitleClass = !title ? "form__input--incomplete" : ''
@@ -93,7 +93,7 @@ const NewNoteForm = ({ users }) => {
                     onChange={onTextChanged}
                 />
 
-                <label className="form__label form__checkbox-container" htmlFor="username">
+               {/*  <label className="form__label form__checkbox-container" htmlFor="username">
                     ASSIGNED TO:</label>
                 <select
                     id="username"
@@ -103,7 +103,7 @@ const NewNoteForm = ({ users }) => {
                     onChange={onUserIdChanged}
                 >
                     {options}
-                </select>
+                </select> */}
 
             </form>
         </>

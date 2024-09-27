@@ -4,7 +4,6 @@ import {
     faFileCirclePlus,
     faFilePen,
     faUserGear,
-    faUserPlus,
     faRightFromBracket
 } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate, Link, useLocation } from 'react-router-dom'
@@ -44,7 +43,6 @@ const DashHeader = () => {
     }, [isSuccess, navigate])
 
     const onNewNoteClicked = () => navigate('/dash/notes/new')
-    /* const onNewUserClicked = () => navigate('/dash/users/new') */
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
     
@@ -66,19 +64,6 @@ const DashHeader = () => {
             </button>
         )
     }
-
-    /* let newUserButton = null
-    if (USERS_REGEX.test(pathname)) {
-        newUserButton = (
-            <button
-                className="icon-button"
-                title="New User"
-                onClick={onNewUserClicked}
-            >
-                <FontAwesomeIcon icon={faUserPlus} />
-            </button>
-        )
-    } */
 
     let userButton = null
     if (isManager || isAdmin) {
@@ -129,7 +114,6 @@ const DashHeader = () => {
         buttonContent = (
             <>
                 {newNoteButton}
-                {/* {newUserButton} */}
                 {notesButton}
                 {userButton}
                 {logoutButton}

@@ -199,7 +199,7 @@ tr {
   font-size: 1rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: repeat(5, 1fr);
   color: var(--TABLE-COLOR);
   gap: 0.1em;
 }
@@ -331,7 +331,7 @@ tr {
 
 @media screen and (max-width: 400px) {
   h1 {
-    font-size: 2rem;
+    font-size: 1.25rem;
   }
 
   .dash-header__nav {
@@ -341,8 +341,39 @@ tr {
   .icon-button {
     font-size: 1.5rem;
   }
+
+  .table--notes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  
+  .note__username {
+    display: block
+  }
 }
 
+@media screen and (min-width: 400px) and (max-width: 768px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .dash-header__nav {
+    gap: 0;
+  }
+
+  .icon-button {
+    font-size: 1.5rem;
+  }
+
+  .table--notes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  
+  .note__username {
+    display: block
+  }
+}
 
 @media screen and (min-width: 768px) {
 
@@ -363,7 +394,7 @@ tr {
   }
 
   .table--notes {
-    grid-template-columns: repeat(3, 1fr) 2fr repeat(2, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 
   .note__created,

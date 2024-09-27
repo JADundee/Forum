@@ -26,7 +26,7 @@ const EditNoteForm = ({ note, users }) => {
 
     const [title, setTitle] = useState(note.title)
     const [text, setText] = useState(note.text)
-    const [completed, setCompleted] = useState(note.completed)
+    /* const [completed, setCompleted] = useState(note.completed) */
     const [userId, setUserId] = useState(note.user)
 
     useEffect(() => {
@@ -42,14 +42,14 @@ const EditNoteForm = ({ note, users }) => {
 
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
-    const onCompletedChanged = e => setCompleted(prev => !prev)
-    const onUserIdChanged = e => setUserId(e.target.value)
+    /* const onCompletedChanged = e => setCompleted(prev => !prev) */
+   /*  const onUserIdChanged = e => setUserId(e.target.value) */
 
     const canSave = [title, text, userId].every(Boolean) && !isLoading
 
     const onSaveNoteClicked = async (e) => {
         if (canSave) {
-            await updateNote({ id: note.id, user: userId, title, text, completed })
+            await updateNote({ id: note.id, user: userId, title, text})
         }
     }
 
@@ -60,7 +60,7 @@ const EditNoteForm = ({ note, users }) => {
     const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })
     const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })
 
-    const options = users.map(user => {
+    /* const options = users.map(user => {
         return (
             <option
                 key={user.id}
@@ -68,7 +68,7 @@ const EditNoteForm = ({ note, users }) => {
 
             > {user.username}</option >
         )
-    })
+    }) */
 
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const validTitleClass = !title ? "form__input--incomplete" : ''
@@ -132,7 +132,7 @@ const EditNoteForm = ({ note, users }) => {
                 />
                 <div className="form__row">
                     <div className="form__divider">
-                        <label className="form__label form__checkbox-container" htmlFor="note-completed">
+                        {/* <label className="form__label form__checkbox-container" htmlFor="note-completed">
                             WORK COMPLETE:
                             <input
                                 className="form__checkbox"
@@ -142,9 +142,9 @@ const EditNoteForm = ({ note, users }) => {
                                 checked={completed}
                                 onChange={onCompletedChanged}
                             />
-                        </label>
+                        </label> */}
 
-                        <label className="form__label form__checkbox-container" htmlFor="note-username">
+                        {/* <label className="form__label form__checkbox-container" htmlFor="note-username">
                             ASSIGNED TO:</label>
                         <select
                             id="note-username"
@@ -154,7 +154,7 @@ const EditNoteForm = ({ note, users }) => {
                             onChange={onUserIdChanged}
                         >
                             {options}
-                        </select>
+                        </select> */}
                     </div>
                     <div className="form__divider">
                         <p className="form__created">Created:<br />{created}</p>
