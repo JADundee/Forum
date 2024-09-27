@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-
+import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '../features/auth/authSlice'
 import { useLoginMutation } from '../features/auth/authApiSlice'
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import usePersist from '../hooks/usePersist'
 
 const Public = () => {
@@ -16,6 +16,7 @@ const Public = () => {
     const [persist, setPersist] = usePersist()
 
     const navigate = useNavigate()
+    const { pathname } = useLocation()
     const dispatch = useDispatch()
 
     const [login, { isLoading }] = useLoginMutation()
@@ -51,13 +52,60 @@ const Public = () => {
         }
     }
 
+    const errClass = errMsg ? "errmsg" : "offscreen"
+
     const handleUserInput = (e) => setUsername(e.target.value)
     const handlePwdInput = (e) => setPassword(e.target.value)
     const handleToggle = () => setPersist(prev => !prev)
 
-    const errClass = errMsg ? "errmsg" : "offscreen"
+    const DASH_REGEX = /^\/dash(\/)?$/
+    const NOTES_REGEX = /^\/dash\/notes(\/)?$/
+    const USERS_REGEX = /^\/dash\/users(\/)?$/
+
+    const onNewUserClicked = () => navigate('/dash/users/new')
+
+    let dashClass = null
+    if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
+        dashClass = "dash-header__container--small"
+    }
+
 
     if (isLoading) return <p>Loading...</p>
+
+    let newUserButton = null
+    if (USERS_REGEX.test(pathname)) {
+        newUserButton = (
+            <button
+                className="icon-button"
+                title="New User"
+                onClick={onNewUserClicked}
+            >
+                <FontAwesomeIcon icon={faUserPlus} />
+            </button>
+        )
+    }
+
+    /* const registerHandler = async () => {
+        try {
+            await newUserButton().unwrap()
+            navigate('/register', {replace: true})
+        } catch(error) {
+            console.log(error)
+        }
+    } */
+
+        let buttonContent
+        if (isLoading) {
+            buttonContent = <p>Logging Out...</p>
+        } else {
+            buttonContent = (
+                <>
+                   
+                    {newUserButton}
+                    
+                </>
+            )
+        }
 
 
 
@@ -104,9 +152,23 @@ const Public = () => {
                     />
                     Trust This Device
                 </label>
+                
             </form>
-
-            {/* Register Form */}
+            {/* <button
+                className="icon-button"
+                title="Register"
+                onClick={registerHandler}
+            >
+           Register
+           </button> */}
+           <div className={`dash-header__container ${dashClass}`}>
+                    <Link to="/register">
+                        <h1 className="dash-header__title">Register</h1>
+                    </Link>
+                    <nav className="dash-header__nav">
+                        {buttonContent}
+                    </nav>
+                </div>
         </main>
         <footer>
             

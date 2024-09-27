@@ -44,7 +44,7 @@ const DashHeader = () => {
     }, [isSuccess, navigate])
 
     const onNewNoteClicked = () => navigate('/dash/notes/new')
-    const onNewUserClicked = () => navigate('/dash/users/new')
+    /* const onNewUserClicked = () => navigate('/dash/users/new') */
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
     
@@ -67,7 +67,7 @@ const DashHeader = () => {
         )
     }
 
-    let newUserButton = null
+    /* let newUserButton = null
     if (USERS_REGEX.test(pathname)) {
         newUserButton = (
             <button
@@ -78,7 +78,7 @@ const DashHeader = () => {
                 <FontAwesomeIcon icon={faUserPlus} />
             </button>
         )
-    }
+    } */
 
     let userButton = null
     if (isManager || isAdmin) {
@@ -129,7 +129,7 @@ const DashHeader = () => {
         buttonContent = (
             <>
                 {newNoteButton}
-                {newUserButton}
+                {/* {newUserButton} */}
                 {notesButton}
                 {userButton}
                 {logoutButton}
