@@ -35,7 +35,7 @@ const Register = () => {
             setUsername('')
             setPassword('')
             setRoles([])
-            navigate('/dash/users')
+            navigate('/')
             alert("Registration completed. Please login with your credentials.")
         }
     }, [isSuccess, navigate])

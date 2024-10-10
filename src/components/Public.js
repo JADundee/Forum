@@ -1,13 +1,14 @@
 import { useRef, useState, useEffect } from 'react'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { faUserPlus } from '@fortawesome/free-solid-svg-icons'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { setCredentials } from '../features/auth/authSlice'
 import { useLoginMutation } from '../features/auth/authApiSlice'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import usePersist from '../hooks/usePersist'
+import useTitle from '../hooks/useTitle'
 
 const Public = () => {
+    useTitle('Employee Login')
+    
     const userRef = useRef()
     const errRef = useRef()
     const [username, setUsername] = useState('')
@@ -16,7 +17,6 @@ const Public = () => {
     const [persist, setPersist] = usePersist()
 
     const navigate = useNavigate()
-    const { pathname } = useLocation()
     const dispatch = useDispatch()
 
     const [login, { isLoading }] = useLoginMutation()
@@ -58,52 +58,14 @@ const Public = () => {
     const handlePwdInput = (e) => setPassword(e.target.value)
     const handleToggle = () => setPersist(prev => !prev)
 
-    const DASH_REGEX = /^\/dash(\/)?$/
-    const NOTES_REGEX = /^\/dash\/notes(\/)?$/
-    const USERS_REGEX = /^\/dash\/users(\/)?$/
-
-    const onNewUserClicked = () => navigate('/dash/users/new')
-
-    let dashClass = null
-    if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
-        dashClass = "dash-header__container--small"
-    }
-
+    const onNewUserClicked = () => navigate('/register')
 
     if (isLoading) return <p>Loading...</p>
-
-    let newUserButton = null
-    if (USERS_REGEX.test(pathname)) {
-        newUserButton = (
-            <button
-                className="icon-button"
-                title="New User"
-                onClick={onNewUserClicked}
-            >
-                <FontAwesomeIcon icon={faUserPlus} />
-            </button>
-        )
-    }
-
-        let buttonContent
-        if (isLoading) {
-            buttonContent = <p>Logging Out...</p>
-        } else {
-            buttonContent = (
-                <>
-                   
-                    {newUserButton}
-                    
-                </>
-            )
-        }
-
-
 
     const content = (
         <section className="public">
         <header>
-            <h1>Employee Login</h1>
+            <h1>Login</h1>
         </header>
         <main className="login">
             <p ref={errRef} className={errClass} aria-live="assertive">{errMsg}</p>
@@ -145,14 +107,11 @@ const Public = () => {
                 </label>
                 
             </form>
-           <div className={`dash-header__container ${dashClass}`}>
-                    <Link to="/register">
-                        <h1 className="dash-header__title">Register</h1>
-                    </Link>
-                    <nav className="dash-header__nav">
-                        {buttonContent}
-                    </nav>
-                </div>
+            <div> 
+                    <button className="form__submit-button" onClick={onNewUserClicked}>
+                        Register
+                    </button>
+            </div>
         </main>
         <footer>
             
