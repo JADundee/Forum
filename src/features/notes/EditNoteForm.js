@@ -57,8 +57,8 @@ const EditNoteForm = ({ note, users }) => {
         await deleteNote({ id: note.id })
     }
 
-    const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })
-    const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' })
+    const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
+    const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
 
     /* const options = users.map(user => {
         return (
@@ -96,7 +96,7 @@ const EditNoteForm = ({ note, users }) => {
 
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
-                    <h2>Edit Note #{note.ticket}</h2>
+                    <h2>Edit Thread: {note.title}</h2>
                     <div className="form__action-buttons">
                         <button
                             className="icon-button"

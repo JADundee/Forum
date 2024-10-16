@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useAddNewUserMutation } from "../users/usersApiSlice"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const USER_REGEX = /^[A-z]{3,20}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
@@ -52,6 +52,8 @@ const Register = () => {
         }
     }
 
+    const navigateHome = () => navigate('/')
+
     /* const options = Object.values(ROLES).map(role => {
         return (
             <option
@@ -74,7 +76,7 @@ const Register = () => {
 
             <form className="form" onSubmit={onSaveUserClicked}>
                 <div className="form__title-row">
-                    <h2>New User</h2>
+                    <h2>Create New Account</h2>
                 </div>
                 <label className="form__label" htmlFor="username">
                     Username: <span className="nowrap">[3-20 letters]</span></label>
@@ -89,7 +91,7 @@ const Register = () => {
                 />
 
                 <label className="form__label" htmlFor="password">
-                    Password: <span className="nowrap">[4-12 chars incl. !@#$%]</span></label>
+                    Password: <span className="nowrap">[4-12 characters. Include a symbol]</span></label>
                 <input
                     className={`form__input ${validPwdClass}`}
                     id="password"
@@ -122,9 +124,14 @@ const Register = () => {
                         </button>
                     </div>
             </form>
-            <footer>
-                <Link to="/">Back to Home</Link>
-            </footer>
+            <div>
+                        <button
+                            className="form__submit-button"
+                            onClick={navigateHome}
+                        >
+                                Back to Login
+                        </button>
+                    </div>
         </>
     )
 
