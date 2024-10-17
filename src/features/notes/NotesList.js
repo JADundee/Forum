@@ -4,7 +4,7 @@ import Note from "./Note"
 
 const NotesList = () => {
 
-    /* const { username, isManager, isAdmin } = useAuth() */
+    /* const { username, isAdmin } = useAuth() */
 
     const {
         data: notes,
@@ -31,7 +31,7 @@ const NotesList = () => {
 
         let filteredIds = ids.filter(noteId => entities[noteId].username)
         /*let filteredIds
-         if (isManager || isAdmin) {
+         if ( isAdmin ) {
             filteredIds = [...ids]
         } else {
             filteredIds = ids.filter(noteId => entities[noteId].username === username)

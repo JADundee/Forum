@@ -7,7 +7,7 @@ import useAuth from "../../hooks/useAuth"
 
 const EditNoteForm = ({ note, users }) => {
 
-    const { isManager, isAdmin } = useAuth()
+    const { isAdmin } = useAuth()
 
     const [updateNote, {
         isLoading,
@@ -26,7 +26,7 @@ const EditNoteForm = ({ note, users }) => {
 
     const [title, setTitle] = useState(note.title)
     const [text, setText] = useState(note.text)
-    /* const [completed, setCompleted] = useState(note.completed) */
+    const [completed, setCompleted] = useState(note.completed)
     const [userId, setUserId] = useState(note.user)
 
     useEffect(() => {
@@ -42,8 +42,8 @@ const EditNoteForm = ({ note, users }) => {
 
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
-    /* const onCompletedChanged = e => setCompleted(prev => !prev) */
-   /*  const onUserIdChanged = e => setUserId(e.target.value) */
+    const onCompletedChanged = e => setCompleted(prev => !prev)
+    /* const onUserIdChanged = e => setUserId(e.target.value) */
 
     const canSave = [title, text, userId].every(Boolean) && !isLoading
 
@@ -78,7 +78,7 @@ const EditNoteForm = ({ note, users }) => {
 
 
     let deleteButton = null
-    if (isManager || isAdmin) {
+    if ( isAdmin ) {
         deleteButton = (
             <button
                 className="icon-button"
@@ -132,7 +132,7 @@ const EditNoteForm = ({ note, users }) => {
                 />
                 <div className="form__row">
                     <div className="form__divider">
-                        {/* <label className="form__label form__checkbox-container" htmlFor="note-completed">
+                        <label className="form__label form__checkbox-container" htmlFor="note-completed">
                             WORK COMPLETE:
                             <input
                                 className="form__checkbox"
@@ -142,7 +142,7 @@ const EditNoteForm = ({ note, users }) => {
                                 checked={completed}
                                 onChange={onCompletedChanged}
                             />
-                        </label> */}
+                        </label>
 
                         {/* <label className="form__label form__checkbox-container" htmlFor="note-username">
                             ASSIGNED TO:</label>

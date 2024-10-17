@@ -20,7 +20,7 @@ const Register = () => {
     const [validUsername, setValidUsername] = useState(false)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
-    const [roles, setRoles] = useState(["Employee"])
+    const [roles, setRoles] = useState(["Member"])
 
     useEffect(() => {
         setValidUsername(USER_REGEX.test(username))
@@ -54,20 +54,9 @@ const Register = () => {
 
     const navigateHome = () => navigate('/')
 
-    /* const options = Object.values(ROLES).map(role => {
-        return (
-            <option
-                key={role}
-                value={role}
-
-            > {role}</option >
-        )
-    }) */
-
     const errClass = isError ? "errmsg" : "offscreen"
     const validUserClass = !validUsername ? 'form__input--incomplete' : ''
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
-    /* const validRolesClass = !Boolean(roles.length) ? 'form__input--incomplete' : '' */
 
 
     const content = (
@@ -100,20 +89,6 @@ const Register = () => {
                     value={password}
                     onChange={onPasswordChanged}
                 />
-
-                {/* <label className="form__label" htmlFor="roles">
-                    ASSIGNED ROLES:</label>
-                <select
-                    id="roles"
-                    name="roles"
-                    className={`form__select ${validRolesClass}`}
-                    multiple={true}
-                    size="3"
-                    value={roles}
-                    onChange={onRolesChanged}
-                >
-                    {options}
-                </select> */}
 
             <div className="form__action-buttons">
                         <button

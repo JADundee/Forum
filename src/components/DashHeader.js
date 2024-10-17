@@ -17,7 +17,7 @@ const NOTES_REGEX = /^\/dash\/notes(\/)?$/
 const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 const DashHeader = () => {
-    const { isManager, isAdmin } = useAuth()
+    const { isAdmin } = useAuth()
 
     const navigate = useNavigate()
     const { pathname } = useLocation()
@@ -66,7 +66,7 @@ const DashHeader = () => {
     }
 
     let userButton = null
-    if (isManager || isAdmin) {
+    if ( isAdmin ) {
         if (!USERS_REGEX.test(pathname) && pathname.includes('/dash')) {
             userButton = (
                 <button
