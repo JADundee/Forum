@@ -26,7 +26,7 @@ const EditNoteForm = ({ note, users }) => {
 
     const [title, setTitle] = useState(note.title)
     const [text, setText] = useState(note.text)
-    const [completed, setCompleted] = useState(note.completed)
+    /* const [completed, setCompleted] = useState(note.completed) */
     const [userId, setUserId] = useState(note.user)
 
     useEffect(() => {
@@ -42,7 +42,7 @@ const EditNoteForm = ({ note, users }) => {
 
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
-    const onCompletedChanged = e => setCompleted(prev => !prev)
+    /* const onCompletedChanged = e => setCompleted(prev => !prev) */
     /* const onUserIdChanged = e => setUserId(e.target.value) */
 
     const canSave = [title, text, userId].every(Boolean) && !isLoading
@@ -131,7 +131,7 @@ const EditNoteForm = ({ note, users }) => {
                     onChange={onTextChanged}
                 />
                 <div className="form__row">
-                    <div className="form__divider">
+                    {/* <div className="form__divider">
                         <label className="form__label form__checkbox-container" htmlFor="note-completed">
                             WORK COMPLETE:
                             <input
@@ -144,7 +144,7 @@ const EditNoteForm = ({ note, users }) => {
                             />
                         </label>
 
-                        {/* <label className="form__label form__checkbox-container" htmlFor="note-username">
+                        <label className="form__label form__checkbox-container" htmlFor="note-username">
                             ASSIGNED TO:</label>
                         <select
                             id="note-username"
@@ -154,8 +154,8 @@ const EditNoteForm = ({ note, users }) => {
                             onChange={onUserIdChanged}
                         >
                             {options}
-                        </select> */}
-                    </div>
+                        </select>
+                    </div> */}
                     <div className="form__divider">
                         <p className="form__created">Created:<br />{created}</p>
                         <p className="form__updated">Updated:<br />{updated}</p>
