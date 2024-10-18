@@ -14,6 +14,7 @@ import PersistLogin from './features/auth/PersistLogin';
 import RequireAuth from './features/auth/RequireAuth'
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
+import NoteExpand from './features/notes/NoteExpand'
 
 function App() {
   useTitle('theForum')
@@ -43,7 +44,8 @@ function App() {
 
                 <Route path="notes">
                   <Route index element={<NotesList />} />
-                  <Route path=":id" element={<EditNote />} />
+                  <Route path=":id/edit" element={<EditNote />} />
+                  <Route path=":id/expand" element={<NoteExpand />} />
                   <Route path="new" element={<NewNote />} />
                 </Route>
 
