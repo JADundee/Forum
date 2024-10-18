@@ -8,9 +8,9 @@ import useAuth from "../../hooks/useAuth"  */
 
 const NoteExpand = () => {
 
-content = (
+const content = (
     <div>
-        
+
     </div>
 )
 
