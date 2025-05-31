@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { useAddNewNoteMutation } from "./notesApiSlice"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperPlane, fapaperplane } from "@fortawesome/free-solid-svg-icons"
+import ReactQuill from "react-quill"
 
 const NewNoteForm = ({ users }) => {
 
