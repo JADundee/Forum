@@ -4,23 +4,45 @@ import {
     faFileCirclePlus,
     faFilePen,
     faUserGear,
-    faRightFromBracket
+    faRightFromBracket,
+    faFile
 } from "@fortawesome/free-solid-svg-icons"
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-
+import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
+/* import { useGetNotesQuery } from '../features/notes/notesApiSlice' */
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-
+import { useGetNotesQuery } from '../features/notes/notesApiSlice'
 import useAuth from '../hooks/useAuth'
 
 const DASH_REGEX = /^\/dash(\/)?$/
 const NOTES_REGEX = /^\/dash\/notes(\/)?$/
 const USERS_REGEX = /^\/dash\/users(\/)?$/
 
+
+
 const DashHeader = () => {
     const { isAdmin } = useAuth()
+    const { id } = useParams();
 
+    
+    
     const navigate = useNavigate()
     const { pathname } = useLocation()
+
+   /*  const NoteIdComponent = ({ noteId }) => {
+    const { note } = useGetNotesQuery("notesList", {
+        selectFromResult: ({ data }) => ({
+            note: data?.entities[noteId] ? noteId : null
+        }),
+    });
+
+    return <div>{note}</div>;
+}; */
+
+    const { data: note } = useGetNotesQuery("notesList", {
+        selectFromResult: ({ data }) => ({
+            note: data?.entities[id]
+        }),
+    });
 
     const [sendLogout, {
         isLoading,
@@ -45,8 +67,8 @@ const DashHeader = () => {
     const onNewNoteClicked = () => navigate('/dash/notes/new')
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
+    const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
     
-
     let dashClass = null
     if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
         dashClass = "dash-header__container--small"
@@ -81,17 +103,31 @@ const DashHeader = () => {
     }
 
     let notesButton = null
-    if (!NOTES_REGEX.test(pathname) && pathname.includes('/dash')) {
+    if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {
         notesButton = (
             <button
                 className="icon-button"
                 title="Notes"
                 onClick={onNotesClicked}
             >
+                <FontAwesomeIcon icon={faFile} />
+            </button>
+        )
+    } 
+
+    let editNoteButton = null
+    if (pathname.includes(`/dash/notes/${id}/expand`)) {
+        editNoteButton = (
+            <button
+                className="icon-button"
+                title="Edit Note"
+                onClick={onEditNoteClicked}
+            >
                 <FontAwesomeIcon icon={faFilePen} />
             </button>
         )
     }
+    
 
     const logoutButton = (
         <button
@@ -115,6 +151,7 @@ const DashHeader = () => {
             <>
                 {newNoteButton}
                 {notesButton}
+                {editNoteButton}
                 {userButton}
                 {logoutButton}
             </>
