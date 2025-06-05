@@ -2,9 +2,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAddNewNoteMutation } from "./notesApiSlice"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPaperPlane, fapaperplane } from "@fortawesome/free-solid-svg-icons"
-import ReactQuill from "react-quill"
-
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons"
 const NewNoteForm = ({ users }) => {
 
     const [addNewNote, {
@@ -18,6 +16,7 @@ const NewNoteForm = ({ users }) => {
 
     const [title, setTitle] = useState('')
     const [text, setText] = useState('')
+    
     const [userId, setUserId] = useState(users[0].id)
 
     useEffect(() => {
@@ -95,6 +94,7 @@ const NewNoteForm = ({ users }) => {
                     value={text}
                     onChange={onTextChanged}
                 />
+               
 
                {/*  <label className="form__label form__checkbox-container" htmlFor="username">
                     ASSIGNED TO:</label>

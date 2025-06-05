@@ -8,7 +8,6 @@ import {
     faFile
 } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
-/* import { useGetNotesQuery } from '../features/notes/notesApiSlice' */
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
 import { useGetNotesQuery } from '../features/notes/notesApiSlice'
 import useAuth from '../hooks/useAuth'
@@ -21,22 +20,10 @@ const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 const DashHeader = () => {
     const { isAdmin } = useAuth()
-    const { id } = useParams();
-
-    
+    const { id } = useParams(); 
     
     const navigate = useNavigate()
     const { pathname } = useLocation()
-
-   /*  const NoteIdComponent = ({ noteId }) => {
-    const { note } = useGetNotesQuery("notesList", {
-        selectFromResult: ({ data }) => ({
-            note: data?.entities[noteId] ? noteId : null
-        }),
-    });
-
-    return <div>{note}</div>;
-}; */
 
     const { data: note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
@@ -88,7 +75,7 @@ const DashHeader = () => {
     }
 
     let userButton = null
-    if ( isAdmin ) {
+    /* if ( isAdmin ) { */
         if (!USERS_REGEX.test(pathname) && pathname.includes('/dash')) {
             userButton = (
                 <button
@@ -100,7 +87,7 @@ const DashHeader = () => {
                 </button>
             )
         }
-    }
+    //}
 
     let notesButton = null
     if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {

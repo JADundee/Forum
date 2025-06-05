@@ -18,8 +18,8 @@ const NoteExpand = () => {
       return <p className="errmsg">No access</p>
     }
 
-    if ( !isAdmin ) {
-        if (note.username !== username) {
+    if (!isAdmin && note.username !== username) {
+        if (window.location.pathname.includes('edit')) {
             return <p className="errmsg">No access</p>
         }
     }
