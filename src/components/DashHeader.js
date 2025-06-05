@@ -9,7 +9,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-import { useGetNotesQuery } from '../features/notes/notesApiSlice'
+import {useGetNotesQuery} from '../features/notes/notesApiSlice'
+import {useGetUsersQuery} from '../features/users/usersApiSlice'
 import useAuth from '../hooks/useAuth'
 
 const DASH_REGEX = /^\/dash(\/)?$/
@@ -18,18 +19,26 @@ const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 
 
-const DashHeader = () => {
-    const { isAdmin } = useAuth()
+const DashHeader = ({noteId}) => {
+    const { isAdmin, username } = useAuth()
     const { id } = useParams(); 
     
     const navigate = useNavigate()
     const { pathname } = useLocation()
 
-    const { data: note } = useGetNotesQuery("notesList", {
+    const { note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
             note: data?.entities[id]
         }),
-    });
+    })
+
+    /* const { users } = useGetUsersQuery("usersList", {
+            selectFromResult: ({ data }) => ({
+                users: data?.ids.map(id => data?.entities[id])
+            }),
+        }) */
+   
+        
 
     const [sendLogout, {
         isLoading,
@@ -101,9 +110,9 @@ const DashHeader = () => {
             </button>
         )
     } 
-
+    
     let editNoteButton = null
-    if (pathname.includes(`/dash/notes/${id}/expand`)) {
+    if (pathname.includes(`/dash/notes/${id}/expand`) && note.username === username) {
         editNoteButton = (
             <button
                 className="icon-button"

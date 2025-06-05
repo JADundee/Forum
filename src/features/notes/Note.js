@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPenToSquare, faExpand } from "@fortawesome/free-solid-svg-icons"
+import { faExpand } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
 import { useGetNotesQuery } from './notesApiSlice'
 import { memo } from 'react'
@@ -11,7 +11,6 @@ const Note = ({ noteId }) => {
             note: data?.entities[noteId]
         }),
     })
-
     const navigate = useNavigate()
 
     if (note) {
@@ -19,7 +18,7 @@ const Note = ({ noteId }) => {
 
         const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
 
-        const handleEdit = () => navigate(`/dash/notes/${noteId}/edit`)
+      
 
         const handleView = () => navigate(`/dash/notes/${noteId}/expand`)
 
@@ -41,14 +40,6 @@ const Note = ({ noteId }) => {
                         onClick={handleView}
                     >
                         <FontAwesomeIcon icon={faExpand} />
-                    </button>
-                </td>
-                <td className="table__cell">
-                    <button
-                        className="icon-button table__button"
-                        onClick={handleEdit}
-                    >
-                        <FontAwesomeIcon icon={faPenToSquare} />
                     </button>
                 </td>
             </tr>
