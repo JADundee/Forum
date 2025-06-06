@@ -69,6 +69,16 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 { type: 'Note', id: arg.id }
             ]
         }),
+        addReply: builder.mutation({
+            query: ({ noteId, userId, replyText }) => ({
+            url: `/notes/${noteId}/replies`,
+            method: 'POST',
+            body: { userId, replyText },
+            }),
+        invalidatesTags: (result, error, arg) => [
+        { type: 'Note', id: arg.noteId },
+        ],
+        }),
     }),
 })
 
@@ -77,6 +87,7 @@ export const {
     useAddNewNoteMutation,
     useUpdateNoteMutation,
     useDeleteNoteMutation,
+    useAddReplyMutation,
 } = notesApiSlice
 
 // returns the query result object

@@ -1,4 +1,5 @@
 import { useGetNotesQuery } from "./notesApiSlice"
+import React from "react"
 import Note from "./Note"
 /* import useAuth from "../../hooks/useAuth" */
 
@@ -51,7 +52,6 @@ const NotesList = () => {
                         <th scope="col" className="table__th note__title">Title</th>
                         <th scope="col" className="table__th note__username">Owner</th>
                         <th scope="col" className="table__th note__expand">Expand</th>
-
                     </tr>
                 </thead>
                 <tbody>

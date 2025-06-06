@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { useGetNotesQuery } from './notesApiSlice'
 import useAuth from '../../hooks/useAuth'
+import ReplyForm from './ReplyForm'
 
 
 const NoteExpand = () => {
@@ -35,6 +36,11 @@ const NoteExpand = () => {
 
             <section className="blog-post__content">
                 <p>{note.text}</p>
+            </section>
+            <section className="blog-post__replies"> {/* need to create styles still */}
+                     
+                <ReplyForm noteId={note.id} userId={note.userId} />
+                
             </section>
             <footer>
                <p className="blog-post__meta">
