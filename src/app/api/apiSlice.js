@@ -21,6 +21,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     let result = await baseQuery(args, api, extraOptions)
 
+    /* console.log('Data returned from API:', result.data); */
+
     // If you want, handle other status codes, too
     if (result?.error?.status === 403) {
         console.log('sending refresh token')
@@ -50,5 +52,26 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ['Note', 'User'],
-    endpoints: builder => ({})
+    endpoints: builder => ({
+          addReply: builder.mutation({
+      query: ({ noteId, userId, replyText }) => {
+        return {
+          url: `/notes/${noteId}/replies`,
+          method: 'POST',
+          body: { userId, replyText },
+        };
+        
+      },
+      async queryFn({ noteId, userId, replyText }) {
+    console.log('Add reply query function:', {
+      noteId,
+      userId,
+      replyText,
+    });
+    // ...
+  },
+      // ...
+    }),
+    
+    })
 })

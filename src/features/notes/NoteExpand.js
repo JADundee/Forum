@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom'
-import { useGetNotesQuery } from './notesApiSlice'
+import { useGetNotesQuery, useGetRepliesQuery } from './notesApiSlice'
 import useAuth from '../../hooks/useAuth'
 import ReplyForm from './ReplyForm'
-
+import RepliesList from './RepliesList'
 
 const NoteExpand = () => {
 
@@ -15,7 +15,12 @@ const NoteExpand = () => {
         }),
     })
 
-    if (!note) {
+    const { data: replies, isLoading, isError } = useGetRepliesQuery(note?.id);
+
+   console.log(replies)
+   
+
+    if (!note || !note.id) {
       return <p className="errmsg">No access</p>
     }
 
@@ -24,6 +29,20 @@ const NoteExpand = () => {
             return <p className="errmsg">No access</p>
         }
     }
+
+    if (isLoading) {
+        return <p>Loading replies...</p>;
+    }
+
+    if (isError) {
+        return <p>Error loading replies</p>;
+    }
+
+    if (!replies && !isLoading) {
+        return <p>No replies found</p>;
+    }
+
+    console.log(replies);
 
     const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
     const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
@@ -37,17 +56,24 @@ const NoteExpand = () => {
             <section className="blog-post__content">
                 <p>{note.text}</p>
             </section>
+
+            <p className="blog-post__meta">
+                    <span className="blog-post__created">Published: {created}</span> | 
+                    <span className="blog-post__updated">Updated: {updated}</span>
+                </p>
+
             <section className="blog-post__replies"> {/* need to create styles still */}
                      
                 <ReplyForm noteId={note.id} userId={note.userId} />
                 
             </section>
-            <footer>
-               <p className="blog-post__meta">
-                    <span className="blog-post__created">Published: {created}</span> | 
-                    <span className="blog-post__updated">Updated: {updated}</span>
-                </p>
-            </footer>
+            
+             <section className="blog-post__replies">
+         <div>
+      <h2>Replies</h2>
+      <RepliesList replies={replies} />
+    </div>
+      </section>
         </article>
     );
 

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useAddReplyMutation } from './notesApiSlice';
+import useAuth from '../../hooks/useAuth';
 
-const ReplyForm = ({ noteId, userId }) => {
-  const [replyText, setReplyText] = useState('');
-  const [addReply, { isLoading }] = useAddReplyMutation();
+const ReplyForm = ({ noteId }) => {
+    const { userId } = useAuth();
+    const [replyText, setReplyText] = useState('');
+    const [addReply, { isLoading }] = useAddReplyMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
