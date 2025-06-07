@@ -10,7 +10,6 @@ import {
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
 import {useGetNotesQuery} from '../features/notes/notesApiSlice'
-import {useGetUsersQuery} from '../features/users/usersApiSlice'
 import useAuth from '../hooks/useAuth'
 
 const DASH_REGEX = /^\/dash(\/)?$/
@@ -84,7 +83,7 @@ const DashHeader = ({noteId}) => {
     }
 
     let userButton = null
-    /* if ( isAdmin ) { */
+     if ( isAdmin ) { 
         if (!USERS_REGEX.test(pathname) && pathname.includes('/dash')) {
             userButton = (
                 <button
@@ -96,7 +95,7 @@ const DashHeader = ({noteId}) => {
                 </button>
             )
         }
-    //}
+    }
 
     let notesButton = null
     if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {
@@ -112,7 +111,7 @@ const DashHeader = ({noteId}) => {
     } 
     
     let editNoteButton = null
-    if (pathname.includes(`/dash/notes/${id}/expand`) && note.username === username) {
+    if (pathname.includes(`/dash/notes/${id}/expand`) && note?.username === username) {
         editNoteButton = (
             <button
                 className="icon-button"

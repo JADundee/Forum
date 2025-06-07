@@ -444,9 +444,12 @@ tr {
 
 /* Header Section */
 .blog-post__header {
-    border-bottom: 3px solid #eaeaea;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #444;
 }
 
 .blog-post__header h1 {
@@ -459,11 +462,12 @@ tr {
 
 /* Blog Post Content */
 .blog-post__content {
-    font-size: 1.4rem;
-    line-height: 2;
-    color: #333;
-    text-align: justify;
-    padding-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  color: #555;
 }
 
 /* Paragraph Styling */
@@ -479,6 +483,47 @@ tr {
     padding-left: 15px;
     margin: 20px 0;
     font-size: 1.2rem;
+}
+
+/* Created and Updated Dates */
+.blog-post__created, .blog-post__updated {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.blog-post__form {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.blog-post__replies textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.blog-post__replies button[type="submit"] {
+  background-color: #0073e6;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.blog-post__replies button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 
 /* Images */

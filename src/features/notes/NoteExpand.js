@@ -16,10 +16,7 @@ const NoteExpand = () => {
     })
 
     const { data: replies, isLoading, isError } = useGetRepliesQuery(note?.id);
-
-   console.log(replies)
    
-
     if (!note || !note.id) {
       return <p className="errmsg">No access</p>
     }
@@ -42,8 +39,6 @@ const NoteExpand = () => {
         return <p>No replies found</p>;
     }
 
-    console.log(replies);
-
     const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
     const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
 
@@ -62,7 +57,7 @@ const NoteExpand = () => {
                     <span className="blog-post__updated">Updated: {updated}</span>
                 </p>
 
-            <section className="blog-post__replies"> {/* need to create styles still */}
+            <section className="blog-post__form">
                      
                 <ReplyForm noteId={note.id} userId={note.userId} />
                 

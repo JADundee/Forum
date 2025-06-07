@@ -13,7 +13,7 @@ const ReplyForm = ({ noteId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className='blog-post__replies'>
       <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} />
       <button type="submit" disabled={isLoading}>
         Reply
