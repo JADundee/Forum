@@ -47,6 +47,7 @@ function App() {
                   <Route path=":id/edit" element={<EditNote />} />
                   <Route path=":id/expand" element={<NoteExpand />} />
                   <Route path="new" element={<NewNote />} />
+                
                 </Route>
 
               </Route>{/* End Dash */}

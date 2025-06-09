@@ -69,6 +69,15 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 { type: 'Note', id: arg.id }
             ]
         }),
+        getReplies: builder.query({
+            query: (noteId) => ({
+                url: `/notes/${noteId}/replies`,
+                method: 'GET',
+            }),
+            transformResponse: (responseData) => {
+                return responseData;
+            },
+        }),
         addReply: builder.mutation({
             query: ({ noteId, userId, replyText }) => ({
                 url: `/notes/${noteId}/replies`,
@@ -82,15 +91,15 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         { type: 'Note', id: arg.noteId },
         ],
         }),
-        getReplies: builder.query({
-            query: (noteId) => ({
-                url: `/notes/${noteId}/replies`,
-                method: 'GET',
-            }),
-            transformResponse: (responseData) => {
-                return responseData;
-            },
-        }),
+        deleteReply: builder.mutation({
+      query: ({ replyId }) => ({
+        url: `/notes/replies/${replyId}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Reply', id: arg.replyId },
+      ],
+    }),
     }),
 })
 
@@ -101,6 +110,7 @@ export const {
     useDeleteNoteMutation,
     useAddReplyMutation,
     useGetRepliesQuery,
+    useDeleteReplyMutation,
 } = notesApiSlice
 
 // returns the query result object

@@ -526,6 +526,19 @@ tr {
   background-color: #0056b3;
 }
 
+.delete-button {
+  background-color: #ff0000; /* red background */
+  color: #ffffff; /* white text */
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #cc0000; /* darker red on hover */
+}
+
 /* Images */
 .blog-post__content img {
     width: 100%;
