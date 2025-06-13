@@ -79,27 +79,23 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             },
         }),
         addReply: builder.mutation({
-            query: ({ noteId, userId, replyText }) => ({
-                url: `/notes/${noteId}/replies`,
-                method: 'POST',
-                body: JSON.stringify({ userId: `"${userId}"`, replyText }),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }),
-        invalidatesTags: (result, error, arg) => [
-        { type: 'Note', id: arg.noteId },
-        ],
-        }),
-        deleteReply: builder.mutation({
-      query: ({ replyId }) => ({
-        url: `/notes/replies/${replyId}`,
-        method: 'DELETE',
-      }),
-      invalidatesTags: (result, error, arg) => [
-        { type: 'Reply', id: arg.replyId },
-      ],
-    }),
+  query: ({ noteId, userId, replyText }) => ({
+    url: `/notes/${noteId}/replies`,
+    method: 'POST',
+    body: JSON.stringify({ userId: `"${userId}"`, replyText }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }),
+  refetch: ['getReplies'], // refetch getReplies query after adding a reply
+}),
+deleteReply: builder.mutation({
+  query: ({ replyId }) => ({
+    url: `/notes/replies/${replyId}`,
+    method: 'DELETE',
+  }),
+  refetch: ['getReplies'], // refetch getReplies query after deleting a reply
+}),
     }),
 })
 
@@ -110,7 +106,7 @@ export const {
     useDeleteNoteMutation,
     useAddReplyMutation,
     useGetRepliesQuery,
-    useDeleteReplyMutation,
+    useDeleteReplyMutation
 } = notesApiSlice
 
 // returns the query result object

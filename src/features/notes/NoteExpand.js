@@ -8,6 +8,7 @@ const NoteExpand = () => {
 
     const { id } = useParams()
     const { username, isAdmin } = useAuth()
+    
 
     const { note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
@@ -15,7 +16,9 @@ const NoteExpand = () => {
         }),
     })
 
-    const { data: replies, isLoading, isError } = useGetRepliesQuery(note?.id);
+    const { data: replies, isLoading, isError, refetch } = useGetRepliesQuery(note?.id);
+
+    
    
     if (!note || !note.id) {
       return <p className="errmsg">No access</p>
@@ -59,7 +62,7 @@ const NoteExpand = () => {
 
             <section className="blog-post__form">
                      
-                <ReplyForm noteId={note.id} userId={note.userId} />
+                <ReplyForm noteId={note.id} userId={note.userId} setReplies={replies} refetchReplies={refetch}  />
                 
             </section>
             

@@ -1,11 +1,11 @@
 import React from 'react'
 import { useGetUsersQuery } from '../users/usersApiSlice';
-import { useDeleteReplyMutation, useGetRepliesQuery } from './notesApiSlice';
+import { useDeleteReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 
 const RepliesList = ({ replies }) => {
   const { data: users } = useGetUsersQuery('usersList');
-  const [deleteReply, { isLoading }] = useDeleteReplyMutation()
+  const [deleteReply ] = useDeleteReplyMutation()
   const { userId } = useAuth()
 
   const handleDeleteReply = async (replyId) => {
@@ -35,7 +35,7 @@ const Reply = ({ reply, users, userId, handleDeleteReply }) => {
           <button
             className="delete-button"
             title="Delete Reply"
-            onClick={() => handleDeleteReply(reply.id)}
+            onClick={() => handleDeleteReply(reply._id)}
           >
             Delete
           </button>

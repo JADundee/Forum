@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { useAddReplyMutation } from './notesApiSlice';
-import useAuth from '../../hooks/useAuth';
 
-const ReplyForm = ({ noteId }) => {
-    const { userId } = useAuth();
+
+const ReplyForm = ({ noteId, userId, refetchReplies }) => {
     const [replyText, setReplyText] = useState('');
     const [addReply, { isLoading }] = useAddReplyMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await addReply({ noteId, userId, replyText });
+     refetchReplies();
   };
+
+
+  const canReply = replyText.trim() !== ''
+  
 
   return (
     <form onSubmit={handleSubmit} className='blog-post__replies'>
       <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} />
-      <button type="submit" disabled={isLoading}>
+      <button type="submit" disabled={!canReply} className={`${canReply ? '' : 'disabled-button'}`}>
         Reply
       </button>
     </form>

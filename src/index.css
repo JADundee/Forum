@@ -526,6 +526,15 @@ tr {
   background-color: #0056b3;
 }
 
+.disabled-button {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+  color: #666;
+  border-color: #ccc;
+  pointer-events: none;
+}
+
 .delete-button {
   background-color: #ff0000; /* red background */
   color: #ffffff; /* white text */
