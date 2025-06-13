@@ -5,7 +5,8 @@ import {
     faFilePen,
     faUserGear,
     faRightFromBracket,
-    faFile
+    faFile,
+    faBell
 } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
@@ -122,6 +123,16 @@ const DashHeader = ({noteId}) => {
             </button>
         )
     }
+
+    const notificationButton = (
+        <button
+            className="icon-button notification-button"
+            title="Notifications"
+        >
+            <FontAwesomeIcon icon={faBell} />
+            <span className="notification-count">0</span>
+        </button>
+    )
     
 
     const logoutButton = (
@@ -148,6 +159,7 @@ const DashHeader = ({noteId}) => {
                 {notesButton}
                 {editNoteButton}
                 {userButton}
+                {notificationButton}
                 {logoutButton}
             </>
         )
