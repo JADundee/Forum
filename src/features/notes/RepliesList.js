@@ -3,13 +3,14 @@ import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useDeleteReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 
-const RepliesList = ({ replies }) => {
+const RepliesList = ({ replies, refetchReplies }) => {
   const { data: users } = useGetUsersQuery('usersList');
   const [deleteReply ] = useDeleteReplyMutation()
   const { userId } = useAuth()
 
   const handleDeleteReply = async (replyId) => {
     await deleteReply({ replyId })
+    refetchReplies()
   }
 
     if (!Array.isArray(replies)) {

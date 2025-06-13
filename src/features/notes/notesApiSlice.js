@@ -79,25 +79,28 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             },
         }),
         addReply: builder.mutation({
-  query: ({ noteId, userId, replyText }) => ({
-    url: `/notes/${noteId}/replies`,
-    method: 'POST',
-    body: JSON.stringify({ userId: `"${userId}"`, replyText }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  }),
-  refetch: ['getReplies'], // refetch getReplies query after adding a reply
-}),
-deleteReply: builder.mutation({
-  query: ({ replyId }) => ({
-    url: `/notes/replies/${replyId}`,
-    method: 'DELETE',
-  }),
-  refetch: ['getReplies'], // refetch getReplies query after deleting a reply
-}),
-    }),
-})
+            query: ({ noteId, userId, replyText }) => ({
+                url: `/notes/${noteId}/replies`,
+                method: 'POST',
+                body: JSON.stringify({ 
+                    userId: `"${userId}"`,
+                    replyText,
+                }),
+                headers: {
+                'Content-Type': 'application/json',
+                },
+            }),
+            refetch: ['getReplies'], // refetch getReplies query after adding a reply
+        }),
+        deleteReply: builder.mutation({
+            query: ({ replyId }) => ({
+                url: `/notes/replies/${replyId}`,
+                method: 'DELETE',
+            }),
+            refetch: ['getReplies'], // refetch getReplies query after deleting a reply
+            }),
+        }),
+    })
 
 export const {
     useGetNotesQuery,

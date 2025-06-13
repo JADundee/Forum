@@ -69,7 +69,7 @@ const NoteExpand = () => {
              <section className="blog-post__replies">
          <div>
       <h2>Replies</h2>
-      <RepliesList replies={replies} />
+      <RepliesList replies={replies} refetchReplies={refetch} />
     </div>
       </section>
         </article>
