@@ -8,9 +8,10 @@ import {
     faFile,
     faBell
 } from "@fortawesome/free-solid-svg-icons"
+import moment from 'moment'
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-import {useGetNotesQuery} from '../features/notes/notesApiSlice'
+import {useGetNotesQuery, useGetNotificationsQuery} from '../features/notes/notesApiSlice'
 import useAuth from '../hooks/useAuth'
 
 const DASH_REGEX = /^\/dash(\/)?$/
@@ -26,12 +27,18 @@ const DashHeader = () => {
     const navigate = useNavigate()
     const { pathname } = useLocation()
 
+    const dropdown = document.querySelector('.notification-dropdown')
+
+    const { data: notifications, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
+    
+    const uniqueNotifications = notifications && notifications.filter((notification, index, self) => self.findIndex(n => n.id === notification.id) === index);
+
     const { note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
             note: data?.entities[id]
         }),
     })
-   
+
     const [sendLogout, {
         isLoading,
         isSuccess,
@@ -56,6 +63,7 @@ const DashHeader = () => {
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
     const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
+    const onNotificationClicked = () => dropdown.classList.toggle('show')
     
     let dashClass = null
     if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
@@ -115,14 +123,31 @@ const DashHeader = () => {
             </button>
         )
     }
-
+    console.log(notifications);
+    console.log(note);
     const notificationButton = (
         <button
             className="icon-button notification-button"
             title="Notifications"
+            onClick={onNotificationClicked}
         >
             <FontAwesomeIcon icon={faBell} />
-            <span className="notification-count">0</span>
+            <div className="notification-dropdown">
+                {notificationsLoading ? 
+                    (<p className="notification-item">Loading...</p>) 
+                : notificationsError ? 
+                    ( <p className="notification-item">Error fetching notifications</p> ) 
+                : (
+                    uniqueNotifications.map((notification) => (
+                        <div key={notification.id} className="notification-item">
+                            <p className='notification-title'>New Notification on: </p>
+                            <p>From: {notification.username}</p>
+                            <p>"{notification.replyText}"</p>
+                            <p>{moment(notification.createdAt).fromNow()}</p>
+                        </div>
+                    ))
+                )}
+    </div>
         </button>
     )
     

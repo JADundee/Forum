@@ -83,13 +83,14 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 body: { userId, replyText, username },
                 };
             },
-            async queryFn({ noteId, userId, replyText, username }) {
+            async queryFn({ noteId, userId, replyText, username, noteTitle }) {
                 // Create a new notification object
                 const notification = {
                 userId,
                 noteId,
                 replyText,
                 username,
+                noteTitle,
                 createdAt: new Date().toISOString(),
                 };
 
@@ -114,6 +115,12 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+         getNotifications: builder.query({
+            query: () => ({
+                url: '/notifications',
+                method: 'GET',
+            }),
+        }),
     }),
 })
 
@@ -124,7 +131,8 @@ export const {
     useDeleteNoteMutation,
     useAddReplyMutation,
     useGetRepliesQuery,
-    useDeleteReplyMutation
+    useDeleteReplyMutation,
+    useGetNotificationsQuery
 } = notesApiSlice
 
 // returns the query result object
