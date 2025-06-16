@@ -19,7 +19,7 @@ const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 
 
-const DashHeader = ({noteId}) => {
+const DashHeader = () => {
     const { isAdmin, username } = useAuth()
     const { id } = useParams(); 
     
@@ -31,15 +31,7 @@ const DashHeader = ({noteId}) => {
             note: data?.entities[id]
         }),
     })
-
-    /* const { users } = useGetUsersQuery("usersList", {
-            selectFromResult: ({ data }) => ({
-                users: data?.ids.map(id => data?.entities[id])
-            }),
-        }) */
    
-        
-
     const [sendLogout, {
         isLoading,
         isSuccess,
@@ -184,4 +176,5 @@ const DashHeader = ({noteId}) => {
 
     return content
 }
+
 export default DashHeader

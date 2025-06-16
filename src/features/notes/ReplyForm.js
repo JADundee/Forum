@@ -1,11 +1,11 @@
-import React, { useState} from 'react';
+import { useState } from 'react';
 import { useAddReplyMutation } from './notesApiSlice';
 
 
 const ReplyForm = ({ noteId, userId, username, refetchReplies }) => {
 
     const [replyText, setReplyText] = useState('');
-    const [addReply, { isLoading }] = useAddReplyMutation();
+    const [addReply] = useAddReplyMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,10 +13,8 @@ const ReplyForm = ({ noteId, userId, username, refetchReplies }) => {
      refetchReplies();
   };
 
-
   const canReply = replyText.trim() !== ''
   
-
   return (
     <form onSubmit={handleSubmit} className='blog-post__replies'>
       <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} />

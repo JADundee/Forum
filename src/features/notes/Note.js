@@ -7,12 +7,13 @@ import { memo } from 'react'
 
 const Note = ({ noteId }) => {
 
+    const navigate = useNavigate()
+
     const { note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
             note: data?.entities[noteId]
         }),
     })
-    const navigate = useNavigate()
 
     if (note) {
         const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
@@ -25,23 +26,17 @@ const Note = ({ noteId }) => {
 
         return (
             <tr className="table__row">
-                {/* <td className="table__cell note__status">
-                    {note.completed
-                        ? <span className="note__status--completed">Completed</span>
-                        : <span className="note__status--open">Open</span>
-                    }
-                </td> */}
                 <td className="table__cell note__created">{created}</td>
                 <td className="table__cell note__updated">{updated}</td>
                 <td className="table__cell note__title">{note.title}</td>
                 <td className="table__cell note__username">{note.username}</td>
                 <td className="table__cell">
                 <button
-                        className="icon-button table__button"
-                        onClick={handleView}
-                    >
-                        <FontAwesomeIcon icon={faExpand} />
-                    </button>
+                    className="icon-button table__button"
+                    onClick={handleView}
+                >
+                    <FontAwesomeIcon icon={faExpand} />
+                </button>
                 </td>
             </tr>
         )

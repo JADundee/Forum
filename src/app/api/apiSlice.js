@@ -21,8 +21,6 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
     let result = await baseQuery(args, api, extraOptions)
 
-    /* console.log('Data returned from API:', result.data); */
-
     // If you want, handle other status codes, too
     if (result?.error?.status === 403) {
         console.log('sending refresh token')
@@ -62,15 +60,13 @@ export const apiSlice = createApi({
         };
         
       },
-      async queryFn({ noteId, userId, replyText }) {
-    console.log('Add reply query function:', {
-      noteId,
-      userId,
-      replyText,
-    });
-    // ...
-  },
-      // ...
+        async queryFn({ noteId, userId, replyText }) {
+            console.log('Add reply query function:', {
+            noteId,
+            userId,
+            replyText,
+            });
+        },
     }),
     
     })

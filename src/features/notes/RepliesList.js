@@ -1,4 +1,3 @@
-import React from 'react'
 import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useDeleteReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';

@@ -58,7 +58,7 @@ const NoteExpand = () => {
             <p className="blog-post__meta">
                     <span className="blog-post__created">Published: {created}</span> | 
                     <span className="blog-post__updated">Updated: {updated}</span>
-                </p>
+            </p>
 
             <section className="blog-post__form">
                      
@@ -66,12 +66,12 @@ const NoteExpand = () => {
                 
             </section>
             
-             <section className="blog-post__replies">
-         <div>
-      <h2>Replies</h2>
-      <RepliesList replies={replies} refetchReplies={refetch} />
-    </div>
-      </section>
+            <section className="blog-post__replies">
+                <div>
+                    <h2>Replies</h2>
+                    <RepliesList replies={replies} refetchReplies={refetch} />
+                </div>
+            </section>
         </article>
     );
 
