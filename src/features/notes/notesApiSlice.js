@@ -79,18 +79,37 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             },
         }),
         addReply: builder.mutation({
-            query: ({ noteId, userId, replyText }) => ({
+            query: ({ noteId, userId, replyText, username }) => {
+                return {
                 url: `/notes/${noteId}/replies`,
                 method: 'POST',
-                body: JSON.stringify({ 
-                    userId: `"${userId}"`,
-                    replyText,
-                }),
-                headers: {
-                'Content-Type': 'application/json',
-                },
-            }),
-            refetch: ['getReplies'], // refetch getReplies query after adding a reply
+                body: { userId, replyText, username },
+                };
+            },
+            async queryFn({ noteId, userId, replyText, username }) {
+                // Create a new notification object
+                const notification = {
+                userId,
+                noteId,
+                replyText,
+                username,
+                createdAt: new Date().toISOString(),
+                };
+
+                // Add the notification to the database
+                await fetch('/notifications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(notification),
+                });
+
+                // Return the result of the original query
+                return await fetch(`/notes/${noteId}/replies`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, replyText }),
+                });
+            },
         }),
         deleteReply: builder.mutation({
             query: ({ replyId }) => ({

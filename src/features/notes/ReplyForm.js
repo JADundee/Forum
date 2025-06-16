@@ -2,14 +2,14 @@ import React, { useState} from 'react';
 import { useAddReplyMutation } from './notesApiSlice';
 
 
-const ReplyForm = ({ noteId, userId, refetchReplies }) => {
+const ReplyForm = ({ noteId, userId, username, refetchReplies }) => {
 
     const [replyText, setReplyText] = useState('');
     const [addReply, { isLoading }] = useAddReplyMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addReply({ noteId, userId, replyText });
+    await addReply({ noteId, userId, replyText, username });
      refetchReplies();
   };
 
