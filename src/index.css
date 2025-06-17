@@ -217,6 +217,11 @@ a:focus-visible {
   display: block;
 }
 
+.old-notification {
+  background-color: #ccc; /* or any other color you prefer */
+  color: #666; /* or any other color you prefer */
+}
+
 .dash-container {
   padding: 0.75em 0.5em 0.5em;
   flex-grow: 1;

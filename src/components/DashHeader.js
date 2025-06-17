@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
     faFileCirclePlus,
@@ -21,7 +21,7 @@ const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 
 const DashHeader = () => {
-    const { isAdmin, username } = useAuth()
+    const { isAdmin, username, userId } = useAuth()
     const { id } = useParams(); 
     
     const navigate = useNavigate()
@@ -29,15 +29,41 @@ const DashHeader = () => {
 
     const dropdown = document.querySelector('.notification-dropdown')
 
-    const { data: notifications, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
+    const { data: notificationsData, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
     
+    const [notifications, setNotifications] = useState([]);
+
+    useEffect(() => {
+    if (!notificationsLoading && notificationsData) {
+        setNotifications(notificationsData);
+    }
+    }, [notificationsData, notificationsLoading]);
+
     const uniqueNotifications = notifications && notifications.filter((notification, index, self) => self.findIndex(n => n.id === notification.id) === index);
 
-    const { note } = useGetNotesQuery("notesList", {
-        selectFromResult: ({ data }) => ({
-            note: data?.entities[id]
-        }),
-    })
+    const noteId = uniqueNotifications && uniqueNotifications.length > 0 ? uniqueNotifications[0].noteId : null;
+
+    
+    const { data, isLoading: notesLoading } = useGetNotesQuery("notesList");
+
+    const [notes, setNotes] = useState([]);
+
+    useEffect(() => {
+    if (!notesLoading && data && data.entities) {
+        setNotes(Object.values(data.entities).filter(note => note.user === userId));
+    }
+    }, [data, notesLoading, userId]);
+
+
+    const notesUserId = notes.map(note => note.user);
+    const notesTitle = notes.map(note => note.title);
+
+    console.log(notes)
+    console.log(typeof notes)
+    console.log(notesUserId)
+    console.log(userId)
+    console.log(notesTitle)
+    
 
     const [sendLogout, {
         isLoading,
@@ -63,7 +89,12 @@ const DashHeader = () => {
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
     const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
-    const onNotificationClicked = () => dropdown.classList.toggle('show')
+    const onNotificationButtonClicked = () => dropdown.classList.toggle('show')
+    const onNotificationClicked = () => {
+        const notificationElement = document.querySelector('.notification-dropdown .notification-item')
+        notificationElement.classList.add('old-notification')
+        navigate(`/dash/notes/${noteId}/expand`)
+    }
     
     let dashClass = null
     if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
@@ -112,7 +143,7 @@ const DashHeader = () => {
     } 
     
     let editNoteButton = null
-    if (pathname.includes(`/dash/notes/${id}/expand`) && note?.username === username) {
+    if (pathname.includes(`/dash/notes/${id}/expand`) && notes?.username === username) {
         editNoteButton = (
             <button
                 className="icon-button"
@@ -123,33 +154,46 @@ const DashHeader = () => {
             </button>
         )
     }
-    console.log(notifications);
-    console.log(note);
+
     const notificationButton = (
-        <button
-            className="icon-button notification-button"
-            title="Notifications"
-            onClick={onNotificationClicked}
-        >
-            <FontAwesomeIcon icon={faBell} />
-            <div className="notification-dropdown">
-                {notificationsLoading ? 
-                    (<p className="notification-item">Loading...</p>) 
-                : notificationsError ? 
-                    ( <p className="notification-item">Error fetching notifications</p> ) 
-                : (
-                    uniqueNotifications.map((notification) => (
-                        <div key={notification.id} className="notification-item">
-                            <p className='notification-title'>New Notification on: </p>
-                            <p>From: {notification.username}</p>
-                            <p>"{notification.replyText}"</p>
-                            <p>{moment(notification.createdAt).fromNow()}</p>
-                        </div>
-                    ))
-                )}
+    <button
+        className="icon-button notification-button"
+        title="Notifications"
+        onClick={onNotificationButtonClicked}
+    >
+    <FontAwesomeIcon icon={faBell} />
+    <div className="notification-dropdown">
+      {notificationsLoading ? (
+        <p className="notification-item">Loading...</p>
+      ) : notificationsError ? (
+        <p className="notification-item">Error fetching notifications</p>
+      ) : (
+            notifications &&
+            notifications
+            .filter((notification) => {
+            return notification.username !== username;
+            })
+            .map((notification) => {
+                const note = notes.find((note) => note.id === notification.noteId);
+                return (
+                    <div
+                        key={notification.id}
+                        className="notification-item"
+                        onClick={onNotificationClicked}
+                    >
+                    {note && (
+                        <p className="notification-title">New Reply on: {note.title}</p>
+                    )}
+                        <p>From: {notification.username}</p>
+                        <p>"{notification.replyText}"</p>
+                        <p>{moment(notification.createdAt).fromNow()}</p>
+                    </div>
+                );
+            })
+        )}
     </div>
-        </button>
-    )
+    </button>
+    );
     
 
     const logoutButton = (
