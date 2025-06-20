@@ -47,13 +47,15 @@ const NoteExpand = () => {
 
     const content = (
         <article className="blog-post">
-            <header className="blog-post__header">
-                <h1>{note.title}</h1>
-            </header>
+            <div className="Blog-post-Op">
+                <header className="blog-post__header">
+                    <h1>{note.title}</h1>
+                </header>
 
-            <section className="blog-post__content">
-                <p>{note.text}</p>
-            </section>
+                <section className="blog-post__content">
+                    <p>{note.text}</p>
+                </section>
+            </div>
 
             <p className="blog-post__meta">
                     <span className="blog-post__created">Published: {created}</span> | 

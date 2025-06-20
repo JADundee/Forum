@@ -181,7 +181,7 @@ a:focus-visible {
 
 .notification-dropdown {
   display: none;
-  background-color: #ffffff;
+  background-color: var(--BGCOLOR);
   border: 1px solid #ddd;
   margin-top: 55px;
   margin-bottom: 40px;
@@ -209,19 +209,18 @@ a:focus-visible {
   /* Style each notification item */
   padding: 10px;
   border-bottom: 1px solid #ddd;
-  color: black;
+  color: var(--COLOR);
   width: 100%;
   box-sizing: border-box;
 }
 
 .notification-dropdown .notification-item p {
-  margin: 0; /* Remove default margin from p elements */
   font-size: 14px; /* Set a smaller font size for the notification text */
 }
 
 .notification-item:hover {
   /* Add hover effect to each notification item */
-  background-color: #f0f0f0;
+  background-color: var(--LINK-HOVER);
   width: 100%;
   
 }
@@ -238,10 +237,10 @@ a:focus-visible {
   background-color: var(--LINK-HOVER);
 }
 
-.old-notification {
+/* .old-notification {
   text-decoration: line-through;
-  color: #aaa; /* or any other color you prefer */
-}
+  color: #aaa; 
+} */
 
 .dash-container {
   padding: 0.75em 0.5em 0.5em;
@@ -415,13 +414,133 @@ tr {
   gap: 0.5em;
 }
 
+.blog-post {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 20px;
+    background: var(--BGCOLOR);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Header Section */
+  .blog-post__header {
+    background-color: var(--TABLE-BGCOLOR);
+    padding: 15px;
+    border-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+
+  .blog-post__header h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--LINK-HOVER);
+      text-align: center;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+  }
+
+  /* Blog Post Content */
+  .blog-post__content {
+    padding: 20px;
+    background-color: var(--TABLE-BGCOLOR);
+    border-radius: 8px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    color: var(--TABLE-COLOR);
+    margin-bottom: 40px;
+  }
+
+  /* Paragraph Styling */
+  .blog-post__content p {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--TABLE-BGCOLOR);
+    color: var(--TABLE-COLOR);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Created and Updated Dates */
+  .blog-post__created, .blog-post__updated {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--TABLE-COLOR);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .blog-post__form {
+    padding: 20px;
+    background-color: var(--TABLE-BGCOLOR);
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .blog-post__replies textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--BORDER-COLOR);
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .blog-post__replies button[type="submit"] {
+    background-color: #0073e6;
+    color: var(--COLOR);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .blog-post__replies button[type="submit"]:hover {
+    background-color: var(--LINK-HOVER);
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    background-color: #ccc;
+    color: #666;
+    pointer-events: none;
+  }
+
+  .delete-button {
+    background-color: #ff0000; 
+    color: #ffffff; 
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .delete-button:hover {
+    background-color: #cc0000; 
+  }
+
+  .blog-post__content a:hover {
+      text-decoration: underline;
+  }
+
 .replies-list {
   margin-top: 20px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: var(--TABLE-BGCOLOR);
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-top: 40px;
 }
 
 .reply {
@@ -437,11 +556,6 @@ tr {
   margin-bottom: 10px;
 }
 
-.username {
-  font-weight: bold;
-  color: #00698f;
-}
-
 .timestamp {
   color: #666;
   font-size: 14px;
@@ -449,8 +563,8 @@ tr {
 
 .reply-content {
   padding: 10px;
-  color: #000;
-  background-color: #fff;
+  color: var(--TABLE-COLOR);
+  background-color: var(--TABLE-BGCOLOR);
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -458,42 +572,35 @@ tr {
 
 .all-notifications {
   padding: 20px;
-  background-color: #fff;
+  background-color: var(--BGCOLOR);
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   font-family: 'Nunito', sans-serif;
 }
 
 .all-notifications__header {
-  background-color: #f8f8f8;
+  background-color: var(--BGCOLOR);
   padding: 15px;
   border-radius: 8px;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #444;
+  color: var(--COLOR);
 }
 
 .all-notifications__header h1 {
   font-size: 2.8rem;
   font-weight: 700;
-  color: #222;
   text-align: center;
   letter-spacing: -0.5px;
 }
 
 .all-notifications__content {
   padding: 20px;
-  background-color: #fff;
+  background-color: var(--TABLE-BGCOLOR);
   border-radius: 8px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   font-size: 1.2rem;
-  color: #555;
-}
-
-.all-notifications__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  color: var(--COLOR);
 }
 
 .all-notifications__item {
@@ -507,14 +614,16 @@ tr {
 
 .all-notifications__text {
   font-size: 1.2rem;
-  color: #555;
 }
 
 .all-notifications__timestamp {
   font-size: 1rem;
   font-weight: 500;
-  color: #555;
   text-align: right;
+}
+
+.timestamp {
+  color: var(--COLOR);
 }
 
 .username, .note-title {
@@ -575,7 +684,6 @@ tr {
   }
 
   .dash-container {
-    
     padding: 1em;
     width: 100%;
   }
@@ -596,163 +704,5 @@ tr {
 
   .form__action-buttons {
     position: static;
-  }
-
-  .blog-post {
-    max-width: 850px;
-    margin: 50px auto;
-    padding: 30px;
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-family: 'Inter', sans-serif;
-  }
-
-  /* Header Section */
-  .blog-post__header {
-    background-color: #f8f8f8;
-    padding: 15px;
-    border-radius: 8px;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #444;
-  }
-
-  .blog-post__header h1 {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: #222;
-      text-align: center;
-      letter-spacing: -0.5px;
-  }
-
-  /* Blog Post Content */
-  .blog-post__content {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
-    color: #555;
-  }
-
-  /* Paragraph Styling */
-  .blog-post__content p {
-      margin-bottom: 20px;
-  }
-
-  /* Blockquotes */
-  .blog-post__content blockquote {
-      font-style: italic;
-      color: #555;
-      border-left: 4px solid #0073e6;
-      padding-left: 15px;
-      margin: 20px 0;
-      font-size: 1.2rem;
-  }
-
-  /* Created and Updated Dates */
-  .blog-post__created, .blog-post__updated {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #555;
-    text-align: center;
-    margin-bottom: 10px;
-  }
-
-  .blog-post__form {
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
-    color: #555;
-  }
-
-  .blog-post__replies textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    color: #555;
-  }
-
-  .blog-post__replies button[type="submit"] {
-    background-color: #0073e6;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
-
-  .blog-post__replies button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-
-  .disabled-button {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: #ccc;
-    color: #666;
-    border-color: #ccc;
-    pointer-events: none;
-  }
-
-  .delete-button {
-    background-color: #ff0000; /* red background */
-    color: #ffffff; /* white text */
-    border: none;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .delete-button:hover {
-    background-color: #cc0000; /* darker red on hover */
-  }
-
-  /* Images */
-  .blog-post__content img {
-      width: 100%;
-      border-radius: 8px;
-      margin: 20px 0;
-  }
-
-  /* Links */
-  .blog-post__content a {
-      color: #0073e6;
-      text-decoration: none;
-      font-weight: 600;
-  }
-
-  .blog-post__content a:hover {
-      text-decoration: underline;
-  }
-
-  /* Footer as Meta Information */
-  .blog-post__footer {
-      margin-top: 30px;
-      padding: 15px;
-      background: #f8f8f8;
-      text-align: center;
-      font-size: 1rem;
-      color: #444;
-      border-radius: 8px;
-  }
-
-  /* Meta Details in Footer */
-  .blog-post__meta {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #555;
-      text-align: center;
-  }
-
-  .blog-post__meta span {
-      display: inline-block;
-      margin-right: 10px;
   }
 } 
