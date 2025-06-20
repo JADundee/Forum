@@ -5,15 +5,10 @@ const Welcome = () => {
 
     const {username, isAdmin} = useAuth()
 
-    const date = new Date()
-    const today = new Intl.DateTimeFormat('en-US', { dateStyle: 'full', timeStyle: 'short' }).format(date)
-
     const content = (
         <section className="welcome">
 
-            <p>{today}</p>
-
-            <h1>Welcome! {username}</h1>
+            <h1>Welcome, {username}!</h1>
 
             <p><Link to="/dash/notes">View Threads</Link></p>
 

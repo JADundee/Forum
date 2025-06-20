@@ -256,6 +256,11 @@ a:focus-visible {
   height: auto;
 }
 
+.dash-footer-date {
+  margin-left: auto;
+  text-align: right;
+}
+
 /* || TABLES - GENERAL */
 
 thead,
