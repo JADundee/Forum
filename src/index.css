@@ -219,7 +219,11 @@ a:focus-visible {
 }
 
 .see-all-button {
-  
+  margin-top: 5px;
+}
+
+.see-all-button:hover {
+  background-color: var(--LINK-HOVER);
 }
 
 .old-notification {
