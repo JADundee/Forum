@@ -16,7 +16,7 @@
   --ERROR: firebrick;
   --INACTIVE: lightgray;
   --LINK-COLOR: whitesmoke;
-  --LINK-HOVER: rgba(245, 245, 245, 0.9);
+  --LINK-HOVER: limegreen;
   --NOTE-BGCOLOR: hsla(240, 64%, 27%, 0.65);
   --STATUS-COMPLETE: limegreen;
   --STATUS-OPEN: firebrick;
@@ -56,7 +56,7 @@
 
 .icon-button:hover,
 .icon-button:focus-visible {
-  transform: scale(1.2);
+  color: var(--LINK-HOVER);
 }
 
 .icon-button[disabled] {
@@ -169,18 +169,21 @@ a:focus-visible {
 
 .notification-dropdown {
   display: none;
-  position: absolute;
   background-color: #ffffff;
   border: 1px solid #ddd;
-  right: -50px;
-  top: 100%;
-  margin-top: 10px;
+  margin-top: 55px;
+  margin-bottom: 40px;
   padding: 10px;
+  top: 0;
+  right: 0;
+  bottom: 0;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
   width: 250px;
+  overflow-y: auto;
+  max-height: 100vh;
+  position: fixed
 }
 
 .notification-title {
@@ -197,8 +200,6 @@ a:focus-visible {
   color: black;
   width: 100%;
   box-sizing: border-box;
-  display: block; /* Use flexbox to align the notification content */
-  align-items: center;
 }
 
 .notification-dropdown .notification-item p {
@@ -206,20 +207,24 @@ a:focus-visible {
   font-size: 14px; /* Set a smaller font size for the notification text */
 }
 
-.notification-dropdown .notification-item:hover {
+.notification-item:hover {
   /* Add hover effect to each notification item */
   background-color: #f0f0f0;
   width: 100%;
-  box-sizing: border-box;
+  
 }
 
 .notification-dropdown.show {
   display: block;
 }
 
+.see-all-button {
+  
+}
+
 .old-notification {
-  background-color: #ccc; /* or any other color you prefer */
-  color: #666; /* or any other color you prefer */
+  text-decoration: line-through;
+  color: #aaa; /* or any other color you prefer */
 }
 
 .dash-container {
@@ -448,6 +453,23 @@ tr {
   .icon-button {
     font-size: 1.5rem;
   }
+
+  .notification-dropdown {
+    max-height: 100vh;
+    font-size: 14px;
+  }
+
+  .blog-post {
+    padding: 20px;
+  }
+    
+  .blog-post__header h1 {
+    font-size: 2.2rem;
+  }
+    
+  .blog-post__content {
+    font-size: 1.3rem;
+  }
   
 }
 
@@ -461,6 +483,11 @@ tr {
   .dash-header {
     padding: 0 1em;
    
+  }
+
+  .notification-dropdown {
+    max-height: 100vh;
+    font-size: 16px;
   }
 
   .dash-container {
@@ -495,168 +522,153 @@ tr {
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
     font-family: 'Inter', sans-serif;
-}
+  }
 
-/* Header Section */
-.blog-post__header {
-  background-color: #f8f8f8;
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #444;
-}
-
-.blog-post__header h1 {
-    font-size: 2.8rem;
-    font-weight: 700;
-    color: #222;
-    text-align: center;
-    letter-spacing: -0.5px;
-}
-
-/* Blog Post Content */
-.blog-post__content {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
-  color: #555;
-}
-
-/* Paragraph Styling */
-.blog-post__content p {
-    margin-bottom: 20px;
-}
-
-/* Blockquotes */
-.blog-post__content blockquote {
-    font-style: italic;
-    color: #555;
-    border-left: 4px solid #0073e6;
-    padding-left: 15px;
-    margin: 20px 0;
-    font-size: 1.2rem;
-}
-
-/* Created and Updated Dates */
-.blog-post__created, .blog-post__updated {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #555;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.blog-post__form {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
-  color: #555;
-}
-
-.blog-post__replies textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  color: #555;
-}
-
-.blog-post__replies button[type="submit"] {
-  background-color: #0073e6;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-.blog-post__replies button[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-.disabled-button {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background-color: #ccc;
-  color: #666;
-  border-color: #ccc;
-  pointer-events: none;
-}
-
-.delete-button {
-  background-color: #ff0000; /* red background */
-  color: #ffffff; /* white text */
-  border: none;
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.delete-button:hover {
-  background-color: #cc0000; /* darker red on hover */
-}
-
-/* Images */
-.blog-post__content img {
-    width: 100%;
-    border-radius: 8px;
-    margin: 20px 0;
-}
-
-/* Links */
-.blog-post__content a {
-    color: #0073e6;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.blog-post__content a:hover {
-    text-decoration: underline;
-}
-
-/* Footer as Meta Information */
-.blog-post__footer {
-    margin-top: 30px;
+  /* Header Section */
+  .blog-post__header {
+    background-color: #f8f8f8;
     padding: 15px;
-    background: #f8f8f8;
-    text-align: center;
-    font-size: 1rem;
-    color: #444;
     border-radius: 8px;
-}
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #444;
+  }
 
-/* Meta Details in Footer */
-.blog-post__meta {
+  .blog-post__header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #222;
+      text-align: center;
+      letter-spacing: -0.5px;
+  }
+
+  /* Blog Post Content */
+  .blog-post__content {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  /* Paragraph Styling */
+  .blog-post__content p {
+      margin-bottom: 20px;
+  }
+
+  /* Blockquotes */
+  .blog-post__content blockquote {
+      font-style: italic;
+      color: #555;
+      border-left: 4px solid #0073e6;
+      padding-left: 15px;
+      margin: 20px 0;
+      font-size: 1.2rem;
+  }
+
+  /* Created and Updated Dates */
+  .blog-post__created, .blog-post__updated {
     font-size: 1rem;
     font-weight: 500;
     color: #555;
     text-align: center;
-}
+    margin-bottom: 10px;
+  }
 
-.blog-post__meta span {
-    display: inline-block;
-    margin-right: 10px;
-}
+  .blog-post__form {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-size: 1.2rem;
+    color: #555;
+  }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .blog-post {
-        padding: 20px;
-    }
-    
-    .blog-post__header h1 {
-        font-size: 2.2rem;
-    }
-    
-    .blog-post__content {
-        font-size: 1.3rem;
-    }
-}
+  .blog-post__replies textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .blog-post__replies button[type="submit"] {
+    background-color: #0073e6;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+
+  .blog-post__replies button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+  .disabled-button {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+    color: #666;
+    border-color: #ccc;
+    pointer-events: none;
+  }
+
+  .delete-button {
+    background-color: #ff0000; /* red background */
+    color: #ffffff; /* white text */
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .delete-button:hover {
+    background-color: #cc0000; /* darker red on hover */
+  }
+
+  /* Images */
+  .blog-post__content img {
+      width: 100%;
+      border-radius: 8px;
+      margin: 20px 0;
+  }
+
+  /* Links */
+  .blog-post__content a {
+      color: #0073e6;
+      text-decoration: none;
+      font-weight: 600;
+  }
+
+  .blog-post__content a:hover {
+      text-decoration: underline;
+  }
+
+  /* Footer as Meta Information */
+  .blog-post__footer {
+      margin-top: 30px;
+      padding: 15px;
+      background: #f8f8f8;
+      text-align: center;
+      font-size: 1rem;
+      color: #444;
+      border-radius: 8px;
+  }
+
+  /* Meta Details in Footer */
+  .blog-post__meta {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #555;
+      text-align: center;
+  }
+
+  .blog-post__meta span {
+      display: inline-block;
+      margin-right: 10px;
+  }
 } 

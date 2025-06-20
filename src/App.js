@@ -15,6 +15,7 @@ import RequireAuth from './features/auth/RequireAuth'
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
 import NoteExpand from './features/notes/NoteExpand'
+import Notifications from './features/users/Notifications'
 
 function App() {
   useTitle('theForum')
@@ -47,7 +48,7 @@ function App() {
                   <Route path=":id/edit" element={<EditNote />} />
                   <Route path=":id/expand" element={<NoteExpand />} />
                   <Route path="new" element={<NewNote />} />
-                
+                  <Route path="notifications/all" element={<Notifications />} />
                 </Route>
 
               </Route>{/* End Dash */}

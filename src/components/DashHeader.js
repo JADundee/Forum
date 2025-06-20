@@ -84,195 +84,218 @@ const DashHeader = () => {
     }] = useSendLogoutMutation()
 
    // Define logout handler function to handle logout functionality
-const logoutHandler = async () => {
-    try {
-        // Call sendLogout mutation function to log out user
-        await sendLogout().unwrap()
-        // Navigate to home page after logout
-        navigate('/', {replace: true})
-    } catch(error) {
-        // Log any errors that occur during logout
-        console.log(error)
+    const logoutHandler = async () => {
+        try {
+            // Call sendLogout mutation function to log out user
+            await sendLogout().unwrap()
+            // Navigate to home page after logout
+            navigate('/', {replace: true})
+        } catch(error) {
+            // Log any errors that occur during logout
+            console.log(error)
+        }
     }
-}
 
-// Effect hook to navigate to home page when logout is successful
-useEffect(() => {
-    if (isSuccess) navigate('/')
-}, [isSuccess, navigate])
+    // Effect hook to navigate to home page when logout is successful
+    useEffect(() => {
+        if (isSuccess) navigate('/')
+    }, [isSuccess, navigate])
 
-// Define navigation handler functions for different routes
-const onNewNoteClicked = () => navigate('/dash/notes/new')
-const onNotesClicked = () => navigate('/dash/notes')
-const onUsersClicked = () => navigate('/dash/users')
-const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
+    // Define navigation handler functions for different routes
+    const onNewNoteClicked = () => navigate('/dash/notes/new')
+    const onNotesClicked = () => navigate('/dash/notes')
+    const onUsersClicked = () => navigate('/dash/users')
+    const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
 
-// Define notification-related handler functions
-const onNotificationButtonClicked = () => dropdown.classList.toggle('show')
-const onNotificationClicked = (noteId) => {
-    // Get notification element
-    const notificationElement = document.querySelector('.notification-dropdown .notification-item')
-    // Add 'old-notification' class to notification element
-    notificationElement.classList.add('old-notification')
-    // Navigate to note page
-    navigate(`/dash/notes/${noteId}/expand`)
-}
+    const handleOutsideClick = (e) => {
+    if (!dropdown.contains(e.target) && !e.target.classList.contains('icon-button') && !e.target.classList.contains('notification-button')) {
+        dropdown.classList.remove('show')
+        document.removeEventListener('click', handleOutsideClick)
+    }
+    }
+
+    // Define notification-related handler functions
+    const onNotificationButtonClicked = () => {
+        dropdown.classList.toggle('show')
+        if (dropdown.classList.contains('show')) {
+            setTimeout(() => {
+            document.addEventListener('click', handleOutsideClick)
+            }, 100)
+        } else {
+            document.removeEventListener('click', handleOutsideClick)
+        }
+    }
+
+    const onNotificationClicked = (noteId) => {
+        // Get notification element
+        const notificationElement = document.querySelector('.notification-dropdown .notification-item')
+        // Add 'old-notification' class to notification element
+        notificationElement.classList.add('old-notification')
+        // Navigate to note page
+        navigate(`/dash/notes/${noteId}/expand`)
+    }
     
    // Define variable to store class name for dash header container
-let dashClass = null
+    let dashClass = null
 
-// Check if current pathname does not match any of the defined regex patterns
-if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
-    // If true, set dashClass to "dash-header__container--small"
-    dashClass = "dash-header__container--small"
-}
+    // Check if current pathname does not match any of the defined regex patterns
+    if (!DASH_REGEX.test(pathname) && !NOTES_REGEX.test(pathname) && !USERS_REGEX.test(pathname)) {
+        // If true, set dashClass to "dash-header__container--small"
+        dashClass = "dash-header__container--small"
+    }
 
-// Define variable to store new note button element
-let newNoteButton = null
+    // Define variable to store new note button element
+    let newNoteButton = null
 
-// Check if current pathname matches NOTES_REGEX pattern
-if (NOTES_REGEX.test(pathname)) {
-    // If true, create new note button element
-    newNoteButton = (
-        <button
-            className="icon-button"
-            title="New Note"
-            onClick={onNewNoteClicked}
-        >
-            <FontAwesomeIcon icon={faFileCirclePlus} />
-        </button>
-    )
-}
-
-// Define variable to store user button element
-let userButton = null
-
-// Check if user is admin and current pathname does not match USERS_REGEX pattern
-if (isAdmin) {
-    if (!USERS_REGEX.test(pathname) && pathname.includes('/dash')) {
-        // If true, create user button element
-        userButton = (
+    // Check if current pathname matches NOTES_REGEX pattern
+    if (NOTES_REGEX.test(pathname)) {
+        // If true, create new note button element
+        newNoteButton = (
             <button
                 className="icon-button"
-                title="Users"
-                onClick={onUsersClicked}
+                title="New Note"
+                onClick={onNewNoteClicked}
             >
-                <FontAwesomeIcon icon={faUserGear} />
+                <FontAwesomeIcon icon={faFileCirclePlus} />
             </button>
         )
     }
-}
 
-// Define variable to store notes button element
-let notesButton = null
+    // Define variable to store user button element
+    let userButton = null
 
-// Check if current pathname does not match NOTES_REGEX pattern and does not include "/dash/notes/:id/expand"
-if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {
-    // If true, create notes button element
-    notesButton = (
+    // Check if user is admin and current pathname does not match USERS_REGEX pattern
+    if (isAdmin) {
+        if (!USERS_REGEX.test(pathname) && pathname.includes('/dash')) {
+            // If true, create user button element
+            userButton = (
+                <button
+                    className="icon-button"
+                    title="Users"
+                    onClick={onUsersClicked}
+                >
+                    <FontAwesomeIcon icon={faUserGear} />
+                </button>
+            )
+        }
+    }
+
+    // Define variable to store notes button element
+    let notesButton = null
+
+    // Check if current pathname does not match NOTES_REGEX pattern and does not include "/dash/notes/:id/expand"
+    if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {
+        // If true, create notes button element
+        notesButton = (
+            <button
+                className="icon-button"
+                title="Notes"
+                onClick={onNotesClicked}
+            >
+                <FontAwesomeIcon icon={faFile} />
+            </button>
+        )
+    }
+
+    // Define variable to store edit note button element
+    let editNoteButton = null
+
+    // Check if current pathname includes "/dash/notes/:id/expand" and note username matches current user's username
+    if (pathname.includes(`/dash/notes/${id}/expand`) && notes?.username === username) {
+        // If true, create edit note button element
+        editNoteButton = (
+            <button
+                className="icon-button"
+                title="Edit Note"
+                onClick={onEditNoteClicked}
+            >
+                <FontAwesomeIcon icon={faFilePen} />
+            </button>
+        )
+    }
+
+    // Define notification button element
+    const notificationButton = (
+        <button
+            className="icon-button notification-button"
+            title="Notifications"
+            onClick={onNotificationButtonClicked}
+        >
+            <FontAwesomeIcon icon={faBell} />
+            <div className="notification-dropdown">
+                {notificationsLoading ? (
+                    <p className="notification-item">Loading...</p>
+                ) : notificationsError ? (
+                    <p className="notification-item">Error fetching notifications</p>
+                ) : (
+                    notifications &&
+                    notifications
+                        .filter((notification) => {
+                            return notification.username !== username;
+                        })
+                        .map((notification) => {
+                            const note = notes.find((note) => note.id === notification.noteId);
+                            return (
+                                <div
+                                    key={notification.id}
+                                    className="notification-item"
+                                    data-note-id={notification.noteId}
+                                    onClick={() => onNotificationClicked(notification.noteId)}
+                                >
+                                    {note && (
+                                        <p className="notification-title">New Reply on: {note.title}</p>
+                                    )}
+                                    <p>From: {notification.username}</p>
+                                    <p>"{notification.replyText}"</p>
+                                    <p>{moment(notification.createdAt).fromNow()}</p>
+                                </div>
+                            );
+                        })
+                )}
+                <button
+                    className="see-all-button"
+                    onClick={() => navigate('/notifications/all')}
+                >
+                    See All
+                </button>
+            </div>
+        </button>
+    );
+
+    // Define logout button element
+    const logoutButton = (
         <button
             className="icon-button"
-            title="Notes"
-            onClick={onNotesClicked}
+            title="Logout"
+            onClick={logoutHandler}
         >
-            <FontAwesomeIcon icon={faFile} />
+            <FontAwesomeIcon icon={faRightFromBracket} />
         </button>
     )
-}
 
-// Define variable to store edit note button element
-let editNoteButton = null
+    // Define variable to store error message class
+    const errClass = isError ? "errmsg" : "offscreen"
 
-// Check if current pathname includes "/dash/notes/:id/expand" and note username matches current user's username
-if (pathname.includes(`/dash/notes/${id}/expand`) && notes?.username === username) {
-    // If true, create edit note button element
-    editNoteButton = (
-        <button
-            className="icon-button"
-            title="Edit Note"
-            onClick={onEditNoteClicked}
-        >
-            <FontAwesomeIcon icon={faFilePen} />
-        </button>
-    )
-}
+    // Define variable to store button content
+    let buttonContent
 
-// Define notification button element
-const notificationButton = (
-    <button
-        className="icon-button notification-button"
-        title="Notifications"
-        onClick={onNotificationButtonClicked}
-    >
-        <FontAwesomeIcon icon={faBell} />
-        <div className="notification-dropdown">
-            {notificationsLoading ? (
-                <p className="notification-item">Loading...</p>
-            ) : notificationsError ? (
-                <p className="notification-item">Error fetching notifications</p>
-            ) : (
-                notifications &&
-                notifications
-                    .filter((notification) => {
-                        return notification.username !== username;
-                    })
-                    .map((notification) => {
-                        const note = notes.find((note) => note.id === notification.noteId);
-                        return (
-                            <div
-                                key={notification.id}
-                                className="notification-item"
-                                data-note-id={notification.noteId}
-                                onClick={() => onNotificationClicked(notification.noteId)}
-                            >
-                                {note && (
-                                    <p className="notification-title">New Reply on: {note.title}</p>
-                                )}
-                                <p>From: {notification.username}</p>
-                                <p>"{notification.replyText}"</p>
-                                <p>{moment(notification.createdAt).fromNow()}</p>
-                            </div>
-                        );
-                    })
-            )}
-        </div>
-    </button>
-);
-
-// Define logout button element
-const logoutButton = (
-    <button
-        className="icon-button"
-        title="Logout"
-        onClick={logoutHandler}
-    >
-        <FontAwesomeIcon icon={faRightFromBracket} />
-    </button>
-)
-
-// Define variable to store error message class
-const errClass = isError ? "errmsg" : "offscreen"
-
-// Define variable to store button content
-let buttonContent
-
-// Check if logout is in progress
-if (isLoading) {
-    // If true, display loading message
-    buttonContent = <p>Logging Out...</p>
-} else {
-    // Otherwise, display navigation buttons
-    buttonContent = (
-        <>
-            {newNoteButton}
-            {notesButton}
-            {editNoteButton}
-            {userButton}
-            {notificationButton}
-            {logoutButton}
-        </>
-    )
-}
+    // Check if logout is in progress
+    if (isLoading) {
+        // If true, display loading message
+        buttonContent = <p>Logging Out...</p>
+    } else {
+        // Otherwise, display navigation buttons
+        buttonContent = (
+            <>
+                {newNoteButton}
+                {notesButton}
+                {editNoteButton}
+                {userButton}
+                {notificationButton}
+                {logoutButton}
+            </>
+        )
+    }
 
     // Define JSX element for DashHeader component
     const content = (
