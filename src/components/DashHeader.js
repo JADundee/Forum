@@ -254,7 +254,7 @@ const DashHeader = () => {
                 )}
                 <button
                     className="see-all-button"
-                    onClick={() => navigate('/notifications/all')}
+                    onClick={() => navigate('/dash/users/notifications/all')}
                 >
                     See All Notifications
                 </button>

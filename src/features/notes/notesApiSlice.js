@@ -83,14 +83,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 body: { userId, replyText, username },
                 };
             },
-            async queryFn({ noteId, userId, replyText, username, noteTitle }) {
+            async queryFn({ noteId, userId, replyText, username }) {
                 // Create a new notification object
                 const notification = {
                 userId,
                 noteId,
                 replyText,
                 username,
-                noteTitle,
                 createdAt: new Date().toISOString(),
                 };
 

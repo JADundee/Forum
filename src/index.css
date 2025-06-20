@@ -444,6 +444,75 @@ tr {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.all-notifications {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Nunito', sans-serif;
+}
+
+.all-notifications__header {
+  background-color: #f8f8f8;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.all-notifications__header h1 {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.all-notifications__content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.all-notifications__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.all-notifications__item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.all-notifications__item:last-child {
+  border-bottom: none;
+}
+
+.all-notifications__text {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.all-notifications__timestamp {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  text-align: right;
+}
+
+.username, .note-title {
+  color: var(--LINK-HOVER);
+}
+
+.reply-text {
+  color: var(--LINK-HOVER)
+}
+
 @media screen and (max-width: 400px) {
   h1 {
     font-size: 2rem;
