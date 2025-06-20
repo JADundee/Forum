@@ -42,13 +42,12 @@ const Public = () => {
             if (!err.status) {
                 setErrMsg('No Server Response');
             } else if (err.status === 400) {
-                setErrMsg('Missing Username or Password');
+                setErrMsg('Missing Username and/or Password');
             } else if (err.status === 401) {
-                setErrMsg('Unauthorized');
+                setErrMsg('Invalid Username and/or Password');
             } else {
                 setErrMsg(err.data?.message);
             }
-            errRef.current.focus();
         }
     }
 
