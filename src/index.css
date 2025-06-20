@@ -10,19 +10,32 @@
 
 :root {
   /* COLORS */
-  --BGCOLOR: #0F172A;
+  --BGCOLOR: whitesmoke;
   --BORDER-COLOR: #FFF;
-  --COLOR: #FFF;
+  --COLOR: #00002ca6;
   --ERROR: firebrick;
   --INACTIVE: lightgray;
-  --LINK-COLOR: whitesmoke;
+  --LINK-COLOR: #00002ca6;
   --LINK-HOVER: limegreen;
-  --NOTE-BGCOLOR: hsla(240, 64%, 27%, 0.65);
+  --NOTE-BGCOLOR: #191971a6;
   --STATUS-COMPLETE: limegreen;
   --STATUS-OPEN: firebrick;
   --TABLE-BGCOLOR: #FFF;
   --TABLE-COLOR: #000;
   --INPUT-INVALID: #F00;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --BGCOLOR: #0F172A;
+    --COLOR: #FFFFFF;
+    --LINK-COLOR: whitesmoke;
+    --LINK-HOVER: limegreen;
+    --NOTE-BGCOLOR: #333333;
+    --TABLE-BGCOLOR: #333333;
+    --TABLE-COLOR: #FFFFFF;
+  }
 }
 
 /* || UTILITY CLASSES */
@@ -79,7 +92,6 @@ body {
   min-height: 100vh;
   background-color: var(--BGCOLOR);
   color: var(--COLOR);
-  background-image: url('./img/background.jpg');
   background-size: cover;
   background-position: top right;
   background-blend-mode: multiply;
