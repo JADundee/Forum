@@ -21,6 +21,8 @@ const Public = () => {
 
     const [login, { isLoading }] = useLoginMutation()
 
+    const canLogin = username.trim() !== '' && password.trim() !== ''
+
     useEffect(() => {
         userRef.current.focus()
     }, [])
@@ -64,7 +66,7 @@ const Public = () => {
     const content = (
         <section className="public">
         <header>
-            <h1>Forum Login</h1>
+            <h1>theForum</h1>
         </header>
         <main className="login">
             <p ref={errRef} className={errClass} aria-live="assertive">{errMsg}</p>
@@ -101,7 +103,7 @@ const Public = () => {
                     />
                     Trust This Device
                 </label>
-                <button className="form__submit-button form__login-button">Sign In</button>
+                <button className="form__submit-button form__login-button" disabled={!canLogin}>Sign In</button>
                 <p>New to the Forum?</p>
                 <button className="form__submit-button form__register-button" onClick={onNewUserClicked}>
                         Register

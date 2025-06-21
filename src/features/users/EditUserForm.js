@@ -62,8 +62,6 @@ const EditUserForm = ({ user }) => {
         setRoles(values)
     }
 
-    const onActiveChanged = () => setActive(prev => !prev)
-
     const onSaveUserClicked = async (e) => {
         if (password) {
             await updateUser({ id: user.id, username, password, roles, active })
@@ -100,6 +98,28 @@ const EditUserForm = ({ user }) => {
 
     const errContent = (error?.data?.message || delerror?.data?.message) ?? ''
 
+    let saveButton = null
+            saveButton = (
+                <button
+                    className="button"
+                    title="Save"
+                    onClick={onSaveUserClicked}
+                    disabled={!canSave}
+                >
+                   Save <FontAwesomeIcon icon={faSave} />
+                </button>
+            )
+    
+        let deleteButton = null
+            deleteButton = (
+                <button
+                    className="button delete-button"
+                    title="Delete"
+                    onClick={onDeleteUserClicked}
+                >
+                   Delete <FontAwesomeIcon icon={faTrashCan} />
+                </button>
+            )
 
     const content = (
         <>
@@ -145,21 +165,8 @@ const EditUserForm = ({ user }) => {
                     {options}
                 </select>
                 <div className="form__action-buttons">
-                    <button
-                        className="button"
-                        title="Save"
-                        onClick={onSaveUserClicked}
-                        disabled={!canSave}
-                    >
-                    Save <FontAwesomeIcon icon={faSave} />
-                    </button>
-                    <button
-                        className="button delete-button"
-                        title="Delete"
-                        onClick={onDeleteUserClicked}
-                    >
-                    Delete <FontAwesomeIcon icon={faTrashCan} />
-                    </button>
+                    {saveButton}
+                    {deleteButton}  
                 </div>
             </form>
         </>

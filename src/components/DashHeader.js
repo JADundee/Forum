@@ -67,6 +67,7 @@ const DashHeader = () => {
     // Extract user IDs and titles from notes
     const notesUserId = notes.map(note => note.user);
     const notesTitle = notes.map(note => note.title);
+    const note = notes.find((note) => note.id === id);
 
     // Log notes data for debugging
     console.log(notes)
@@ -116,15 +117,18 @@ const DashHeader = () => {
 
     // Define notification-related handler functions
     const onNotificationButtonClicked = () => {
-        dropdown.classList.toggle('show')
-        if (dropdown.classList.contains('show')) {
-            setTimeout(() => {
-            document.addEventListener('click', handleOutsideClick)
-            }, 100)
-        } else {
-            document.removeEventListener('click', handleOutsideClick)
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (dropdown) {
+            dropdown.classList.toggle('show');
+            if (dropdown.classList.contains('show')) {
+                setTimeout(() => {
+                    document.addEventListener('click', handleOutsideClick);
+                }, 100);
+            } else {
+                document.removeEventListener('click', handleOutsideClick);
+            }
         }
-    }
+    };
 
     const onNotificationClicked = (noteId) => {
         // Get notification element
@@ -184,7 +188,7 @@ const DashHeader = () => {
     let notesButton = null
 
     // Check if current pathname does not match NOTES_REGEX pattern and does not include "/dash/notes/:id/expand"
-    if (!NOTES_REGEX.test(pathname) && !pathname.includes(`/dash/notes/${id}/expand`) && pathname.includes('/dash')) {
+    if (!NOTES_REGEX.test(pathname) && pathname.includes('/dash')) {
         // If true, create notes button element
         notesButton = (
             <button
@@ -201,7 +205,7 @@ const DashHeader = () => {
     let editNoteButton = null
 
     // Check if current pathname includes "/dash/notes/:id/expand" and note username matches current user's username
-    if (pathname.includes(`/dash/notes/${id}/expand`) && notes?.username === username) {
+    if (pathname.includes(`/dash/notes/${id}/expand`) && note?.username === username) {
         // If true, create edit note button element
         editNoteButton = (
             <button
@@ -215,58 +219,63 @@ const DashHeader = () => {
     }
 
     // Define notification button element
-    const notificationButton = (
-        <button
-            className="icon-button notification-button"
-            title="Notifications"
-            onClick={onNotificationButtonClicked}
-        >
-            <FontAwesomeIcon icon={faBell} />
-            <div className="notification-dropdown">
-                {notificationsLoading ? (
-                    <p className="notification-item">Loading...</p>
-                ) : notificationsError ? (
-                    <p className="notification-item">Error fetching notifications</p>
-                ) : (
-                    notifications &&
-                    notifications
-                        .filter((notification) => {
-                            return notification.username !== username;
-                        })
-                        .map((notification) => {
-                            const note = notes.find((note) => note.id === notification.noteId);
-                            return (
-                                <div
-                                    key={notification.id}
-                                    className="notification-item"
-                                    data-note-id={notification.noteId}
-                                    onClick={() => onNotificationClicked(notification.noteId)}
-                                >
-                                    {note && (
-                                        <p className="notification-title">
-                                            <span className="notification-header">New Reply on: </span>
-                                            {note.title}
+    let notificationButton = null;
+
+    // Check if current pathname does not match "/dash/users/notifications/all"
+    if (!pathname.includes('/dash/users/notifications/all')) {
+        notificationButton = (
+            <button
+                className="icon-button notification-button"
+                title="Notifications"
+                onClick={onNotificationButtonClicked}
+            >
+                <FontAwesomeIcon icon={faBell} />
+                <div className="notification-dropdown">
+                    {notificationsLoading ? (
+                        <p className="notification-item">Loading...</p>
+                    ) : notificationsError ? (
+                        <p className="notification-item">Error fetching notifications</p>
+                    ) : (
+                        notifications &&
+                        notifications
+                            .filter((notification) => {
+                                return notification.username !== username;
+                            })
+                            .map((notification) => {
+                                const note = notes.find((note) => note.id === notification.noteId);
+                                return (
+                                    <div
+                                        key={notification.id}
+                                        className="notification-item"
+                                        data-note-id={notification.noteId}
+                                        onClick={() => onNotificationClicked(notification.noteId)}
+                                    >
+                                        {note && (
+                                            <p className="notification-title">
+                                                <span className="notification-header">New Reply on: </span>
+                                                {note.title}
+                                            </p>
+                                        )}
+                                        <p>
+                                            From: 
+                                            <span className="username"> {notification.username}</span>
                                         </p>
-                                    )}
-                                    <p>
-                                        From: 
-                                        <span className="username"> {notification.username}</span>
-                                    </p>
-                                    <p>"{notification.replyText}"</p>
-                                    <p>{moment(notification.createdAt).fromNow()}</p>
-                                </div>
-                            );
-                        })
-                )}
-                <button
-                    className="button"
-                    onClick={() => navigate('/dash/users/notifications/all')}
-                >
-                    See All Notifications
-                </button>
-            </div>
-        </button>
-    );
+                                        <p>"{notification.replyText}"</p>
+                                        <p>{moment(notification.createdAt).fromNow()}</p>
+                                    </div>
+                                );
+                            })
+                    )}
+                    <button
+                        className="button"
+                        onClick={() => navigate('/dash/users/notifications/all')}
+                    >
+                        See All Notifications
+                    </button>
+                </div>
+            </button>
+        );
+    }
 
     // Define logout button element
     const logoutButton = (

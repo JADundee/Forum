@@ -62,16 +62,29 @@ const EditNoteForm = ({ note }) => {
 
     const errContent = (error?.data?.message || delerror?.data?.message) ?? ''
 
+    let saveButton = null
+    if ( isAdmin ) {
+        saveButton = (
+            <button
+                className="button"
+                title="Save"
+                onClick={onSaveNoteClicked}
+                disabled={!canSave}
+            >
+               Save <FontAwesomeIcon icon={faSave} />
+            </button>
+        )
+    }
 
     let deleteButton = null
     if ( isAdmin ) {
         deleteButton = (
             <button
-                className="icon-button"
+                className="button delete-button"
                 title="Delete"
                 onClick={onDeleteNoteClicked}
             >
-                <FontAwesomeIcon icon={faTrashCan} />
+               Delete <FontAwesomeIcon icon={faTrashCan} />
             </button>
         )
     }
@@ -115,15 +128,7 @@ const EditNoteForm = ({ note }) => {
                     </div>
                 </div>
                 <div className="form__action-buttons">
-                    <button
-                        className="icon-button"
-                        title="Save"
-                        onClick={onSaveNoteClicked}
-                        disabled={!canSave}
-                    >
-                    <FontAwesomeIcon icon={faSave} />
-                    </button>
-                            
+                    {saveButton}         
                     {deleteButton}
                 </div>
             </form>
