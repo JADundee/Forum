@@ -1,7 +1,11 @@
 import { useGetNotificationsQuery, useGetNotesQuery } from '../notes/notesApiSlice';
+import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 const AllNotifications = () => {
+
+  const navigate = useNavigate()
+
   const { data: notificationsData, isLoading, isError } = useGetNotificationsQuery();
   const { data: notesData, isLoading: notesLoading } = useGetNotesQuery();
 
@@ -15,6 +19,15 @@ const AllNotifications = () => {
 
   const notes = notesData.entities;
 
+  const handleNotificationClicked = (noteId) => {
+        // Get notification element
+        const notificationElement = document.querySelector('.all-notifications__item')
+        // Add 'old-notification' class to notification element
+        notificationElement.classList.add('old-notification')
+        // Navigate to note page
+        navigate(`/dash/notes/${noteId}/expand`)
+    }
+
   return (
     <div className="all-notifications">
       <div className="all-notifications__header">
@@ -23,7 +36,7 @@ const AllNotifications = () => {
       <div className="all-notifications__content">
         <ul className="all-notifications__list">
           {notificationsData.map((notification) => (
-            <li key={notification.id} className="all-notifications__item">
+            <li key={notification.id} className="all-notifications__item" onClick={() => handleNotificationClicked(notification.noteId)}>
                 <p className="all-notifications__text">
                 <span className="username">{notification.username}</span> replied to: {' '}
                 <span className="note-title">

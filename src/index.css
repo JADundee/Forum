@@ -271,7 +271,7 @@ a:any-link:focus-visible {
 
 .notification-header {
   color: var(--COLOR);
-  text-decoration: underline;
+  border-bottom: 1px solid var(--BORDER-COLOR);
 }
 
 .notification-item {
