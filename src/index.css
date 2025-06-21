@@ -362,12 +362,34 @@ tr {
   z-index: 1;
 }
 
+.table__th {
+  text-decoration: underline;
+  font-weight: bold;
+  padding-bottom: 0.5em;
+}
+
 .table__th,
 .table__cell {
+  margin-top: 3px;
+  margin-bottom: 3px;
   background-color: var(--TABLE-BGCOLOR);
   text-align: left;
-  border: 1px solid var(--TABLE-COLOR);
+  border-bottom: 1px solid var(--TABLE-COLOR);
   padding: 0.5em;
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
+}
+
+.note__created, .note__updated {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.note__expand {
+  text-align: center;
 }
 
 .table__cell:last-child {
@@ -746,8 +768,9 @@ tr {
   }
 
   .table--notes {
-    grid-template-columns: repeat(2, 1fr)  repeat(3, 1fr);
+  grid-template-columns: 2fr 2fr 1fr 1fr 2fr;
   }
+
 
   .note__created,
   .note__updated,
