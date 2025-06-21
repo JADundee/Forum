@@ -243,9 +243,15 @@ const DashHeader = () => {
                                     onClick={() => onNotificationClicked(notification.noteId)}
                                 >
                                     {note && (
-                                        <p className="notification-title">New Reply on: {note.title}</p>
+                                        <p className="notification-title">
+                                            <span className="notification-header">New Reply on: </span>
+                                            {note.title}
+                                        </p>
                                     )}
-                                    <p>From: {notification.username}</p>
+                                    <p>
+                                        From: 
+                                        <span className="username"> {notification.username}</span>
+                                    </p>
                                     <p>"{notification.replyText}"</p>
                                     <p>{moment(notification.createdAt).fromNow()}</p>
                                 </div>

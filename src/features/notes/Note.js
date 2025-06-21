@@ -4,6 +4,7 @@ import { faExpand } from "@fortawesome/free-solid-svg-icons"
 import { useNavigate } from 'react-router-dom'
 import { useGetNotesQuery } from './notesApiSlice'
 import { memo } from 'react'
+import moment from 'moment'
 
 const Note = ({ noteId }) => {
 
@@ -16,9 +17,8 @@ const Note = ({ noteId }) => {
     })
 
     if (note) {
-        const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
-
-        const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long' })
+        const created = moment(note.createdAt).format('MMMM D, YYYY h:mm A');
+        const updated = moment(note.updatedAt).format('MMMM D, YYYY h:mm A');
 
       
 

@@ -25,7 +25,7 @@ const AllNotifications = () => {
           {notificationsData.map((notification) => (
             <li key={notification.id} className="all-notifications__item">
                 <p className="all-notifications__text">
-                <span className="username">{notification.username}</span> replied to{' '}
+                <span className="username">{notification.username}</span> replied to: {' '}
                 <span className="note-title">
                             {notes[notification.noteId] && notes[notification.noteId].title}
                             </span>

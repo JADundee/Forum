@@ -3,6 +3,7 @@ import { useGetNotesQuery, useGetRepliesQuery } from './notesApiSlice'
 import useAuth from '../../hooks/useAuth'
 import ReplyForm from './ReplyForm'
 import RepliesList from './RepliesList'
+import moment from 'moment'
 
 const NoteExpand = () => {
 
@@ -42,12 +43,12 @@ const NoteExpand = () => {
         return <p>No replies found</p>;
     }
 
-    const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
-    const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
+    const created = moment(note.createdAt).format('MMMM D, YYYY h:mm A');
+    const updated = moment(note.updatedAt).format('MMMM D, YYYY h:mm A');
 
     const content = (
         <article className="blog-post">
-            <div className="Blog-post-Op">
+            <div className='blog-post__op'>
                 <header className="blog-post__header">
                     <h1>{note.title}</h1>
                 </header>
@@ -55,12 +56,18 @@ const NoteExpand = () => {
                 <section className="blog-post__content">
                     <p>{note.text}</p>
                 </section>
-            </div>
 
-            <p className="blog-post__meta">
-                    <span className="blog-post__created">Published: {created}</span> | 
-                    <span className="blog-post__updated">Updated: {updated}</span>
-            </p>
+                <p className='blog-post__author'>Author:
+                    <span className="username">
+                        {note.username}
+                    </span>
+                </p>
+
+                <p className="blog-post__meta">
+                        <span className="blog-post__created">Published: {created}</span> | 
+                        <span className="blog-post__updated">Updated: {updated}</span>
+                </p>
+            </div>
 
             <section className="blog-post__form">
                      

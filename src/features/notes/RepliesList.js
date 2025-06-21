@@ -1,6 +1,7 @@
 import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useDeleteReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
+import moment from 'moment';
 
 const RepliesList = ({ replies, refetchReplies }) => {
   const { data: users } = useGetUsersQuery('usersList');
@@ -25,12 +26,17 @@ const RepliesList = ({ replies, refetchReplies }) => {
   );
 };
 
+const formatTimestamp = (timestamp) => {
+  return moment(timestamp).format('MMMM D, YYYY h:mm A');
+};
+
 const Reply = ({ reply, users, userId, handleDeleteReply }) => {
   return (
     <div className="reply">
       <div className="reply-header">
-        <span className="username">{users?.entities[reply.user]?.username}</span>
-        <span className="timestamp">{reply.createdAt}</span>
+        <span className="username">{users?.entities[reply.user]?.username}
+          <span className='username-text'> Replied:</span>
+        </span>
         {userId === reply.user && (
           <button
             className="delete-button"
@@ -44,6 +50,7 @@ const Reply = ({ reply, users, userId, handleDeleteReply }) => {
       <div className="reply-content">
         <p>{reply.text}</p>
       </div>
+        <span className="timestamp">Replied on {formatTimestamp(reply.createdAt)}</span>
     </div>
   );
 };

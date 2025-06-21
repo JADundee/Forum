@@ -10,18 +10,19 @@
 
 :root {
   /* COLORS */
-  --BGCOLOR: whitesmoke;
-  --BORDER-COLOR: #FFF;
-  --COLOR: #00002ca6;
+  --BGCOLOR: #F7F7F7;
+  --BORDER-COLOR: #E5E5E5;
+  --BOX-SHADOW: #309230;
+  --COLOR: #333;
   --ERROR: firebrick;
-  --INACTIVE: lightgray;
-  --LINK-COLOR: #00002ca6;
-  --LINK-HOVER: limegreen;
-  --NOTE-BGCOLOR: #191971a6;
-  --STATUS-COMPLETE: limegreen;
+  --INACTIVE: #CCC;
+  --LINK-COLOR: #309230;
+  --LINK-HOVER: #236323;
+  --NOTE-BGCOLOR: #F0F0F0;
+  --STATUS-COMPLETE: #309230;
   --STATUS-OPEN: firebrick;
   --TABLE-BGCOLOR: #FFF;
-  --TABLE-COLOR: #000;
+  --TABLE-COLOR: #333;
   --INPUT-INVALID: #F00;
 }
 
@@ -29,9 +30,10 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --BGCOLOR: #0F172A;
+    --BOX-SHADOW: #309230;
     --COLOR: #FFFFFF;
-    --LINK-COLOR: whitesmoke;
-    --LINK-HOVER: limegreen;
+    --LINK-COLOR: #309230;
+    --LINK-HOVER: #236323;
     --NOTE-BGCOLOR: #333333;
     --TABLE-BGCOLOR: #333333;
     --TABLE-COLOR: #FFFFFF;
@@ -62,7 +64,7 @@
   font-size: 2.5rem;
   background-color: transparent;
   border: none;
-  color: var(--COLOR);
+  color: var(--LINK-COLOR);
   display: grid;
   place-content: center;
 }
@@ -70,6 +72,7 @@
 .icon-button:hover,
 .icon-button:focus-visible {
   color: var(--LINK-HOVER);
+  cursor: pointer;
 }
 
 .icon-button[disabled] {
@@ -82,6 +85,25 @@
   align-items: center;
   padding: 10px 20px;
   margin-left: 8px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--LINK-COLOR);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--LINK-HOVER);
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--BORDER-COLOR);
+  border-radius: 10px;
 }
 
 
@@ -111,17 +133,15 @@ select {
   flex-flow: column nowrap;
 }
 
-a {
+a:any-link {
+  color: var(--LINK-COLOR);
   text-decoration: none;
 }
 
-a:any-link {
-  color: var(--LINK-COLOR);
-}
-
-a:hover,
-a:focus-visible {
+a:any-link:hover,
+a:any-link:focus-visible {
   color: var(--LINK-HOVER);
+  cursor: pointer;
 }
 
 /* || PAGES */
@@ -154,6 +174,23 @@ a:focus-visible {
   content: "➜ "
 }
 
+.timestamp {
+  color: var(--COLOR);
+  font-size: 14px;
+}
+
+.username-text {
+  color: var(--COLOR);
+}
+
+.username {
+  color: var(--LINK-COLOR);
+}
+
+.note-title {
+  color: var(--LINK-COLOR);
+}
+
 /* || DASH HEADER, CONTAINER & FOOTER */
 
 .dash-header {
@@ -182,16 +219,13 @@ a:focus-visible {
 .notification-dropdown {
   display: none;
   background-color: var(--BGCOLOR);
-  border: 1px solid #ddd;
-  margin-top: 55px;
-  margin-bottom: 40px;
+  border: 1px solid var(--BORDER-COLOR);
+  margin: 55px 0 40px 0;
   padding: 10px;
   top: 0;
   right: 0;
   bottom: 0;
-  border: 1px solid #ddd;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 250px;
   overflow-y: auto;
   max-height: 100vh;
@@ -202,19 +236,26 @@ a:focus-visible {
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 5px;
+  color: var(--LINK-COLOR);
+}
+
+.notification-header {
+  color: var(--COLOR);
   text-decoration: underline;
 }
 
-.notification-dropdown .notification-item {
+.notification-item {
   /* Style each notification item */
   padding: 10px;
   border-bottom: 1px solid #ddd;
   color: var(--COLOR);
   width: 100%;
   box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
 }
 
-.notification-dropdown .notification-item p {
+.notification-item p {
   font-size: 14px; /* Set a smaller font size for the notification text */
 }
 
@@ -230,7 +271,13 @@ a:focus-visible {
 }
 
 .see-all-button {
-  margin-top: 5px;
+  margin-top: 10px;
+  background-color: var(--LINK-COLOR);
+  color: var(--COLOR);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
 .see-all-button:hover {
@@ -319,18 +366,6 @@ tr {
   display: none;
 }
 
-.note__status {
-  font-weight: bold;
-}
-
-.note__status--open {
-  color: var(--STATUS-OPEN);
-}
-
-.note__status--completed {
-  color: var(--STATUS-COMPLETE);
-}
-
 /* || FORM - GENERAL */
 
 .form {
@@ -371,7 +406,7 @@ tr {
 }
 
 .form__register-button {
-  background-color: rgb(112, 255, 114);
+  background-color: var(--LINK-COLOR);
 }
 
 .form__input--text {
@@ -415,99 +450,134 @@ tr {
 }
 
 .blog-post {
-    max-width: 850px;
-    margin: 40px auto;
-    padding: 20px;
-    background: var(--BGCOLOR);
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-family: 'Inter', sans-serif;
-  }
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: var(--BGCOLOR);
+  border-radius: 12px;
+  box-shadow: 0 3px 10px var(--BORDER-COLOR);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
 
   /* Header Section */
+  .blog-post__op {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+}
+
   .blog-post__header {
-    background-color: var(--TABLE-BGCOLOR);
-    padding: 15px;
-    border-radius: 8px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    font-size: 1.8rem;
-    font-weight: 600;
-  }
+  margin-top: 40px;
+  padding: 20px;
+  background-color: var(--BGCOLOR);
+  border-radius: 10px;
+  text-align: center;
+}
 
-  .blog-post__header h1 {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: var(--LINK-HOVER);
-      text-align: center;
-      letter-spacing: -0.5px;
-      margin-bottom: 10px;
-  }
+.blog-post__header h1 {
+  margin-bottom: 10px;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
 
-  /* Blog Post Content */
-  .blog-post__content {
-    padding: 20px;
-    background-color: var(--TABLE-BGCOLOR);
-    border-radius: 8px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
-    color: var(--TABLE-COLOR);
-    margin-bottom: 40px;
-  }
+.blog-post__content {
+  padding: 10px;
+  color: var(--COLOR);
+  background-color: var(--BGCOLOR);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
 
-  /* Paragraph Styling */
-  .blog-post__content p {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: var(--TABLE-BGCOLOR);
-    color: var(--TABLE-COLOR);
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
+.blog-post__author {
+  margin-top: 10px;
+}
 
-  /* Created and Updated Dates */
-  .blog-post__created, .blog-post__updated {
-    font-size: 1rem;
-    font-weight: 500;
-    color: var(--TABLE-COLOR);
-    text-align: center;
-    margin-bottom: 10px;
-  }
+.blog-post__author span {
+  margin-left: 5px;
+}
 
-  .blog-post__form {
-    padding: 20px;
-    background-color: var(--TABLE-BGCOLOR);
-    border-radius: 8px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    font-size: 1.2rem;
-    color: #555;
-  }
+.blog-post__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: var(--COLOR);
+  font-size: 14px;
+}
 
-  .blog-post__replies textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--BORDER-COLOR);
-    border-radius: 5px;
-    font-size: 1.2rem;
-    color: #555;
-  }
+.blog-post__meta span {
+  margin-right: 20px;
+}
 
-  .blog-post__replies button[type="submit"] {
-    background-color: #0073e6;
-    color: var(--COLOR);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2rem;
-    cursor: pointer;
-  }
+.blog-post__meta span:last-child {
+  margin-right: 0;
+}
 
-  .blog-post__replies button[type="submit"]:hover {
-    background-color: var(--LINK-HOVER);
-  }
+.blog-post__form {
+  padding: 20px;
+  background-color: var(--BGCOLOR);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 40px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+}
+
+.blog-post__form textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  font-size: 1.2rem;
+  color: #333;
+  border: 1px solid var(--BORDER-COLOR);
+  border-radius: 8px;
+}
+
+.blog-post__form button[type="submit"] {
+  background-color: var(--LINK-COLOR);
+  color: var(--COLOR);
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.blog-post__form button[type="submit"]:hover {
+  background-color: var(--LINK-HOVER);
+  color:var(--COLOR);
+}
+
+.blog-post__form button[type="submit"]:disabled {
+  background-color: var(--INACTIVE);
+  color: #666;
+  cursor: not-allowed;
+}
+
+.blog-post__replies {
+  padding: 20px;
+  background-color: var(--BGCOLOR);
+  border-radius: 8px;
+  font-size: 1.2rem;
+  color: var(--COLOR);
+  margin-bottom: 40px;
+}
+
+.blog-post__replies h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--COLOR);
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--BORDER-COLOR);
+}
 
   .disabled-button {
     opacity: 0.5;
@@ -520,7 +590,9 @@ tr {
     background-color: #ff0000; 
     color: #ffffff; 
     border: none;
-    padding: 5px 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
     font-size: 14px;
     cursor: pointer;
   }
@@ -529,17 +601,11 @@ tr {
     background-color: #cc0000; 
   }
 
-  .blog-post__content a:hover {
-      text-decoration: underline;
-  }
-
 .replies-list {
   margin-top: 20px;
   padding: 20px;
-  background-color: var(--TABLE-BGCOLOR);
-  border: 1px solid #ddd;
+  background-color: var(--BGCOLOR);
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin-top: 40px;
 }
 
@@ -547,6 +613,8 @@ tr {
   margin-bottom: 20px;
   padding: 20px;
   border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
 
 .reply-header {
@@ -556,82 +624,71 @@ tr {
   margin-bottom: 10px;
 }
 
-.timestamp {
-  color: #666;
-  font-size: 14px;
-}
-
 .reply-content {
   padding: 10px;
   color: var(--TABLE-COLOR);
-  background-color: var(--TABLE-BGCOLOR);
+  background-color: var(--BGCOLOR);
   border: 1px solid #ddd;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
 }
 
 .all-notifications {
-  padding: 20px;
+  display: block;
   background-color: var(--BGCOLOR);
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Nunito', sans-serif;
+  box-shadow: 0 3px 10px var(--BORDER-COLOR);
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 800px;
+  overflow: auto;
+  max-height: 80vh;
 }
 
 .all-notifications__header {
-  background-color: var(--BGCOLOR);
-  padding: 15px;
-  border-radius: 8px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--COLOR);
-}
-
-.all-notifications__header h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: -0.5px;
-}
-
-.all-notifications__content {
-  padding: 20px;
-  background-color: var(--TABLE-BGCOLOR);
-  border-radius: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  font-size: 1.2rem;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
   color: var(--COLOR);
 }
 
 .all-notifications__item {
+  /* Style each notification item */
+  padding: 10px;
+  margin: 5px;
+  border-bottom: 1px solid #ddd;
+  color: var(--COLOR);
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
+}
+
+.all-notifications__item p {
+  font-size: 14px; /* Set a smaller font size for the notification text */
+}
+
+.all-notifications__item:hover {
+  /* Add hover effect to each notification item */
+  background-color: var(--LINK-HOVER);
+  width: 100%;
+  cursor: pointer;
+}
+
+.all-notifications__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.all-notifications__list li {
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
-.all-notifications__item:last-child {
+.all-notifications__list li:last-child {
   border-bottom: none;
-}
-
-.all-notifications__text {
-  font-size: 1.2rem;
-}
-
-.all-notifications__timestamp {
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: right;
-}
-
-.timestamp {
-  color: var(--COLOR);
-}
-
-.username, .note-title {
-  color: var(--LINK-HOVER);
-}
-
-.reply-text {
-  color: var(--LINK-HOVER)
 }
 
 @media screen and (max-width: 400px) {
