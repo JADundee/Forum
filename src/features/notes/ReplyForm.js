@@ -18,7 +18,7 @@ const ReplyForm = ({ noteId, userId, username, refetchReplies }) => {
   return (
     <form onSubmit={handleSubmit} className='blog-post__replies'>
       <textarea value={replyText} onChange={(e) => setReplyText(e.target.value)} />
-      <button type="submit" disabled={!canReply} className={`${canReply ? '' : 'disabled-button'}`}>
+      <button type="submit" disabled={!canReply} className='button'>
         Reply
       </button>
     </form>

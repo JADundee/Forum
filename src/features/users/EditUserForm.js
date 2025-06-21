@@ -108,23 +108,7 @@ const EditUserForm = ({ user }) => {
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
                     <h2>Edit User</h2>
-                    <div className="form__action-buttons">
-                        <button
-                            className="icon-button"
-                            title="Save"
-                            onClick={onSaveUserClicked}
-                            disabled={!canSave}
-                        >
-                            <FontAwesomeIcon icon={faSave} />
-                        </button>
-                        <button
-                            className="icon-button"
-                            title="Delete"
-                            onClick={onDeleteUserClicked}
-                        >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                        </button>
-                    </div>
+                    
                 </div>
                 <label className="form__label" htmlFor="username">
                     Username: <span className="nowrap">[3-20 letters]</span></label>
@@ -137,7 +121,6 @@ const EditUserForm = ({ user }) => {
                     value={username}
                     onChange={onUsernameChanged}
                 />
-
                 <label className="form__label" htmlFor="password">
                     Password: <span className="nowrap">[empty = no change]</span> <span className="nowrap">[4-12 chars incl. !@#$%]</span></label>
                 <input
@@ -148,25 +131,12 @@ const EditUserForm = ({ user }) => {
                     value={password}
                     onChange={onPasswordChanged}
                 />
-
-                <label className="form__label form__checkbox-container" htmlFor="user-active">
-                    ACTIVE:
-                    <input
-                        className="form__checkbox"
-                        id="user-active"
-                        name="user-active"
-                        type="checkbox"
-                        checked={active}
-                        onChange={onActiveChanged}
-                    />
-                </label>
-
                 <label className="form__label" htmlFor="roles">
                     ASSIGNED ROLES:</label>
                 <select
                     id="roles"
                     name="roles"
-                    className={`form__select ${validRolesClass}`}
+                    className={`form__check ${validRolesClass}`}
                     multiple={true}
                     size="3"
                     value={roles}
@@ -174,7 +144,23 @@ const EditUserForm = ({ user }) => {
                 >
                     {options}
                 </select>
-
+                <div className="form__action-buttons">
+                    <button
+                        className="button"
+                        title="Save"
+                        onClick={onSaveUserClicked}
+                        disabled={!canSave}
+                    >
+                    Save <FontAwesomeIcon icon={faSave} />
+                    </button>
+                    <button
+                        className="button delete-button"
+                        title="Delete"
+                        onClick={onDeleteUserClicked}
+                    >
+                    Delete <FontAwesomeIcon icon={faTrashCan} />
+                    </button>
+                </div>
             </form>
         </>
     )

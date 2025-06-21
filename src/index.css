@@ -79,13 +79,41 @@
   visibility: hidden;
 }
 
-.icon-text {
-  font-size: 2.5rem;
-  display: inline-flex;
-  align-items: center;
+.button {
+  background-color: var(--LINK-COLOR);
+  color: var(--COLOR);
   padding: 10px 20px;
-  margin-left: 8px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
 }
+
+.button:hover {
+  background-color: var(--LINK-HOVER);
+  color:var(--COLOR);
+}
+
+.button:disabled {
+  background-color: var(--INACTIVE);
+  color: #666;
+  cursor: not-allowed;
+}
+
+.delete-button {
+    background-color: #ff0000; 
+    color: #ffffff; 
+    border: none;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .delete-button:hover {
+    background-color: #cc0000; 
+  }
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -200,6 +228,8 @@ a:any-link:focus-visible {
   background-color: var(--BGCOLOR);
   padding: 0 0.5em;
   border-bottom: 1px solid var(--BORDER-COLOR);
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
 }
 
 .dash-header__container {
@@ -247,7 +277,7 @@ a:any-link:focus-visible {
 .notification-item {
   /* Style each notification item */
   padding: 10px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--BORDER-COLOR);
   color: var(--COLOR);
   width: 100%;
   box-sizing: border-box;
@@ -270,20 +300,6 @@ a:any-link:focus-visible {
   display: block;
 }
 
-.see-all-button {
-  margin-top: 10px;
-  background-color: var(--LINK-COLOR);
-  color: var(--COLOR);
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.see-all-button:hover {
-  background-color: var(--LINK-HOVER);
-}
-
 /* .old-notification {
   text-decoration: line-through;
   color: #aaa; 
@@ -302,6 +318,7 @@ a:any-link:focus-visible {
   background-color: var(--BGCOLOR);
   padding: 0.5em;
   border-top: 1px solid var(--BORDER-COLOR);
+  border-radius: 10px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
@@ -333,7 +350,6 @@ tr {
 .table__button {
   padding: 0.25em;
   font-size: 1.5rem;
-  color: var(--TABLE-COLOR);
 }
 
 .table__thead {
@@ -375,13 +391,6 @@ tr {
   
 }
 
-.form__checkbox-container {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  gap: 0.5em;
-}
-
 .form__persist {
   display: flex;
   align-items: center;
@@ -395,10 +404,11 @@ tr {
   align-items: center;
 }
 
-.form__input,
-.form__submit-button {
+.form__input {
   padding: 0.5em;
   border-radius: 15px;
+  border-radius: 10px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
 
 .form__login-button {
@@ -418,25 +428,6 @@ tr {
   outline: 1px solid var(--INPUT-INVALID);
 }
 
-.form__checkbox {
-  width: 24px;
-  height: 24px;
-}
-
-.form__select {
-  width: fit-content;
-  padding: 0.25em;
-}
-
-.form__action-buttons {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 0.5em;
-  position: absolute;
-  right: 0.5em;
-}
-
 .form__row {
   display: flex;
   flex-flow: row nowrap;
@@ -446,6 +437,33 @@ tr {
 .form__divider {
   display: flex;
   flex-flow: column nowrap;
+  gap: 0.5em;
+}
+
+.form__check {
+  padding: 0.5em;
+  font-size: 1.2rem;
+  border: 1px solid var(--TABLE-COLOR);
+  border-radius: 8px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+  width: auto;
+}
+
+.form__check option:hover {
+  background-color: var(--BGCOLOR);
+  color: var(--COLOR);
+  cursor: pointer;
+}
+
+.form__check option:checked {
+  background-color: var(--LINK-COLOR);
+  color: var(--COLOR);
+}
+
+.form__action-buttons {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
   gap: 0.5em;
 }
 
@@ -465,7 +483,7 @@ tr {
   .blog-post__op {
   margin-bottom: 20px;
   padding: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--BORDER-COLOR);
   border-radius: 10px;
   box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
@@ -526,6 +544,8 @@ tr {
   color: #333;
   margin-bottom: 40px;
   box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+  border-bottom: 1px solid var(--BORDER-COLOR);
+  border-radius: 10px;
 }
 
 .blog-post__form textarea {
@@ -536,27 +556,6 @@ tr {
   color: #333;
   border: 1px solid var(--BORDER-COLOR);
   border-radius: 8px;
-}
-
-.blog-post__form button[type="submit"] {
-  background-color: var(--LINK-COLOR);
-  color: var(--COLOR);
-  padding: 10px 20px;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.blog-post__form button[type="submit"]:hover {
-  background-color: var(--LINK-HOVER);
-  color:var(--COLOR);
-}
-
-.blog-post__form button[type="submit"]:disabled {
-  background-color: var(--INACTIVE);
-  color: #666;
-  cursor: not-allowed;
 }
 
 .blog-post__replies {
@@ -579,28 +578,6 @@ tr {
   border-bottom: 1px solid var(--BORDER-COLOR);
 }
 
-  .disabled-button {
-    opacity: 0.5;
-    background-color: #ccc;
-    color: #666;
-    pointer-events: none;
-  }
-
-  .delete-button {
-    background-color: #ff0000; 
-    color: #ffffff; 
-    border: none;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .delete-button:hover {
-    background-color: #cc0000; 
-  }
-
 .replies-list {
   margin-top: 20px;
   padding: 20px;
@@ -612,7 +589,7 @@ tr {
 .reply {
   margin-bottom: 20px;
   padding: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--BORDER-COLOR);
   border-radius: 10px;
   box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
@@ -651,13 +628,16 @@ tr {
   font-size: 16px;
   margin-bottom: 5px;
   color: var(--COLOR);
+  border-bottom: 1px solid var(--BORDER-COLOR);
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
 }
 
 .all-notifications__item {
   /* Style each notification item */
   padding: 10px;
   margin: 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--BORDER-COLOR);
   color: var(--COLOR);
   width: 100%;
   box-sizing: border-box;
@@ -684,11 +664,7 @@ tr {
 
 .all-notifications__list li {
   padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.all-notifications__list li:last-child {
-  border-bottom: none;
+  border-bottom: 1px solid var(--BORDER-COLOR);
 }
 
 @media screen and (max-width: 400px) {
@@ -757,9 +733,5 @@ tr {
   .note__updated,
   .note__username {
     display: block
-  }
-
-  .form__action-buttons {
-    position: static;
   }
 } 

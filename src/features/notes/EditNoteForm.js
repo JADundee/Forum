@@ -83,18 +83,7 @@ const EditNoteForm = ({ note }) => {
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
                     <h2>Edit Thread: {note.title}</h2>
-                        <div className="form__action-buttons">
-                            <button
-                                className="icon-button"
-                                title="Save"
-                                onClick={onSaveNoteClicked}
-                                disabled={!canSave}
-                            >
-                                <FontAwesomeIcon icon={faSave} />
-                            </button>
-                            
-                            {deleteButton}
-                        </div>
+                       
                 </div>
                 <label className="form__label" htmlFor="note-title">
                     Title:
@@ -124,6 +113,18 @@ const EditNoteForm = ({ note }) => {
                         <p className="form__created">Created:<br />{created}</p>
                         <p className="form__updated">Updated:<br />{updated}</p>
                     </div>
+                </div>
+                <div className="form__action-buttons">
+                    <button
+                        className="icon-button"
+                        title="Save"
+                        onClick={onSaveNoteClicked}
+                        disabled={!canSave}
+                    >
+                    <FontAwesomeIcon icon={faSave} />
+                    </button>
+                            
+                    {deleteButton}
                 </div>
             </form>
         </>

@@ -53,17 +53,6 @@ const NewNoteForm = ({ users }) => {
             <form className="form" onSubmit={onSaveNoteClicked}>
                 <div className="form__title-row">
                     <h2>New Note</h2>
-                        <div className="form__action-buttons">
-                            
-                            <button
-                                className="icon-button icon-text"
-                                title="Save"
-                                disabled={!canSave}
-                            >
-                                <p className="icon-text">Create </p>
-                                <FontAwesomeIcon icon={faPaperPlane} />
-                            </button>
-                        </div>
                 </div>
                 <label className="form__label" htmlFor="title">
                     Title:
@@ -88,6 +77,16 @@ const NewNoteForm = ({ users }) => {
                     value={text}
                     onChange={onTextChanged}
                 />
+                <div className="form__action-buttons">
+                            
+                    <button
+                        className="button"
+                        title="Save"
+                        disabled={!canSave}
+                    >
+                        <p className="icon-text">Create </p>
+                    </button>
+                </div>
             </form>
         </>
     )

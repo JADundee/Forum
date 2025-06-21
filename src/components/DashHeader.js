@@ -259,7 +259,7 @@ const DashHeader = () => {
                         })
                 )}
                 <button
-                    className="see-all-button"
+                    className="button"
                     onClick={() => navigate('/dash/users/notifications/all')}
                 >
                     See All Notifications
