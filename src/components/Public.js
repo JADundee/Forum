@@ -81,6 +81,7 @@ const Public = () => {
                     value={username}
                     onChange={handleUserInput}
                     autoComplete="off"
+                    placeholder='Enter your username'
                     required
                 />
 
@@ -91,6 +92,7 @@ const Public = () => {
                     id="password"
                     onChange={handlePwdInput}
                     value={password}
+                    placeholder='Enter your password'
                     required
                 />
                 <label htmlFor="persist" className="form__persist">

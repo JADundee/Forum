@@ -219,6 +219,10 @@ a:any-link:focus-visible {
   color: var(--LINK-COLOR);
 }
 
+textarea {
+  resize: none;
+}
+
 /* || DASH HEADER, CONTAINER & FOOTER */
 
 .dash-header {

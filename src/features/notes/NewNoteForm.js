@@ -64,6 +64,7 @@ const NewNoteForm = ({ users }) => {
                     type="text"
                     autoComplete="off"
                     value={title}
+                    placeholder="Enter a title for this post"
                     onChange={onTitleChanged}
                 />
 
@@ -75,6 +76,7 @@ const NewNoteForm = ({ users }) => {
                     id="text"
                     name="text"
                     value={text}
+                    placeholder="Enter text for this post"
                     onChange={onTextChanged}
                 />
                 <div className="form__action-buttons">
