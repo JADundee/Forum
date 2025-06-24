@@ -27,8 +27,15 @@ const NotesList = () => {
         const { ids, entities } = notes
 
         let filteredIds = ids.filter(noteId => entities[noteId].username)
+        
+        // Sort by most recently updated
+        filteredIds.sort((a, b) => {
+            const dateA = new Date(entities[a].updatedAt)
+            const dateB = new Date(entities[b].updatedAt)
+            return dateB - dateA // Descending order (most recent first)
+        })
     
-        const tableContent = ids?.length && filteredIds.map(noteId => <Note key={noteId} noteId={noteId} />)
+        const tableContent = filteredIds?.length && filteredIds.map(noteId => <Note key={noteId} noteId={noteId} />)
 
         content = (
             <table className="table table--notes">
