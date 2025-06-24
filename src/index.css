@@ -140,11 +140,13 @@
 body {
   font-family: 'Nunito', sans-serif;
   min-height: 100vh;
+  height: 100vh;
   background-color: var(--BGCOLOR);
   color: var(--COLOR);
   background-size: cover;
   background-position: top right;
   background-blend-mode: multiply;
+  overflow-x: hidden;
 }
 
 input,
@@ -157,8 +159,10 @@ select {
 #root {
   /* React root div */
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-flow: column nowrap;
+  overflow-x: hidden;
 }
 
 a:any-link {
@@ -312,6 +316,8 @@ textarea {
 .dash-container {
   padding: 0.75em 0.5em 0.5em;
   flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .dash-footer {
@@ -710,6 +716,16 @@ tr {
 }
 
 @media screen and (max-width: 400px) {
+  body {
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #root {
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
   h1 {
     font-size: 2rem;
   }
@@ -745,6 +761,13 @@ tr {
 @media screen and (min-width: 768px) and (max-width: 1000px) {
   body {
     font-size: 1.1rem;
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #root {
+    height: 100vh;
+    overflow-x: hidden;
   }
 
   .dash-header {
@@ -753,6 +776,8 @@ tr {
 
   .dash-container {
     padding: 0.75em;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .table {
@@ -813,7 +838,13 @@ tr {
 
   body {
     font-size: 1.25rem;
-  
+    height: 100vh;
+    overflow-x: hidden;
+  }
+
+  #root {
+    height: 100vh;
+    overflow-x: hidden;
   }
 
   .dash-header {
@@ -829,6 +860,8 @@ tr {
   .dash-container {
     padding: 1em;
     width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   .table {
