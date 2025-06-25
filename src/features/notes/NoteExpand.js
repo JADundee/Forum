@@ -71,7 +71,7 @@ const NoteExpand = () => {
 
             <section className="blog-post__form">
                      
-                <ReplyForm noteId={note.id} userId={note.userId} setReplies={replies} refetchReplies={refetch}  />
+                <ReplyForm noteId={note.id} userId={note.user} setReplies={replies} refetchReplies={refetch}  />
                 
             </section>
             

@@ -36,7 +36,7 @@ const Public = () => {
         e.preventDefault()
         try {
             const { accessToken } = await login({ username, password }).unwrap()
-            dispatch(setCredentials({ accessToken }))
+            dispatch(setCredentials({ accessToken, persist }))
             setUsername('')
             setPassword('')
             navigate('/dash')

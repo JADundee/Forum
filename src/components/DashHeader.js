@@ -16,7 +16,7 @@ import moment from 'moment'
 // Import necessary hooks from React Router and Redux
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-import {useGetNotesQuery, useGetNotificationsQuery} from '../features/notes/notesApiSlice'
+import {useGetNotesQuery, useGetNotificationsQuery, useMarkNotificationReadMutation} from '../features/notes/notesApiSlice'
 import useAuth from '../hooks/useAuth'
 
 // Define regular expressions for matching dashboard routes
@@ -40,16 +40,10 @@ const DashHeader = () => {
 
     // Get notifications data from useGetNotificationsQuery hook
     const { data: notificationsData, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
-    
-    // Initialize state for notifications
-    const [notifications, setNotifications] = useState([]);
+    const [markNotificationRead] = useMarkNotificationReadMutation();
 
-    // Effect hook to update notifications state when data is received
-    useEffect(() => {
-        if (!notificationsLoading && notificationsData) {
-            setNotifications(notificationsData);
-        }
-    }, [notificationsData, notificationsLoading]);
+    // Use notificationsData directly
+    const notifications = notificationsData || [];
 
     // Get notes data from useGetNotesQuery hook
     const { data, isLoading: notesLoading } = useGetNotesQuery("notesList");
@@ -86,14 +80,15 @@ const DashHeader = () => {
 
    // Define logout handler function to handle logout functionality
     const logoutHandler = async () => {
+        console.log("Logout handler called");
+        // Targeted clearing of auth-related storage before async call
+        sessionStorage.removeItem('token');
+        localStorage.removeItem('persist');
         try {
-            // Call sendLogout mutation function to log out user
-            await sendLogout().unwrap()
-            // Navigate to home page after logout
-            navigate('/', {replace: true})
-        } catch(error) {
-            // Log any errors that occur during logout
-            console.log(error)
+            await sendLogout().unwrap();
+            navigate('/', { replace: true });
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -130,13 +125,11 @@ const DashHeader = () => {
         }
     };
 
-    const onNotificationClicked = (noteId) => {
-        // Get notification element
-        const notificationElement = document.querySelector('.notification-dropdown .notification-item')
-        // Add 'old-notification' class to notification element
-        notificationElement.classList.add('old-notification')
-        // Navigate to note page
-        navigate(`/dash/notes/${noteId}/expand`)
+    const onNotificationClicked = async (notification) => {
+        if (!notification.read) {
+            await markNotificationRead(notification.id);
+        }
+        navigate(`/dash/notes/${notification.noteId}/expand`);
     }
     
    // Define variable to store class name for dash header container
@@ -218,6 +211,16 @@ const DashHeader = () => {
         )
     }
 
+    // Count unread notifications
+    const unreadCount = notifications.filter(n => !n.read && n.username !== username).length;
+
+    // Handler for marking all as read (to be implemented with backend support)
+    const onMarkAllAsRead = async () => {
+        // Placeholder: implement with backend bulk mark as read endpoint
+        // Example: await markAllNotificationsRead();
+        alert('Mark all as read feature coming soon!');
+    };
+
     // Define notification button element
     let notificationButton = null;
 
@@ -228,27 +231,30 @@ const DashHeader = () => {
                 className="icon-button notification-button"
                 title="Notifications"
                 onClick={onNotificationButtonClicked}
+                style={{ position: 'relative' }}
             >
                 <FontAwesomeIcon icon={faBell} />
+                {unreadCount > 0 && (
+                    <span className="notification-badge">{unreadCount}</span>
+                )}
                 <div className="notification-dropdown">
                     {notificationsLoading ? (
                         <p className="notification-item">Loading...</p>
                     ) : notificationsError ? (
                         <p className="notification-item">Error fetching notifications</p>
                     ) : (
-                        notifications &&
+                        <>
+                        {notifications &&
                         notifications
-                            .filter((notification) => {
-                                return notification.username !== username;
-                            })
+                            .filter((notification) => notification.username !== username)
                             .map((notification) => {
                                 const note = notes.find((note) => note.id === notification.noteId);
                                 return (
                                     <div
                                         key={notification.id}
-                                        className="notification-item"
+                                        className={`notification-item ${notification.read ? 'notification-read' : 'notification-unread'}`}
                                         data-note-id={notification.noteId}
-                                        onClick={() => onNotificationClicked(notification.noteId)}
+                                        onClick={() => onNotificationClicked(notification)}
                                     >
                                         {note && (
                                             <p className="notification-title">
@@ -264,7 +270,14 @@ const DashHeader = () => {
                                         <p>{moment(notification.createdAt).fromNow()}</p>
                                     </div>
                                 );
-                            })
+                            })}
+                        <button
+                            className="mark-all-read-btn"
+                            onClick={onMarkAllAsRead}
+                        >
+                            Mark all as read
+                        </button>
+                        </>
                     )}
                     <button
                         className="button"

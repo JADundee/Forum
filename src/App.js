@@ -36,11 +36,13 @@ function App() {
 
                 <Route index element={<Welcome />} />
 
+                {/* Make notifications accessible to all authenticated users */}
+                <Route path="users/notifications/all" element={<AllNotifications />} />
+
                 <Route element={<RequireAuth allowedRoles={[ ROLES.Admin ]} />}>
                   <Route path="users">
                     <Route index element={<UsersList />} />
                     <Route path=":id" element={<EditUser />} />
-                    <Route path="notifications/all" element={<AllNotifications />} />
                   </Route>
                 </Route>
 
@@ -51,10 +53,7 @@ function App() {
                   <Route path="new" element={<NewNote />} />
                 </Route>
 
-                
-
               </Route>{/* End Dash */}
-              
             </Route>
           </Route>
         </Route>{/* End Protected Routes */}
