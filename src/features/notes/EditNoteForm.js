@@ -6,7 +6,7 @@ import { faSave, faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import useAuth from "../../hooks/useAuth"
 const EditNoteForm = ({ note }) => {
 
-    const { isAdmin } = useAuth()
+    const { isAdmin, userId: currentUserId } = useAuth()
 
     const [updateNote, {
         isLoading,
@@ -25,14 +25,14 @@ const EditNoteForm = ({ note }) => {
 
     const [title, setTitle] = useState(note.title)
     const [text, setText] = useState(note.text)
-    const [userId, setUserId] = useState(note.user)
+    const [ownerId, setOwnerId] = useState(note.user)
 
     useEffect(() => {
 
         if (isSuccess || isDelSuccess) {
             setTitle('')
             setText('')
-            setUserId('')
+            setOwnerId('')
             navigate('/dash/notes')
         }
 
@@ -41,11 +41,11 @@ const EditNoteForm = ({ note }) => {
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
 
-    const canSave = [title, text, userId].every(Boolean) && !isLoading
+    const canSave = [title, text, ownerId].every(Boolean) && !isLoading
 
     const onSaveNoteClicked = async (e) => {
         if (canSave) {
-            await updateNote({ id: note.id, user: userId, title, text})
+            await updateNote({ id: note.id, user: ownerId, title, text})
         }
     }
 
@@ -63,7 +63,7 @@ const EditNoteForm = ({ note }) => {
     const errContent = (error?.data?.message || delerror?.data?.message) ?? ''
 
     let saveButton = null
-    if ( isAdmin ) {
+    if (isAdmin || currentUserId === String(note.user)) {
         saveButton = (
             <button
                 className="button"
@@ -77,7 +77,7 @@ const EditNoteForm = ({ note }) => {
     }
 
     let deleteButton = null
-    if ( isAdmin ) {
+    if (isAdmin || currentUserId === String(note.user)) {
         deleteButton = (
             <button
                 className="button delete-button"
