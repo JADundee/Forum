@@ -1,4 +1,4 @@
-import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation } from '../notes/notesApiSlice';
+import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation } from '../notes/notesApiSlice';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -9,6 +9,7 @@ const AllNotifications = () => {
   const { data: notificationsData, isLoading, isError } = useGetNotificationsQuery();
   const { data: notesData, isLoading: notesLoading } = useGetNotesQuery();
   const [markNotificationRead] = useMarkNotificationReadMutation();
+  const [markAllNotificationsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
 
   if (isLoading || notesLoading) {
     return <p>Loading...</p>;
@@ -21,6 +22,8 @@ const AllNotifications = () => {
   const notes = notesData.entities;
   const notifications = notificationsData || [];
 
+  const unreadCount = notifications.filter(n => !n.read).length;
+
   const handleNotificationClicked = async (notification) => {
     if (!notification.read) {
       await markNotificationRead(notification.id);
@@ -28,10 +31,23 @@ const AllNotifications = () => {
     navigate(`/dash/notes/${notification.noteId}/expand`);
   };
 
+  const handleMarkAllAsRead = async () => {
+    if (unreadCount > 0) {
+      await markAllNotificationsRead();
+    }
+  };
+
   return (
     <div className="all-notifications">
       <div className="all-notifications__header">
         <h1>All Notifications</h1>
+        <button
+          className="button mark-all-read-btn"
+          onClick={handleMarkAllAsRead}
+          disabled={unreadCount === 0 || isMarkingAll}
+        >
+          Mark all as read
+        </button>
       </div>
       <div className="all-notifications__content">
         <ul className="all-notifications__list">

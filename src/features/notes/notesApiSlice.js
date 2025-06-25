@@ -113,6 +113,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
         }),
+        markAllNotificationsRead: builder.mutation({
+            query: () => ({
+                url: '/notifications/mark-all-read',
+                method: 'PATCH',
+            }),
+            invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
+        }),
     }),
 })
 
@@ -126,7 +133,8 @@ export const {
     useDeleteReplyMutation,
     useGetNotificationsQuery,
     useMarkNotificationReadMutation,
-    useCreateNotificationMutation
+    useCreateNotificationMutation,
+    useMarkAllNotificationsReadMutation
 } = notesApiSlice
 
 // returns the query result object

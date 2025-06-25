@@ -16,7 +16,7 @@ import moment from 'moment'
 // Import necessary hooks from React Router and Redux
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-import {useGetNotesQuery, useGetNotificationsQuery, useMarkNotificationReadMutation} from '../features/notes/notesApiSlice'
+import {useGetNotesQuery, useGetNotificationsQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation} from '../features/notes/notesApiSlice'
 import useAuth from '../hooks/useAuth'
 
 // Define regular expressions for matching dashboard routes
@@ -41,6 +41,7 @@ const DashHeader = () => {
     // Get notifications data from useGetNotificationsQuery hook
     const { data: notificationsData, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
     const [markNotificationRead] = useMarkNotificationReadMutation();
+    const [markAllNotificationsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
 
     // Use notificationsData directly
     const notifications = notificationsData || [];
@@ -197,8 +198,8 @@ const DashHeader = () => {
     // Define variable to store edit note button element
     let editNoteButton = null
 
-    // Check if current pathname includes "/dash/notes/:id/expand" and note username matches current user's username
-    if (pathname.includes(`/dash/notes/${id}/expand`) && note?.username === username) {
+    // Check if current pathname includes "/dash/notes/:id/expand" and note exists
+    if (pathname.includes(`/dash/notes/${id}/expand`) && (isAdmin || note?.username === username)) {
         // If true, create edit note button element
         editNoteButton = (
             <button
@@ -216,9 +217,9 @@ const DashHeader = () => {
 
     // Handler for marking all as read (to be implemented with backend support)
     const onMarkAllAsRead = async () => {
-        // Placeholder: implement with backend bulk mark as read endpoint
-        // Example: await markAllNotificationsRead();
-        alert('Mark all as read feature coming soon!');
+        if (unreadCount > 0) {
+            await markAllNotificationsRead();
+        }
     };
 
     // Define notification button element
@@ -272,8 +273,9 @@ const DashHeader = () => {
                                 );
                             })}
                         <button
-                            className="mark-all-read-btn"
+                            className="button mark-all-read-btn"
                             onClick={onMarkAllAsRead}
+                            disabled={unreadCount === 0 || isMarkingAll}
                         >
                             Mark all as read
                         </button>

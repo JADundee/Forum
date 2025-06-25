@@ -4,11 +4,14 @@ import useAuth from '../../hooks/useAuth'
 import ReplyForm from './ReplyForm'
 import RepliesList from './RepliesList'
 import moment from 'moment'
+import { useState } from 'react'
 
 const NoteExpand = () => {
 
     const { id } = useParams()
     const { username, isAdmin } = useAuth()
+    const [scrollToLastReply, setScrollToLastReply] = useState(false)
+    const [highlightReplyId, setHighlightReplyId] = useState(null);
     
 
     const { note } = useGetNotesQuery("notesList", {
@@ -46,6 +49,10 @@ const NoteExpand = () => {
     const created = moment(note.createdAt).format('MMMM D, YYYY h:mm A');
     const updated = moment(note.updatedAt).format('MMMM D, YYYY h:mm A');
 
+    const handleReplySubmitted = (replyId) => {
+        setHighlightReplyId(replyId);
+    };
+
     const content = (
         <article className="blog-post">
             <div className='blog-post__op'>
@@ -70,19 +77,22 @@ const NoteExpand = () => {
             </div>
 
             <section className="blog-post__form">
-                     
-                <ReplyForm noteId={note.id} userId={note.user} setReplies={replies} refetchReplies={refetch}  />
-                
+                <ReplyForm noteId={note.id} userId={note.user} setReplies={replies} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
             </section>
             
             <section className="blog-post__replies">
                 <div>
                     <h2>Replies</h2>
-                    <RepliesList replies={replies} refetchReplies={refetch} />
+                    <RepliesList replies={replies} refetchReplies={refetch} highlightReplyId={highlightReplyId} />
                 </div>
             </section>
         </article>
     );
+
+    // Reset scrollToLastReply after scroll
+    if (scrollToLastReply) {
+        setTimeout(() => setScrollToLastReply(false), 500);
+    }
 
     return content;
 

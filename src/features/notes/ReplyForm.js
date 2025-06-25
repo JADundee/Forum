@@ -1,18 +1,16 @@
 import { useState } from 'react';
 import { useAddReplyMutation, useCreateNotificationMutation } from './notesApiSlice';
-import { useGetUsersQuery } from '../users/usersApiSlice';
 import useAuth from '../../hooks/useAuth';
 
-const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies }) => {
+const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitted }) => {
     const [replyText, setReplyText] = useState('');
     const [addReply] = useAddReplyMutation();
     const [createNotification] = useCreateNotificationMutation();
     const { username: senderUsername, userId: senderUserId } = useAuth();
-    const { data: usersData } = useGetUsersQuery('usersList');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await addReply({ noteId, userId: senderUserId, replyText, username: senderUsername });
+        const result = await addReply({ noteId, userId: senderUserId, replyText, username: senderUsername });
         if (noteOwnerId !== senderUserId) {
             await createNotification({
                 userId: String(noteOwnerId),
@@ -22,6 +20,8 @@ const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies }) => {
             });
         }
         refetchReplies();
+        setReplyText('');
+        if (onReplySubmitted && result?.data?._id) onReplySubmitted(result.data._id);
     };
 
     const canReply = replyText.trim() !== ''
