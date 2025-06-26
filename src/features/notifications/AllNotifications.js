@@ -41,7 +41,7 @@ const AllNotifications = () => {
     await deleteNotification(notificationId);
   };
 
-  return (
+  const content = (
     <div className="all-notifications">
       <div className="all-notifications__header">
         <h1>All Notifications</h1>
@@ -90,6 +90,8 @@ const AllNotifications = () => {
       </div>
     </div>
   );
+
+  return content;
 };
 
 export default AllNotifications;

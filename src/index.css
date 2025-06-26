@@ -1003,3 +1003,10 @@ tr {
     display: block
   }
 }
+
+.dash-header__title--disabled {
+  color: var(--INACTIVE);
+  cursor: not-allowed;
+  user-select: none;
+  pointer-events: none;
+}

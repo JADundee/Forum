@@ -18,6 +18,7 @@ import NoteExpand from './features/notes/NoteExpand'
 import AllNotifications from './features/notifications/AllNotifications'
 import ForgotPassword from './features/auth/ForgotPassword'
 import ResetPassword from './features/auth/ResetPassword'
+import Profile from './features/users/Profile'
 
 function App() {
   useTitle('theForum')
@@ -39,6 +40,7 @@ function App() {
               <Route path="dash" element={<DashLayout />}>
 
                 <Route index element={<Welcome />} />
+                <Route path="profile" element={<Profile />} />
 
                 {/* Make notifications accessible to all authenticated users */}
                 <Route path="users/notifications/all" element={<AllNotifications />} />

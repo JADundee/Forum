@@ -7,7 +7,8 @@ import {
     faUserGear,
     faRightFromBracket,
     faFile,
-    faBell
+    faBell,
+    faUser
 } from "@fortawesome/free-solid-svg-icons"
 
 // Import moment library for date and time formatting
@@ -103,6 +104,7 @@ const DashHeader = () => {
     const onNotesClicked = () => navigate('/dash/notes')
     const onUsersClicked = () => navigate('/dash/users')
     const onEditNoteClicked = () => navigate(`/dash/notes/${id}/edit`)
+    const onProfileClicked = () => navigate('/dash/profile')
 
     const handleOutsideClick = (e) => {
     if (!dropdown.contains(e.target) && !e.target.classList.contains('icon-button') && !e.target.classList.contains('notification-button')) {
@@ -292,6 +294,17 @@ const DashHeader = () => {
         );
     }
 
+    // Define profile button element
+    const profileButton = (
+        <button
+            className="icon-button"
+            title="Profile"
+            onClick={onProfileClicked}
+        >
+            <FontAwesomeIcon icon={faUser} />
+        </button>
+    )
+
     // Define logout button element
     const logoutButton = (
         <button
@@ -322,21 +335,27 @@ const DashHeader = () => {
                 {editNoteButton}
                 {userButton}
                 {notificationButton}
+                {profileButton}
                 {logoutButton}
             </>
         )
     }
 
     // Define JSX element for DashHeader component
+    const isWelcomePage = pathname === '/dash';
     const content = (
         <>
             <p className={errClass}>{error?.data?.message}</p>
 
             <header className="dash-header">
                 <div className={`dash-header__container ${dashClass}`}>
-                    <Link to="/dash">
-                        <h1 className="dash-header__title">theForum</h1>
-                    </Link>
+                    {isWelcomePage ? (
+                        <h1 className="dash-header__title dash-header__title--disabled">theForum</h1>
+                    ) : (
+                        <Link to="/dash">
+                            <h1 className="dash-header__title">theForum</h1>
+                        </Link>
+                    )}
                     <nav className="dash-header__nav">
                         {buttonContent}
                     </nav>
