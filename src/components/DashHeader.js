@@ -130,7 +130,7 @@ const DashHeader = () => {
         if (!notification.read) {
             await markNotificationRead(notification.id);
         }
-        navigate(`/dash/notes/${notification.noteId}/expand`);
+        navigate(`/dash/notes/${notification.noteId}/expand`, { state: { replyId: notification.replyId } });
     }
     
    // Define variable to store class name for dash header container

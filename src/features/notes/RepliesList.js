@@ -22,7 +22,7 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
     refetchReplies()
   }
 
-    if (!Array.isArray(replies)) {
+  if (!Array.isArray(replies)) {
     return <p>No replies found</p>;
   }
 

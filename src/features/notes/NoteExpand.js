@@ -1,14 +1,16 @@
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useGetNotesQuery, useGetRepliesQuery } from './notesApiSlice'
 import useAuth from '../../hooks/useAuth'
 import ReplyForm from './ReplyForm'
 import RepliesList from './RepliesList'
 import moment from 'moment'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const NoteExpand = () => {
 
     const { id } = useParams()
+    const location = useLocation();
+    const navigate = useNavigate();
     const { username, isAdmin } = useAuth()
     const [scrollToLastReply, setScrollToLastReply] = useState(false)
     const [highlightReplyId, setHighlightReplyId] = useState(null);
@@ -22,8 +24,15 @@ const NoteExpand = () => {
 
     const { data: replies, isLoading, isError, refetch } = useGetRepliesQuery(note?.id);
 
-    
-   
+    // Set highlightReplyId from navigation state after replies are loaded
+    useEffect(() => {
+        if (location.state?.replyId && replies && replies.length > 0) {
+            setHighlightReplyId(location.state.replyId);
+            // Clear the navigation state so it doesn't persist
+            navigate(location.pathname, { replace: true, state: {} });
+        }
+    }, [location.state, replies, navigate, location.pathname]);
+
     if (!note || !note.id) {
       return <p className="errmsg">No access</p>
     }
@@ -77,7 +86,7 @@ const NoteExpand = () => {
             </div>
 
             <section className="blog-post__form">
-                <ReplyForm noteId={note.id} userId={note.user} setReplies={replies} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
+                <ReplyForm noteId={note.id} userId={note.user} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
             </section>
             
             <section className="blog-post__replies">

@@ -11,14 +11,6 @@ const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitt
     const handleSubmit = async (e) => {
         e.preventDefault();
         const result = await addReply({ noteId, userId: senderUserId, replyText, username: senderUsername });
-        if (noteOwnerId !== senderUserId) {
-            await createNotification({
-                userId: String(noteOwnerId),
-                noteId,
-                replyText,
-                username: senderUsername
-            });
-        }
         refetchReplies();
         setReplyText('');
         if (onReplySubmitted && result?.data?._id) onReplySubmitted(result.data._id);

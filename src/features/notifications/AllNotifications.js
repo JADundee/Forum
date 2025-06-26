@@ -25,10 +25,8 @@ const AllNotifications = () => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const handleNotificationClicked = async (notification) => {
-    if (!notification.read) {
-      await markNotificationRead(notification.id);
-    }
-    navigate(`/dash/notes/${notification.noteId}/expand`);
+    await markNotificationRead(notification.id);
+    navigate(`/dash/notes/${notification.noteId}/expand`, { state: { replyId: notification.replyId } });
   };
 
   const handleMarkAllAsRead = async () => {
@@ -55,7 +53,9 @@ const AllNotifications = () => {
             <li
               key={notification.id}
               className={`all-notifications__item ${notification.read ? 'notification-read' : 'notification-unread'}`}
-              onClick={() => handleNotificationClicked(notification)}
+              onClick={() => {
+                handleNotificationClicked(notification);
+              }}
             >
               <p className="all-notifications__text">
                 <span className="username">{notification.username}</span> replied to: {' '}

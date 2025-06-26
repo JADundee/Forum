@@ -790,6 +790,25 @@ tr {
   background: #0056b3;
 }
 
+.reply--highlight {
+  animation: reply-flash 1.2s ease;
+}
+
+@keyframes reply-flash {
+  0% {
+    background-color: var(--STATUS-COMPLETE);
+    box-shadow: 0 0 10px var(--STATUS-COMPLETE);
+  }
+  60% {
+    background-color: var(--STATUS-COMPLETE);
+    box-shadow: 0 0 10px var(--STATUS-COMPLETE);
+  }
+  100% {
+    background-color: var(--BGCOLOR);
+    box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+  }
+}
+
 @media screen and (max-width: 400px) {
   body {
     height: 100vh;
@@ -952,24 +971,5 @@ tr {
   .note__updated,
   .note__username {
     display: block
-  }
-}
-
-.reply--highlight {
-  animation: reply-flash 1.2s ease;
-}
-
-@keyframes reply-flash {
-  0% {
-    background-color: var(--STATUS-COMPLETE);
-    box-shadow: 0 0 10px var(--STATUS-COMPLETE);
-  }
-  60% {
-    background-color: var(--STATUS-COMPLETE);
-    box-shadow: 0 0 10px var(--STATUS-COMPLETE);
-  }
-  100% {
-    background-color: var(--BGCOLOR);
-    box-shadow: 10px 10px 0px var(--BOX-SHADOW);
   }
 }
