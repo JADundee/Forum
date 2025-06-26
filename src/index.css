@@ -24,6 +24,8 @@
   --TABLE-BGCOLOR: #FFF;
   --TABLE-COLOR: #333;
   --INPUT-INVALID: #F00;
+  --ALTBUTTON: #82a8ff;
+  --ALTBUTTON-HOVER: #6388ff;
 }
 
 /* Dark mode styles */
@@ -178,6 +180,33 @@ a:any-link:focus-visible {
 
 /* || PAGES */
 
+/* theForum header link style for consistent branding */
+
+.public__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--BGCOLOR);
+  padding: 0 0.5em;
+  border-bottom: 1px solid var(--BORDER-COLOR);
+  border-radius: 10px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
+}
+
+.public__header-link {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--COLOR);
+  cursor: pointer;
+  user-select: none;
+  text-decoration: none;
+  transition: color 0.2s;
+  
+}
+.public__header-link:hover, .theforum-header-link:focus-visible {
+  color: var(--LINK-HOVER);
+}
+
 .public,
 .welcome {
   display: flex;
@@ -307,11 +336,6 @@ textarea {
 .notification-dropdown.show {
   display: block;
 }
-
-/* .old-notification {
-  text-decoration: line-through;
-  color: #aaa; 
-} */
 
 .dash-container {
   padding: 0.75em 0.5em 0.5em;
@@ -478,18 +502,12 @@ tr {
   box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
 
-.form__submit-button {
-  background-color: var(--LINK-COLOR);
-  color: var(--COLOR);
-  padding: 10px;
-  font-size: 1.2rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.form__login-button {
+  background-color: var(--ALTBUTTON);
 }
 
-.form__login-button {
-  background-color: rgb(130, 168, 255);
+.form__login-button:hover {
+  background-color: var(--ALTBUTTON-HOVER);
 }
 
 .form__login-button:disabled {
@@ -499,8 +517,13 @@ tr {
 }
 
 .form__register-button {
-  background-color: var(--LINK-COLOR);
+  background-color: var(--ALTBUTTON);
 }
+
+.form__register-button:hover {
+  background-color: var(--ALTBUTTON-HOVER);
+}
+
 
 .form__input--text {
   min-height: 150px;
@@ -783,11 +806,18 @@ tr {
   width: 100%;
   margin: 8px 0 0 0;
   padding: 6px 0;
-  background: #007bff;
+  background: var(--ALTBUTTON);
   
 }
 .mark-all-read-btn:hover {
-  background: #0056b3;
+  background: var(--ALTBUTTON-HOVER);
+}
+
+.mark-all-read-btn:disabled,
+.mark-all-read-btn:disabled:hover {
+  background: var(--INACTIVE);
+  color: #666;
+  cursor: not-allowed;
 }
 
 .reply--highlight {

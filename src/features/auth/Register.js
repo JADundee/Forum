@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { useAddNewUserMutation } from "../users/usersApiSlice"
 import { useNavigate } from "react-router-dom"
+import PublicHeader from '../../components/PublicHeader'
 
 const USER_REGEX = /^[A-z]{3,20}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Register = () => {
 
@@ -20,6 +22,8 @@ const Register = () => {
     const [validUsername, setValidUsername] = useState(false)
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
+    const [email, setEmail] = useState('')
+    const [validEmail, setValidEmail] = useState(false)
     const [roles, setRoles] = useState(["Member"])
 
     useEffect(() => {
@@ -31,9 +35,14 @@ const Register = () => {
     }, [password])
 
     useEffect(() => {
+        setValidEmail(EMAIL_REGEX.test(email))
+    }, [email])
+
+    useEffect(() => {
         if (isSuccess) {
             setUsername('')
             setPassword('')
+            setEmail('')
             setRoles([])
             navigate('/')
             alert("Registration completed. Please login with your credentials.")
@@ -42,13 +51,14 @@ const Register = () => {
 
     const onUsernameChanged = e => setUsername(e.target.value)
     const onPasswordChanged = e => setPassword(e.target.value)
+    const onEmailChanged = e => setEmail(e.target.value)
 
-    const canSave = [roles.length, validUsername, validPassword].every(Boolean) && !isLoading
+    const canSave = [roles.length, validUsername, validPassword, validEmail].every(Boolean) && !isLoading
 
     const onSaveUserClicked = async (e) => {
         e.preventDefault()
         if (canSave) {
-            await addNewUser({ username, password, roles })
+            await addNewUser({ username, email, password, roles })
         }
     }
 
@@ -57,12 +67,13 @@ const Register = () => {
     const errClass = isError ? "errmsg" : "offscreen"
     const validUserClass = !validUsername ? 'form__input--incomplete' : ''
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
+    const validEmailClass = !validEmail ? 'form__input--incomplete' : ''
 
 
     const content = (
         <>
             <p className={errClass}>{error?.data?.message}</p>
-
+            <PublicHeader />
             <form className="form" onSubmit={onSaveUserClicked}>
                 <div className="form__title-row">
                     <h2>Create New Account</h2>
@@ -90,9 +101,22 @@ const Register = () => {
                     onChange={onPasswordChanged}
                 />
 
+                <label className="form__label" htmlFor="email">
+                    Email:
+                </label>
+                <input
+                    className={`form__input ${validEmailClass}`}
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="off"
+                    value={email}
+                    onChange={onEmailChanged}
+                />
+
             <div className="form__action-buttons">
                         <button
-                            className="form__submit-button"
+                            className="button"
                             title="Save"
                             disabled={!canSave}>
                                 Create Account
@@ -101,7 +125,7 @@ const Register = () => {
             </form>
             <div>
                         <button
-                            className="form__submit-button"
+                            className="button"
                             onClick={navigateHome}
                         >
                                 Back to Login

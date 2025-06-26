@@ -16,6 +16,8 @@ import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
 import NoteExpand from './features/notes/NoteExpand'
 import AllNotifications from './features/notifications/AllNotifications'
+import ForgotPassword from './features/auth/ForgotPassword'
+import ResetPassword from './features/auth/ResetPassword'
 
 function App() {
   useTitle('theForum')
@@ -27,6 +29,8 @@ function App() {
         <Route index element={<Public />} />
         <Route path="register" element={<Register />}>
         </Route>
+        <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="reset-password/:token" element={<ResetPassword />} />
 
         {/* Protected Routes */}
         <Route element={<PersistLogin />}>

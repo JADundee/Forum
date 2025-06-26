@@ -5,6 +5,7 @@ import { setCredentials } from '../features/auth/authSlice'
 import { useLoginMutation } from '../features/auth/authApiSlice'
 import usePersist from '../hooks/usePersist'
 import useTitle from '../hooks/useTitle'
+import PublicHeader from './PublicHeader'
 
 const Public = () => {
     useTitle('Employee Login')
@@ -60,63 +61,64 @@ const Public = () => {
     const handleToggle = () => setPersist(prev => !prev)
 
     const onNewUserClicked = () => navigate('/register')
+    const onForgotPasswordClicked = () => navigate('/forgot-password')
 
     if (isLoading) return <p>Loading...</p>
 
     const content = (
         <section className="public">
-        <header>
-            <h1>theForum</h1>
-        </header>
-        <main className="login">
-            <p ref={errRef} className={errClass} aria-live="assertive">{errMsg}</p>
+            <PublicHeader />
+            <main className="login">
+                <p ref={errRef} className={errClass} aria-live="assertive">{errMsg}</p>
 
-            <form className="form" onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <input
-                    className="form__input"
-                    type="text"
-                    id="username"
-                    ref={userRef}
-                    value={username}
-                    onChange={handleUserInput}
-                    autoComplete="off"
-                    placeholder='Enter your username'
-                    required
-                />
-
-                <label htmlFor="password">Password:</label>
-                <input
-                    className="form__input"
-                    type="password"
-                    id="password"
-                    onChange={handlePwdInput}
-                    value={password}
-                    placeholder='Enter your password'
-                    required
-                />
-                <label htmlFor="persist" className="form__persist">
+                <form className="form" onSubmit={handleSubmit}>
+                    <label htmlFor="username">Username or Email:</label>
                     <input
-                        type="checkbox"
-                        className="form__checkbox"
-                        id="persist"
-                        onChange={handleToggle}
-                        checked={persist}
+                        className="form__input"
+                        type="text"
+                        id="username"
+                        ref={userRef}
+                        value={username}
+                        onChange={handleUserInput}
+                        autoComplete="off"
+                        placeholder='Enter your username or email'
+                        required
                     />
-                    Trust This Device
-                </label>
-                <button className="form__submit-button form__login-button" disabled={!canLogin}>Sign In</button>
-                <p>New to the Forum?</p>
-                <button className="form__submit-button form__register-button" onClick={onNewUserClicked}>
-                        Register
+
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        className="form__input"
+                        type="password"
+                        id="password"
+                        onChange={handlePwdInput}
+                        value={password}
+                        placeholder='Enter your password'
+                        required
+                    />
+                    <label htmlFor="persist" className="form__persist">
+                        <input
+                            type="checkbox"
+                            className="form__checkbox"
+                            id="persist"
+                            onChange={handleToggle}
+                            checked={persist}
+                        />
+                        Trust This Device
+                    </label>
+                    <button className="button form__login-button" disabled={!canLogin}>Sign In</button>
+                    <button className="button form__forgot-password-button" type="button" onClick={onForgotPasswordClicked}>
+                            Forgot Password?
                     </button>
+                    <p>New to the Forum?</p>
+                    <button className="button form__register-button" onClick={onNewUserClicked}>
+                            Register
+                        </button>
+                </form>
+            </main>
+            <footer>
                 
-            </form>
-        </main>
-        <footer>
-            
-        </footer>
-    </section>
+            </footer>
+        </section>
 
     )
     return content
