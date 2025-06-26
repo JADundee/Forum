@@ -1,4 +1,4 @@
-import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation } from '../notes/notesApiSlice';
+import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation, useDeleteNotificationMutation } from '../notes/notesApiSlice';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
@@ -10,6 +10,7 @@ const AllNotifications = () => {
   const { data: notesData, isLoading: notesLoading } = useGetNotesQuery();
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const [markAllNotificationsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
+  const [deleteNotification, { isLoading: isDeleting }] = useDeleteNotificationMutation();
 
   if (isLoading || notesLoading) {
     return <p>Loading...</p>;
@@ -33,6 +34,11 @@ const AllNotifications = () => {
     if (unreadCount > 0) {
       await markAllNotificationsRead();
     }
+  };
+
+  const handleDeleteNotification = async (e, notificationId) => {
+    e.stopPropagation(); // Prevent navigation when deleting
+    await deleteNotification(notificationId);
   };
 
   return (
@@ -69,6 +75,15 @@ const AllNotifications = () => {
               <p className="all-notifications__timestamp">
                 <span className="timestamp">{moment(notification.createdAt).fromNow()}</span>
               </p>
+              <button
+                className="button delete-button"
+                style={{ marginLeft: '10px' }}
+                onClick={e => handleDeleteNotification(e, notification.id)}
+                disabled={isDeleting}
+                title="Delete notification"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
             </li>
           ))}
         </ul>

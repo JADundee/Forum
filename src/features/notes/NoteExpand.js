@@ -79,6 +79,10 @@ const NoteExpand = () => {
                     </span>
                 </p>
 
+                {note.editedBy && (
+                    <p className="blog-post__edited-by">Edited by: <span className="username">{note.editedBy}</span></p>
+                )}
+
                 <p className="blog-post__meta">
                         <span className="blog-post__created">Published: {created}</span> | 
                         <span className="blog-post__updated">Updated: {updated}</span>
