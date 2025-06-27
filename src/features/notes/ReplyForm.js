@@ -10,7 +10,8 @@ const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitt
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const result = await addReply({ noteId, userId: senderUserId, replyText, username: senderUsername });
+        const trimmedReplyText = replyText.trim();
+        const result = await addReply({ noteId, userId: senderUserId, replyText: trimmedReplyText, username: senderUsername });
         refetchReplies();
         setReplyText('');
         if (onReplySubmitted && result?.data?._id) onReplySubmitted(result.data._id);
