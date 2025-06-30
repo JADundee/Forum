@@ -8,14 +8,26 @@ const ResetPassword = () => {
     const { token } = useParams()
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [validConfirm, setValidConfirm] = useState(false)
+    const [passwordsMatch, setPasswordsMatch] = useState(true)
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value)
-        setValidPassword(PWD_REGEX.test(e.target.value))
+        const value = e.target.value
+        setPassword(value)
+        setValidPassword(PWD_REGEX.test(value))
+        setPasswordsMatch(value === confirmPassword)
+    }
+
+    const handleConfirmPasswordChange = (e) => {
+        const value = e.target.value
+        setConfirmPassword(value)
+        setValidConfirm(PWD_REGEX.test(value))
+        setPasswordsMatch(password === value)
     }
 
     const handleSubmit = async (e) => {
@@ -43,6 +55,8 @@ const ResetPassword = () => {
     }
 
     const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
+    const validConfirmClass = !validConfirm ? 'form__input--incomplete' : ''
+    const canSubmit = validPassword && validConfirm && passwordsMatch && !loading
 
     return (
         <section className="public">
@@ -67,8 +81,18 @@ const ResetPassword = () => {
                             onChange={handlePasswordChange}
                             required
                         />
+                        <label htmlFor="confirmPassword">Confirm Password:</label>
+                        <input
+                            className={`form__input ${validConfirmClass}`}
+                            type="password"
+                            id="confirmPassword"
+                            value={confirmPassword}
+                            onChange={handleConfirmPasswordChange}
+                            required
+                        />
+                        {!passwordsMatch && <p className="errmsg">Passwords do not match</p>}
                         <div className="form__action-buttons">
-                            <button className="button" type="submit" disabled={!validPassword || loading}>
+                            <button className={`button form__login-button`} type="submit" disabled={!canSubmit}>
                                 {loading ? 'Resetting...' : 'Reset Password'}
                             </button>
                             <button className="button" type="button" onClick={() => navigate('/')}>Back to Login</button>

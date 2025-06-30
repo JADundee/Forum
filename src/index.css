@@ -13,6 +13,7 @@
   --BGCOLOR: #F7F7F7;
   --BORDER-COLOR: #E5E5E5;
   --BOX-SHADOW: #309230;
+  --BOX-SHADOW-ALT: #bdbdbd;
   --COLOR: #333;
   --ERROR: firebrick;
   --INACTIVE: #CCC;
@@ -223,6 +224,11 @@ a:any-link:focus-visible {
   color: var(--LINK-HOVER);
 }
 
+.public__header-link--disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
 .public,
 .welcome {
   display: flex;
@@ -423,11 +429,6 @@ tr {
   z-index: 1;
 }
 
-.table__th {
-  font-weight: bold;
-  padding-bottom: 0.5em;
-  text-decoration: none;
-}
 
 .header-text {
   text-decoration: underline;
@@ -447,6 +448,14 @@ tr {
   padding: 0.5em;
   border-radius: 8px;
   box-shadow: 5px 5px 0px var(--BOX-SHADOW);
+}
+
+.table__th {
+  font-weight: bold;
+  padding-bottom: 0.5em;
+  text-decoration: none;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW-ALT);
+  border-bottom: 1px solid var(--BOX-SHADOW);
 }
 
 .table__th.sort-arrow {
@@ -879,7 +888,6 @@ tr {
 }
 
 .dash-header__title--disabled {
-  color: var(--INACTIVE);
   cursor: not-allowed;
   user-select: none;
   pointer-events: none;
@@ -1072,4 +1080,64 @@ tr {
   .dash-footer-date {
     display: none;
   }
+}
+
+.table-scroll-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1em;
+}
+
+.table-scroll-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Profile section layout */
+.profile {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+.profile > div:first-child {
+  flex: 1;
+}
+
+/* Activity section spacing */
+.profile-wide-btn {
+  margin: 1.5em 0;
+}
+
+.profile-buttons-transition {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+/* Table scroll wrapper spacing for notes/replies */
+.table-scroll-wrapper {
+  margin-top: 1.5em;
+}
+
+/* Password section spacing */
+.profile .form {
+  margin-top: 1em;
+}
+
+/* Delete button at the bottom */
+.delete-button {
+  margin-top: auto;
+}
+
+/* Horizontal rule spacing */
+.profile hr {
+  margin: 2em 0;
+}
+
+/* Centered empty state in tables */
+.table__row td[colspan],
+.table__cell[colspan] {
+  text-align: center;
 }

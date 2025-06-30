@@ -7,14 +7,11 @@ import moment from 'moment'
 import { useState, useEffect } from 'react'
 
 const NoteExpand = () => {
-
     const { id } = useParams()
     const location = useLocation();
     const navigate = useNavigate();
     const { username, isAdmin } = useAuth()
-    const [scrollToLastReply, setScrollToLastReply] = useState(false)
     const [highlightReplyId, setHighlightReplyId] = useState(null);
-    
 
     const { note } = useGetNotesQuery("notesList", {
         selectFromResult: ({ data }) => ({
@@ -24,34 +21,27 @@ const NoteExpand = () => {
 
     const { data: replies, isLoading, isError, refetch } = useGetRepliesQuery(note?.id);
 
-    // Set highlightReplyId from navigation state after replies are loaded
+    // Inline navigation state handling in useEffect
     useEffect(() => {
         if (location.state?.replyId && replies && replies.length > 0) {
             setHighlightReplyId(location.state.replyId);
-            // Clear the navigation state so it doesn't persist
             navigate(location.pathname, { replace: true, state: {} });
         }
     }, [location.state, replies, navigate, location.pathname]);
 
-    if (!note || !note.id) {
-      return <p className="errmsg">No access</p>
+    // Combined access checks
+    if (!note || !note.id || (!isAdmin && note.username !== username && window.location.pathname.includes('edit'))) {
+        return <p className="errmsg">No access</p>
     }
 
-    if (!isAdmin && note.username !== username) {
-        if (window.location.pathname.includes('edit')) {
-            return <p className="errmsg">No access</p>
-        }
-    }
-
+    // Grouped reply loading/error/empty checks
     if (isLoading) {
         return <p>Loading replies...</p>;
     }
-
     if (isError) {
         return <p>Error loading replies</p>;
     }
-
-    if (!replies && !isLoading) {
+    if (!replies) {
         return <p>No replies found</p>;
     }
 
@@ -101,11 +91,6 @@ const NoteExpand = () => {
             </section>
         </article>
     );
-
-    // Reset scrollToLastReply after scroll
-    if (scrollToLastReply) {
-        setTimeout(() => setScrollToLastReply(false), 500);
-    }
 
     return content;
 

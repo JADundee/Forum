@@ -6,9 +6,14 @@ import PublicHeader from '../../components/PublicHeader'
 const USER_REGEX = /^[A-z]{3,20}$/
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const INITIAL_STATE = {
+    username: '',
+    password: '',
+    email: '',
+    roles: ["Member"]
+}
 
 const Register = () => {
-
     const [addNewUser, {
         isLoading,
         isSuccess,
@@ -18,57 +23,52 @@ const Register = () => {
 
     const navigate = useNavigate()
 
-    const [username, setUsername] = useState('')
-    const [validUsername, setValidUsername] = useState(false)
-    const [password, setPassword] = useState('')
-    const [validPassword, setValidPassword] = useState(false)
-    const [email, setEmail] = useState('')
-    const [validEmail, setValidEmail] = useState(false)
-    const [roles, setRoles] = useState(["Member"])
+    const [form, setForm] = useState(INITIAL_STATE)
+    const [valid, setValid] = useState({
+        username: false,
+        password: false,
+        email: false
+    })
 
     useEffect(() => {
-        setValidUsername(USER_REGEX.test(username))
-    }, [username])
-
-    useEffect(() => {
-        setValidPassword(PWD_REGEX.test(password))
-    }, [password])
-
-    useEffect(() => {
-        setValidEmail(EMAIL_REGEX.test(email))
-    }, [email])
+        setValid({
+            username: USER_REGEX.test(form.username),
+            password: PWD_REGEX.test(form.password),
+            email: EMAIL_REGEX.test(form.email)
+        })
+    }, [form.username, form.password, form.email])
 
     useEffect(() => {
         if (isSuccess) {
-            setUsername('')
-            setPassword('')
-            setEmail('')
-            setRoles([])
+            setForm(INITIAL_STATE)
             navigate('/')
             alert("Registration completed. Please login with your credentials.")
         }
     }, [isSuccess, navigate])
 
-    const onUsernameChanged = e => setUsername(e.target.value)
-    const onPasswordChanged = e => setPassword(e.target.value)
-    const onEmailChanged = e => setEmail(e.target.value)
+    const onInputChange = e => {
+        const { name, value } = e.target
+        setForm(prev => ({ ...prev, [name]: value }))
+    }
 
-    const canSave = [roles.length, validUsername, validPassword, validEmail].every(Boolean) && !isLoading
+    const canSave = [form.roles.length, valid.username, valid.password, valid.email].every(Boolean) && !isLoading
 
     const onSaveUserClicked = async (e) => {
         e.preventDefault()
         if (canSave) {
-            await addNewUser({ username, email, password, roles })
+            await addNewUser({
+                username: form.username,
+                email: form.email,
+                password: form.password,
+                roles: form.roles
+            })
         }
     }
 
     const navigateHome = () => navigate('/')
 
     const errClass = isError ? "errmsg" : "offscreen"
-    const validUserClass = !validUsername ? 'form__input--incomplete' : ''
-    const validPwdClass = !validPassword ? 'form__input--incomplete' : ''
-    const validEmailClass = !validEmail ? 'form__input--incomplete' : ''
-
+    const getInputClass = (field) => !valid[field] ? 'form__input--incomplete' : ''
 
     const content = (
         <section className="public">
@@ -82,37 +82,37 @@ const Register = () => {
                     <label className="form__label" htmlFor="username">
                         Username: <span className="nowrap">[3-20 letters]</span></label>
                     <input
-                        className={`form__input ${validUserClass}`}
+                        className={`form__input ${getInputClass('username')}`}
                         id="username"
                         name="username"
                         type="text"
                         autoComplete="off"
-                        value={username}
-                        onChange={onUsernameChanged}
+                        value={form.username}
+                        onChange={onInputChange}
                     />
 
                     <label className="form__label" htmlFor="password">
                         Password: <span className="nowrap">[4-12 characters. Include a symbol]</span></label>
                     <input
-                        className={`form__input ${validPwdClass}`}
+                        className={`form__input ${getInputClass('password')}`}
                         id="password"
                         name="password"
                         type="password"
-                        value={password}
-                        onChange={onPasswordChanged}
+                        value={form.password}
+                        onChange={onInputChange}
                     />
 
                     <label className="form__label" htmlFor="email">
                         Email:
                     </label>
                     <input
-                        className={`form__input ${validEmailClass}`}
+                        className={`form__input ${getInputClass('email')}`}
                         id="email"
                         name="email"
                         type="email"
                         autoComplete="off"
-                        value={email}
-                        onChange={onEmailChanged}
+                        value={form.email}
+                        onChange={onInputChange}
                     />
 
                     <div className="form__action-buttons">

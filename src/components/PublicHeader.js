@@ -1,18 +1,24 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const PublicHeader = () => {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const isLoginPage = pathname === '/';
     return (
         <header className="public__header">
-            <span
-                className="public__header-link"
-                onClick={() => navigate('/')}
-                tabIndex={0}
-                role="button"
-                onKeyPress={e => { if (e.key === 'Enter') navigate('/') }}
-            >
-                theForum
-            </span>
+            {isLoginPage ? (
+                <h1 className="public__header-link public__header-link--disabled">theForum</h1>
+            ) : (
+                <span
+                    className="public__header-link"
+                    onClick={() => navigate('/')}
+                    tabIndex={0}
+                    role="button"
+                    onKeyPress={e => { if (e.key === 'Enter') navigate('/') }}
+                >
+                    theForum
+                </span>
+            )}
         </header>
     );
 };

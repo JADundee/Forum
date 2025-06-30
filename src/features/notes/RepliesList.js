@@ -2,7 +2,7 @@ import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useDeleteReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 
 const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
   const { data: users } = useGetUsersQuery('usersList');
@@ -11,16 +11,16 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
 
   const lastReplyRef = useRef(null);
 
+  const handleDeleteReply = useCallback(async (replyId) => {
+    await deleteReply({ replyId })
+    refetchReplies()
+  }, [deleteReply, refetchReplies]);
+
   useEffect(() => {
     if (highlightReplyId && lastReplyRef.current) {
       lastReplyRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [highlightReplyId, replies]);
-
-  const handleDeleteReply = async (replyId) => {
-    await deleteReply({ replyId })
-    refetchReplies()
-  }
 
   if (!Array.isArray(replies)) {
     return <p>No replies found</p>;
@@ -32,7 +32,7 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
         <Reply
           key={reply._id}
           reply={reply}
-          users={users}
+          username={users?.entities[reply.user]?.username}
           userId={userId}
           handleDeleteReply={handleDeleteReply}
           refProp={reply._id === highlightReplyId ? lastReplyRef : null}
@@ -47,7 +47,7 @@ const formatTimestamp = (timestamp) => {
   return moment(timestamp).format('MMMM D, YYYY h:mm A');
 };
 
-const Reply = ({ reply, users, userId, handleDeleteReply, refProp, highlight }) => {
+const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
   useEffect(() => {
     if (highlight) {
@@ -59,7 +59,7 @@ const Reply = ({ reply, users, userId, handleDeleteReply, refProp, highlight }) 
   return (
     <div className={`reply${isHighlighted ? ' reply--highlight' : ''}`} ref={refProp}>
       <div className="reply-header">
-        <span className="username">{users?.entities[reply.user]?.username}
+        <span className="username">{username}
           <span className='username-text'> Replied:</span>
         </span>
         {userId === reply.user && (

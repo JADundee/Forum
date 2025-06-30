@@ -10,9 +10,88 @@ import moment from 'moment'
 import { selectCurrentToken } from '../auth/authSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExpand } from '@fortawesome/free-solid-svg-icons'
+import DataTable from '../../components/DataTable'
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
+// --- DRY HELPERS ---
+function useShowWithTimeout(show, timeout = 1500) {
+    const [showContent, setShowContent] = useState(false);
+    const timeoutRef = useRef(null);
+    useEffect(() => {
+        if (show) {
+            setShowContent(true);
+        } else {
+            timeoutRef.current = setTimeout(() => setShowContent(false), timeout);
+        }
+        return () => clearTimeout(timeoutRef.current);
+    }, [show, timeout]);
+    return showContent;
+}
+
+function useSortableData(initialConfig) {
+    const [sortConfig, setSortConfig] = useState(initialConfig);
+    const handleSort = (key) => {
+        setSortConfig(prev => {
+            if (prev.key === key) {
+                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
+            } else {
+                return { key, direction: 'desc' };
+            }
+        });
+    };
+    return [sortConfig, handleSort];
+}
+
+// DRY sorting utility
+function getSortedData(arr, config, keyMap) {
+    return [...arr].sort((a, b) => {
+        let valA = keyMap[config.key](a);
+        let valB = keyMap[config.key](b);
+        if (config.key === 'createdAt' || config.key === 'updatedAt') {
+            return config.direction === 'desc' ? valB - valA : valA - valB;
+        } else {
+            return config.direction === 'desc'
+                ? valB.localeCompare(valA)
+                : valA.localeCompare(valB);
+        }
+    });
+}
+
+// DRY empty row renderer
+const renderEmptyRow = (colCount, message) => (
+    <tr>
+        <td colSpan={colCount} style={{ textAlign: 'center' }}>{message}</td>
+    </tr>
+);
+
+function renderStatus({ loading, error, errorMsg }) {
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p className="errmsg">{errorMsg}</p>;
+    return null;
+}
+
+function TableHeader({ columns, sortConfig, onSort }) {
+    return (
+        <tr>
+            {columns.map(col => (
+                <th
+                    key={col.key}
+                    className={col.className}
+                    style={col.sortable ? { cursor: 'pointer' } : undefined}
+                    onClick={col.sortable ? () => onSort(col.key) : undefined}
+                >
+                    <span className="header-text">{col.label}</span>
+                    {col.sortable && sortConfig.key === col.key ? (
+                        <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
+                    ) : ''}
+                </th>
+            ))}
+        </tr>
+    );
+}
+
+// --- MAIN COMPONENT ---
 const Profile = () => {
     const { username, roles, userId } = useAuth()
     const [showChangePwd, setShowChangePwd] = useState(false)
@@ -30,6 +109,25 @@ const Profile = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const token = useSelector(selectCurrentToken)
+
+    // Centralized handlers for toggling UI states
+    const handleActivitySelect = (activity) => {
+        setShowActivity(true);
+        setSelectedActivity(activity);
+        setShowChangePwd(false);
+    };
+
+    const handleShowActivityToggle = () => {
+        setShowActivity(v => !v);
+        setSelectedActivity(null);
+        setShowChangePwd(false);
+    };
+
+    const handleShowChangePwdToggle = () => {
+        setShowChangePwd(v => !v);
+        setShowActivity(false);
+        setSelectedActivity(null);
+    };
 
     // Fetch user data to get email
     const { user } = useGetUsersQuery('usersList', {
@@ -52,46 +150,22 @@ const Profile = () => {
         refetchOnMountOrArgChange: true
     })
 
-    // State for search and sorting in notes table
+    // State for search in notes table
     const [notesSearch, setNotesSearch] = useState("");
-    const [notesSortConfig, setNotesSortConfig] = useState({ key: 'updatedAt', direction: 'desc' });
 
     // State for user replies aggregation
     const [userReplies, setUserReplies] = useState([])
     const [repliesLoading, setRepliesLoading] = useState(false)
     const [repliesError, setRepliesError] = useState(null)
 
-    // Custom hook for show/hide with timeout
-    function useShowWithTimeout(show, timeout = 1500) {
-        const [showContent, setShowContent] = useState(false);
-        const timeoutRef = useRef(null);
-        useEffect(() => {
-            if (show) {
-                setShowContent(true);
-            } else {
-                timeoutRef.current = setTimeout(() => setShowContent(false), timeout);
-            }
-            return () => clearTimeout(timeoutRef.current);
-        }, [show, timeout]);
-        return showContent;
-    }
+    // Sorting hooks for notes and replies
+    const [notesSortConfig, handleNotesSort] = useSortableData({ key: 'updatedAt', direction: 'desc' });
+    const [repliesSortConfig, handleRepliesSort] = useSortableData({ key: 'createdAt', direction: 'desc' });
 
+    // Show/hide transitions
     const showNotesContent = useShowWithTimeout(showActivity && selectedActivity === 'notes');
     const showRepliesContent = useShowWithTimeout(showActivity && selectedActivity === 'replies');
     const showDeleteConfirmContent = useShowWithTimeout(showDeleteConfirm);
-
-    // Add this function
-    function handleRepliesSort(key) {
-        setRepliesSortConfig(prev => {
-            if (prev.key === key) {
-                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-            } else {
-                return { key, direction: 'desc' };
-            }
-        });
-    }
-
-    const [repliesSortConfig, setRepliesSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
 
     // Fetch user replies as soon as userId and token are available
     useEffect(() => {
@@ -168,22 +242,7 @@ const Profile = () => {
         }
     }
 
-    // Utility function for sorting
-    function getSorted(arr, config, keyMap) {
-        return [...arr].sort((a, b) => {
-            let valA = keyMap[config.key](a);
-            let valB = keyMap[config.key](b);
-            if (config.key === 'createdAt' || config.key === 'updatedAt') {
-                return config.direction === 'desc' ? valB - valA : valA - valB;
-            } else {
-                return config.direction === 'desc'
-                    ? valB.localeCompare(valA)
-                    : valA.localeCompare(valB);
-            }
-        });
-    }
-
-    // For notes sorting
+    // For notes sorting and filtering
     let sortedAndFilteredNoteIds = [];
     if (notesSuccess && notesData) {
         sortedAndFilteredNoteIds = notesData.ids
@@ -193,7 +252,7 @@ const Profile = () => {
                 const searchLower = notesSearch.toLowerCase();
                 return note.title.toLowerCase().includes(searchLower);
             });
-        sortedAndFilteredNoteIds = getSorted(
+        sortedAndFilteredNoteIds = getSortedData(
             sortedAndFilteredNoteIds,
             notesSortConfig,
             {
@@ -205,41 +264,14 @@ const Profile = () => {
         );
     }
 
-    // Sorting header click handler
-    function handleNotesSort(key) {
-        setNotesSortConfig(prev => {
-            if (prev.key === key) {
-                // Toggle direction
-                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-            } else {
-                // New sort key, default to descending
-                return { key, direction: 'desc' };
-            }
-        });
-    }
+    // For replies sorting
+    const sortedReplies = getSortedData(userReplies, repliesSortConfig, {
+        noteTitle: r => r.noteTitle.toLowerCase(),
+        text: r => r.text.toLowerCase(),
+        createdAt: r => new Date(r.createdAt)
+    });
 
-    // Reusable TableHeader component
-    function TableHeader({ columns, sortConfig, onSort }) {
-        return (
-            <tr>
-                {columns.map(col => (
-                    <th
-                        key={col.key}
-                        className={col.className}
-                        style={col.sortable ? { cursor: 'pointer' } : undefined}
-                        onClick={col.sortable ? () => onSort(col.key) : undefined}
-                    >
-                        <span className="header-text">{col.label}</span>
-                        {col.sortable && sortConfig.key === col.key ? (
-                            <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                        ) : ''}
-                    </th>
-                ))}
-            </tr>
-        );
-    }
-
-    // In notes table
+    // Table columns
     const notesColumns = [
         { key: 'title', label: 'Title', className: 'table__th table__title', sortable: true },
         { key: 'username', label: 'Owner', className: 'table__th table__username', sortable: true },
@@ -247,8 +279,6 @@ const Profile = () => {
         { key: 'updatedAt', label: 'Updated', className: 'table__th note__updated', sortable: true },
         { key: 'expand', label: 'Expand', className: 'table__th note__expand', sortable: false }
     ];
-
-    // In replies table
     const repliesColumns = [
         { key: 'noteTitle', label: 'Note Title', className: 'table__th', sortable: true },
         { key: 'text', label: 'Reply', className: 'table__th', sortable: true },
@@ -256,48 +286,69 @@ const Profile = () => {
         { key: 'expand', label: 'Expand', className: 'table__th note__expand', sortable: false }
     ];
 
-    // Calculate the number of notes for the current user
+    // Activity buttons
     const userNotesCount = notesSuccess && notesData
         ? notesData.ids.filter(noteId => notesData.entities[noteId].username === username).length
         : 0;
-    // Calculate the number of replies for the current user
     const userRepliesCount = userReplies.length;
-
     const badgeStyle = { marginLeft: 8, background: '#236323', color: '#fff', borderRadius: '12px', padding: '2px 8px', fontSize: '0.9em', display: 'inline-block' };
+    const activities = [
+        { key: 'notes', label: 'Notes', count: userNotesCount },
+        { key: 'replies', label: 'Replies', count: userRepliesCount },
+        { key: 'likes', label: 'Likes' }
+    ];
+
+    // DRY helper for activity label with badge
+    const renderActivityLabel = (label, count) => (
+        <>
+            {label}
+            {count > 0 && <span style={badgeStyle}>{count}</span>}
+        </>
+    );
+
+    // DRY helpers for password error messages
+    const getPwdError = () => {
+        if (!pwdValid && pwdTouched) return "Password must be 4-12 characters and only contain letters, numbers, and !@#$%";
+        return "";
+    };
+    const getConfirmError = () => {
+        if (confirmTouched && !passwordsMatch) return "Passwords do not match";
+        return "";
+    };
 
     return (
-        <section className="profile" style={{ display: 'flex', flexDirection: 'column', minHeight: '80vh' }}>
-            <div style={{ flex: 1 }}>
+        <section className="profile">
+            <div>
             <h2>My Profile</h2>
             <p><strong>Username:</strong> {username}</p>
             {email && <p><strong>Email:</strong> {email}</p>}
             <p><strong>Roles:</strong> {roles && roles.length ? roles.join(', ') : 'None'}</p>
 
                 {/* User Activity Button */}
-                <div style={{ margin: '1.5em 0' }}>
-                    <button className="button profile-wide-btn" onClick={() => {
-                        setShowActivity(v => !v)
-                        setSelectedActivity(null)
-                        setShowChangePwd(false)
-                    }}>
+                <div>
+                    <button className="button profile-wide-btn" onClick={handleShowActivityToggle}>
                         {showActivity ? 'Hide User Activity' : 'Show User Activity'}
                     </button>
                     {/* Activity buttons always rendered, visibility controlled by class */}
                     <div
                         className={`profile-buttons-transition${showActivity && !selectedActivity ? ' show' : ''}`}
-                        style={{ display: 'flex', flexDirection: 'column', gap: '1em', marginTop: '1em' }}
                         aria-hidden={!showActivity || !!selectedActivity}
                     >
-                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('notes')}>
-                            Notes{userNotesCount > 0 && <span style={badgeStyle}>{userNotesCount}</span>}
-                        </button>
-                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('replies')}>
-                            Replies{userRepliesCount > 0 && <span style={badgeStyle}>{userRepliesCount}</span>}
-                        </button>
-                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('likes')}>Likes</button>
+                        {activities.map(act => (
+                            <button
+                                key={act.key}
+                                className="button profile-btn"
+                                type="button"
+                                tabIndex={showActivity ? 0 : -1}
+                                style={{ pointerEvents: showActivity ? 'auto' : 'none' }}
+                                onClick={() => handleActivitySelect(act.key)}
+                            >
+                                {renderActivityLabel(act.label, act.count)}
+                            </button>
+                        ))}
                     </div>
                     {/* Show notes table if Notes activity is selected */}
-                    <div className={`profile-buttons-transition${showActivity && selectedActivity === 'notes' ? ' show' : ''}`} style={{ marginTop: '1.5em' }}>
+                    <div className={`profile-buttons-transition${showActivity && selectedActivity === 'notes' ? ' show' : ''}`}>
                     {showNotesContent && (
                         <>
                             {/* Search Bar */}
@@ -310,23 +361,18 @@ const Profile = () => {
                                 />
                             </div>
                             {/* Notes Table */}
-                            {notesLoading && <p>Loading...</p>}
-                            {notesError && <p className="errmsg">{notesErrorObj?.data?.message || 'Error loading notes'}</p>}
+                            {renderStatus({ loading: notesLoading, error: notesError, errorMsg: notesErrorObj?.data?.message || 'Error loading notes' })}
                             {notesSuccess && notesData && (
-                                <table className="table table--notes">
-                                    <thead className="table__thead">
-                                        <TableHeader columns={notesColumns} sortConfig={notesSortConfig} onSort={handleNotesSort} />
-                                    </thead>
-                                    <tbody>
-                                        {sortedAndFilteredNoteIds.length === 0 ? (
-                                            <tr>
-                                                <td colSpan="5" style={{ textAlign: 'center' }}>No notes found</td>
-                                            </tr>
-                                        ) : (
-                                            sortedAndFilteredNoteIds.map(noteId => <Note key={noteId} noteId={noteId} />)
-                                        )}
-                                    </tbody>
-                                </table>
+                                <DataTable
+                                    columns={notesColumns}
+                                    data={sortedAndFilteredNoteIds}
+                                    emptyMsg="No notes found"
+                                    renderRow={noteId => <Note key={noteId} noteId={noteId} />}
+                                    sortConfig={notesSortConfig}
+                                    onSort={handleNotesSort}
+                                    tableClassName="table table--notes"
+                                    theadClassName="table__thead"
+                                />
                             )}
                         </>
                     )}
@@ -334,110 +380,101 @@ const Profile = () => {
                 </div>
 
                 {/* Show replies table if Replies activity is selected */}
-                <div className={`profile-buttons-transition${showActivity && selectedActivity === 'replies' ? ' show' : ''}`} style={{ marginTop: '1.5em' }}>
+                <div className={`profile-buttons-transition${showActivity && selectedActivity === 'replies' ? ' show' : ''}`}>
                 {showRepliesContent && (
                     <>
-                    {repliesLoading && <p>Loading...</p>}
-                    {repliesError && <p className="errmsg">{repliesError}</p>}
+                    {renderStatus({ loading: repliesLoading, error: repliesError, errorMsg: repliesError })}
                     {!repliesLoading && !repliesError && (
-                        <table className="table table--replies">
-                            <thead className="table__thead">
-                                <TableHeader columns={repliesColumns} sortConfig={repliesSortConfig} onSort={handleRepliesSort} />
-                            </thead>
-                            <tbody>
-                                {getSorted(userReplies, repliesSortConfig, {
-                                    noteTitle: r => r.noteTitle.toLowerCase(),
-                                    text: r => r.text.toLowerCase(),
-                                    createdAt: r => new Date(r.createdAt)
-                                }).map(reply => (
-                                    <tr key={reply._id} className="table__row">
-                                        <td className="table__cell">{reply.noteTitle}</td>
-                                        <td className="table__cell">{reply.text}</td>
-                                        <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                                        <td className="table__cell">
-                                            <button
-                                                className="icon-button table__button"
-                                                title="Expand Note"
-                                                onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
-                                            >
-                                                <FontAwesomeIcon icon={faExpand} />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        <DataTable
+                            columns={repliesColumns}
+                            data={sortedReplies}
+                            emptyMsg="No replies found"
+                            renderRow={reply => (
+                                <tr key={reply._id} className="table__row">
+                                    <td className="table__cell">{reply.noteTitle}</td>
+                                    <td className="table__cell">{reply.text}</td>
+                                    <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                    <td className="table__cell">
+                                        <button
+                                            className="icon-button table__button"
+                                            title="Expand Note"
+                                            onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
+                                        >
+                                            <FontAwesomeIcon icon={faExpand} />
+                                        </button>
+                                    </td>
+                                </tr>
+                            )}
+                            sortConfig={repliesSortConfig}
+                            onSort={handleRepliesSort}
+                            tableClassName="table table--replies"
+                            theadClassName="table__thead"
+                        />
                     )}
                     </>
                 )}
                 </div>
 
                 {/* Change Password button and form always visible */}
-                <div style={{ margin: '2em 0 0 0' }}>
-                    <button className="button profile-wide-btn" onClick={() => {
-                        setShowChangePwd(v => !v)
-                        setShowActivity(false)
-                        setSelectedActivity(null)
-                    }}>
-                        {showChangePwd ? 'Cancel' : 'Change Password'}
-                    </button>
-                    <div className={`profile-buttons-transition${showChangePwd ? ' show' : ''}`} style={{ marginTop: '1em' }}>
-                        <form
-                            className="form"
-                            onSubmit={handleChangePassword}
-                            aria-hidden={!showChangePwd}
-                            tabIndex={showChangePwd ? 0 : -1}
-                        >
-                            <div className="form__title-row">
-                                <h2>Change Password</h2>
-                            </div>
-                            {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
-                            {successMsg && <p className="msgmsg">{successMsg}</p>}
-                            <label htmlFor="new-password">New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span></label>
-                            <input
-                                id="new-password"
-                                type="password"
-                                value={newPassword}
-                                onChange={handlePwdChange}
-                                onBlur={() => setPwdTouched(true)}
-                                placeholder='Enter your new password'
-                                required
-                                className="form__input"
-                            />
-                            {!pwdValid && pwdTouched && (
-                                <p className="errmsg">Password must be 4-12 characters and only contain letters, numbers, and !@#$%</p>
-                            )}
-                            <label htmlFor="confirm-password">Confirm New Password:</label>
-                            <input
-                                id="confirm-password"
-                                type="password"
-                                value={confirmPassword}
-                                onChange={handleConfirmChange}
-                                onBlur={() => setConfirmTouched(true)}
-                                placeholder='Re-enter your new password'
-                                required
-                                className="form__input"
-                            />
-                            {confirmTouched && !passwordsMatch && (
-                                <p className="errmsg">Passwords do not match</p>
-                            )}
-                            <div className="form__action-buttons">
-                                <button className="button form__login-button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
-                                    {isLoading ? 'Updating...' : 'Set New Password'}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <hr style={{ margin: '2em 0' }} />
+                {selectedActivity === null && (
+                  <div>
+                      <button className="button profile-wide-btn" onClick={handleShowChangePwdToggle}>
+                          {showChangePwd ? 'Cancel' : 'Change Password'}
+                      </button>
+                      <div className={`profile-buttons-transition${showChangePwd ? ' show' : ''}`}>
+                          <form
+                              className="form"
+                              onSubmit={handleChangePassword}
+                              aria-hidden={!showChangePwd}
+                              tabIndex={showChangePwd ? 0 : -1}
+                          >
+                              <div className="form__title-row">
+                                  <h2>Change Password</h2>
+                              </div>
+                              {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
+                              {successMsg && <p className="msgmsg">{successMsg}</p>}
+                              <label htmlFor="new-password">New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span></label>
+                              <input
+                                  id="new-password"
+                                  type="password"
+                                  value={newPassword}
+                                  onChange={handlePwdChange}
+                                  onBlur={() => setPwdTouched(true)}
+                                  placeholder='Enter your new password'
+                                  required
+                                  className="form__input"
+                              />
+                              {getPwdError() && <p className="errmsg">{getPwdError()}</p>}
+                              <label htmlFor="confirm-password">Confirm New Password:</label>
+                              <input
+                                  id="confirm-password"
+                                  type="password"
+                                  value={confirmPassword}
+                                  onChange={handleConfirmChange}
+                                  onBlur={() => setConfirmTouched(true)}
+                                  placeholder='Re-enter your new password'
+                                  required
+                                  className="form__input"
+                              />
+                              {getConfirmError() && <p className="errmsg">{getConfirmError()}</p>}
+                              <div className="form__action-buttons">
+                                  <button className="button form__login-button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
+                                      {isLoading ? 'Updating...' : 'Set New Password'}
+                                  </button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+                )}
+                <hr />
             </div>
             {/* Delete button always at the bottom when visible */}
             {!selectedActivity && (
-                <div style={{ marginTop: 'auto' }}>
+                <div>
             <button className="button delete-button" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
                 Delete My Account
             </button>
-            <div className={`profile-buttons-transition${showDeleteConfirm ? ' show' : ''}`} style={{ marginTop: '1em' }}>
+            <div className={`profile-buttons-transition${showDeleteConfirm ? ' show' : ''}`}>
             {showDeleteConfirmContent && (
                 <>
                     <p>Are you sure you want to delete your account? This action cannot be undone.</p>
