@@ -479,9 +479,6 @@ tr {
   display: flex;
   flex-flow: column nowrap;
   gap: 0.75em;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
   transition: opacity 1.5s ease, max-height 1.5s ease;
 }
 
@@ -1019,16 +1016,16 @@ tr {
   pointer-events: none;
 }
 
-.activity-buttons-transition {
+.profile-buttons-transition {
   opacity: 0;
   max-height: 0;
   overflow: hidden;
   transition: opacity 1.5s ease, max-height 1.5s ease;
 }
 
-.activity-buttons-transition.show {
+.profile-buttons-transition.show {
   opacity: 1;
-  max-height: 200px; /* adjust as needed */
+  max-height: 500px; /* adjust as needed */
 }
 
 .profile-wide-btn {
@@ -1036,7 +1033,7 @@ tr {
   display: inline-block;
 }
 
-.activity-btn {
+.profile-btn {
   min-width: 90px;
   max-width: 140px;
   text-align: center;

@@ -216,15 +216,15 @@ const Profile = () => {
                     </button>
                     {/* Activity buttons always rendered, visibility controlled by class */}
                     <div
-                        className={`activity-buttons-transition${showActivity && !selectedActivity ? ' show' : ''}`}
+                        className={`profile-buttons-transition${showActivity && !selectedActivity ? ' show' : ''}`}
                         style={{ display: 'flex', flexDirection: 'column', gap: '1em', marginTop: '1em' }}
                         aria-hidden={!showActivity || !!selectedActivity}
                     >
-                        <button className="button activity-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('notes')}>
+                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('notes')}>
                             Notes {userNotesCount > 0 && <span style={{ marginLeft: 8, background: '#236323', color: '#fff', borderRadius: '12px', padding: '2px 8px', fontSize: '0.9em' }}>{userNotesCount}</span>}
                         </button>
-                        <button className="button activity-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('replies')}>Replies</button>
-                        <button className="button activity-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('likes')}>Likes</button>
+                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('replies')}>Replies</button>
+                        <button className="button profile-btn" type="button" tabIndex={showActivity ? 0 : -1} style={{ pointerEvents: showActivity ? 'auto' : 'none' }} onClick={() => setSelectedActivity('likes')}>Likes</button>
                     </div>
                     {/* Show notes table if Notes activity is selected */}
                     {showActivity && selectedActivity === 'notes' && (
@@ -347,19 +347,28 @@ const Profile = () => {
                     </div>
                 )}
 
-                {/* Change Password button and form always rendered, visibility controlled by class */}
-                {!selectedActivity && (
-                    <>
-                        <button className="button profile-wide-btn" onClick={() => {
-                            setShowChangePwd(v => !v)
-                            setShowActivity(false)
-                        }}>
-                            {showChangePwd ? 'Cancel' : 'Change Password'}
-                        </button>
-                        <form className={`form${showChangePwd ? ' form-visible' : ''}`} onSubmit={handleChangePassword} style={{ marginTop: '1em' }}>
-                            <label htmlFor="new-password">
-                                New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span>
-                            </label>
+                {/* Change Password button and form always visible */}
+                <div style={{ margin: '2em 0 0 0' }}>
+                    <button className="button profile-wide-btn" onClick={() => {
+                        setShowChangePwd(v => !v)
+                        setShowActivity(false)
+                        setSelectedActivity(null)
+                    }}>
+                        {showChangePwd ? 'Cancel' : 'Change Password'}
+                    </button>
+                    <div className={`profile-buttons-transition${showChangePwd ? ' show' : ''}`} style={{ marginTop: '1em' }}>
+                        <form
+                            className="form"
+                            onSubmit={handleChangePassword}
+                            aria-hidden={!showChangePwd}
+                            tabIndex={showChangePwd ? 0 : -1}
+                        >
+                            <div className="form__title-row">
+                                <h2>Change Password</h2>
+                            </div>
+                            {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
+                            {successMsg && <p className="msgmsg">{successMsg}</p>}
+                            <label htmlFor="new-password">New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span></label>
                             <input
                                 id="new-password"
                                 type="password"
@@ -387,15 +396,15 @@ const Profile = () => {
                             {confirmTouched && !passwordsMatch && (
                                 <p className="errmsg">Passwords do not match</p>
                             )}
-                            <button className="button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
-                                {isLoading ? 'Updating...' : 'Set New Password'}
-                            </button>
-                            {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
+                            <div className="form__action-buttons">
+                                <button className="button form__login-button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
+                                    {isLoading ? 'Updating...' : 'Set New Password'}
+                                </button>
+                            </div>
                         </form>
-                        {successMsg && <p className="msgmsg">{successMsg}</p>}
-                        <hr style={{ margin: '2em 0' }} />
-                    </>
-                )}
+                    </div>
+                </div>
+                <hr style={{ margin: '2em 0' }} />
             </div>
             {/* Delete button always at the bottom when visible */}
             {!selectedActivity && (
