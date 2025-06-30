@@ -128,7 +128,7 @@ const NotesList = () => {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => handleSort('title')}
                             >
-                                <span>Title</span>{' '}
+                                <span className="header-text">Title</span>{' '}
                                 {sortConfig.key === 'title' ? (
                                     <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
                                 ) : ''}
@@ -139,7 +139,7 @@ const NotesList = () => {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => handleSort('username')}
                             >
-                                <span>Owner</span>{' '}
+                                <span className="header-text">Owner</span>{' '}
                                 {sortConfig.key === 'username' ? (
                                     <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
                                 ) : ''}
@@ -150,7 +150,7 @@ const NotesList = () => {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => handleSort('createdAt')}
                             >
-                                <span className="table__created">Created</span>{' '}
+                                <span className="header-text table__created">Created</span>{' '}
                                 {sortConfig.key === 'createdAt' ? (
                                     <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
                                 ) : ''}
@@ -161,12 +161,14 @@ const NotesList = () => {
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => handleSort('updatedAt')}
                             >
-                                <span className="table__updated">Updated</span>{' '}
+                                <span className="header-text table__updated">Updated</span>{' '}
                                 {sortConfig.key === 'updatedAt' ? (
                                     <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
                                 ) : ''}
                             </th>
-                            <th scope="col" className="table__th note__expand">Expand</th>
+                            <th scope="col" className="table__th note__expand">
+                                <span className="header-text">Expand</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

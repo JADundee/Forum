@@ -10,7 +10,7 @@ const DashFooter = () => {
     const content = (
         <footer className="dash-footer">
             <p>Current User: {username}</p>
-            <p>Permissions: {status}</p>
+            <span className="dash-footer-permissions"><p>Permissions: {status}</p></span>
             <p className="dash-footer-date">{today}</p>
         </footer>
     )

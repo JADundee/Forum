@@ -71,67 +71,68 @@ const Register = () => {
 
 
     const content = (
-        <>
-            <p className={errClass}>{error?.data?.message}</p>
+        <section className="public">
             <PublicHeader />
-            <form className="form" onSubmit={onSaveUserClicked}>
-                <div className="form__title-row">
-                    <h2>Create New Account</h2>
-                </div>
-                <label className="form__label" htmlFor="username">
-                    Username: <span className="nowrap">[3-20 letters]</span></label>
-                <input
-                    className={`form__input ${validUserClass}`}
-                    id="username"
-                    name="username"
-                    type="text"
-                    autoComplete="off"
-                    value={username}
-                    onChange={onUsernameChanged}
-                />
+            <main className="login">
+                <p className={errClass}>{error?.data?.message}</p>
+                <form className="form" onSubmit={onSaveUserClicked}>
+                    <div className="form__title-row">
+                        <h2>Create New Account</h2>
+                    </div>
+                    <label className="form__label" htmlFor="username">
+                        Username: <span className="nowrap">[3-20 letters]</span></label>
+                    <input
+                        className={`form__input ${validUserClass}`}
+                        id="username"
+                        name="username"
+                        type="text"
+                        autoComplete="off"
+                        value={username}
+                        onChange={onUsernameChanged}
+                    />
 
-                <label className="form__label" htmlFor="password">
-                    Password: <span className="nowrap">[4-12 characters. Include a symbol]</span></label>
-                <input
-                    className={`form__input ${validPwdClass}`}
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={password}
-                    onChange={onPasswordChanged}
-                />
+                    <label className="form__label" htmlFor="password">
+                        Password: <span className="nowrap">[4-12 characters. Include a symbol]</span></label>
+                    <input
+                        className={`form__input ${validPwdClass}`}
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={password}
+                        onChange={onPasswordChanged}
+                    />
 
-                <label className="form__label" htmlFor="email">
-                    Email:
-                </label>
-                <input
-                    className={`form__input ${validEmailClass}`}
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="off"
-                    value={email}
-                    onChange={onEmailChanged}
-                />
+                    <label className="form__label" htmlFor="email">
+                        Email:
+                    </label>
+                    <input
+                        className={`form__input ${validEmailClass}`}
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="off"
+                        value={email}
+                        onChange={onEmailChanged}
+                    />
 
-            <div className="form__action-buttons">
+                    <div className="form__action-buttons">
                         <button
-                            className="button"
+                            className="button form__register-button"
                             title="Save"
                             disabled={!canSave}>
                                 Create Account
                         </button>
-                    </div>
-            </form>
-            <div>
                         <button
                             className="button"
+                            type="button"
                             onClick={navigateHome}
                         >
                                 Back to Login
                         </button>
                     </div>
-        </>
+                </form>
+            </main>
+        </section>
     )
 
     return content

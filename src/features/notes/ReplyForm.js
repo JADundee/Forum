@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useAddReplyMutation, useCreateNotificationMutation } from './notesApiSlice';
+import { useAddReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 
 const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitted }) => {
     const [replyText, setReplyText] = useState('');
     const [addReply] = useAddReplyMutation();
-    const [createNotification] = useCreateNotificationMutation();
+    
     const { username: senderUsername, userId: senderUserId } = useAuth();
 
     const handleSubmit = async (e) => {

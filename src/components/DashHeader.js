@@ -36,9 +36,6 @@ const DashHeader = () => {
     const navigate = useNavigate()
     const { pathname } = useLocation()
 
-    // Get dropdown element for notifications
-    const dropdown = document.querySelector('.notification-dropdown')
-
     // Get notifications data from useGetNotificationsQuery hook
     const { data: notificationsData, isLoading: notificationsLoading, isError: notificationsError } = useGetNotificationsQuery();
     const [markNotificationRead] = useMarkNotificationReadMutation();
@@ -53,6 +50,9 @@ const DashHeader = () => {
     // Initialize state for notes
     const [notes, setNotes] = useState([]);
 
+    // Initialize state for notification dropdown
+    const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
+
     // Effect hook to update notes state when data is received
     useEffect(() => {
         if (!notesLoading && data && data.entities) {
@@ -61,16 +61,7 @@ const DashHeader = () => {
     }, [data, notesLoading, userId]);
 
     // Extract user IDs and titles from notes
-    const notesUserId = notes.map(note => note.user);
-    const notesTitle = notes.map(note => note.title);
     const note = notes.find((note) => note.id === id);
-
-    // Log notes data for debugging
-    console.log(notes)
-    console.log(typeof notes)
-    console.log(notesUserId)
-    console.log(userId)
-    console.log(notesTitle)
     
     // Get sendLogout mutation function from useSendLogoutMutation hook
     const [sendLogout, {
@@ -82,7 +73,6 @@ const DashHeader = () => {
 
    // Define logout handler function to handle logout functionality
     const logoutHandler = async () => {
-        console.log("Logout handler called");
         // Targeted clearing of auth-related storage before async call
         sessionStorage.removeItem('token');
         localStorage.removeItem('persist');
@@ -107,25 +97,26 @@ const DashHeader = () => {
     const onProfileClicked = () => navigate('/dash/profile')
 
     const handleOutsideClick = (e) => {
-    if (!dropdown.contains(e.target) && !e.target.classList.contains('icon-button') && !e.target.classList.contains('notification-button')) {
-        dropdown.classList.remove('show')
-        document.removeEventListener('click', handleOutsideClick)
-    }
-    }
+        const dropdown = document.querySelector('.notification-dropdown');
+        if (dropdown && !dropdown.contains(e.target) && !e.target.classList.contains('icon-button') && !e.target.classList.contains('notification-button')) {
+            setNotificationDropdownOpen(false);
+            document.removeEventListener('click', handleOutsideClick);
+        }
+    };
 
     // Define notification-related handler functions
     const onNotificationButtonClicked = () => {
-        const dropdown = document.querySelector('.notification-dropdown');
-        if (dropdown) {
-            dropdown.classList.toggle('show');
-            if (dropdown.classList.contains('show')) {
+        setNotificationDropdownOpen((prev) => {
+            const next = !prev;
+            if (next) {
                 setTimeout(() => {
                     document.addEventListener('click', handleOutsideClick);
                 }, 100);
             } else {
                 document.removeEventListener('click', handleOutsideClick);
             }
-        }
+            return next;
+        });
     };
 
     const onNotificationClicked = async (notification) => {
@@ -240,7 +231,7 @@ const DashHeader = () => {
                 {unreadCount > 0 && (
                     <span className="notification-badge">{unreadCount}</span>
                 )}
-                <div className="notification-dropdown">
+                <div className={`notification-dropdown${notificationDropdownOpen ? ' show' : ''}`}>
                     {notificationsLoading ? (
                         <p className="notification-item">Loading...</p>
                     ) : notificationsError ? (
