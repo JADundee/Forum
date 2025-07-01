@@ -249,7 +249,7 @@ const DashHeader = () => {
                 {isNotes && renderNewNoteButton()}
                 {!isNotes && pathname.startsWith('/dash') && renderNotesButton()}
                 {isNoteExpand && (isAdmin || userNotes.find(note => note.id === id)?.username === username) && renderEditNoteButton()}
-                {isAdmin && !isUsers && isDash && renderUsersButton()}
+                {isAdmin && !isUsers && renderUsersButton()}
                 {notificationButton}
                 {profileButton}
                 {logoutButton}

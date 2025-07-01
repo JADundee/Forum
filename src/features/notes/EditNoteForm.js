@@ -37,6 +37,7 @@ const EditNoteForm = ({ note }) => {
     const [title, setTitle] = useState(note.title)
     const [text, setText] = useState(note.text)
     const [ownerId, setOwnerId] = useState(note.user)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         if (isSuccess || isDelSuccess) {
@@ -103,21 +104,42 @@ const EditNoteForm = ({ note }) => {
                         <p className="form__updated">Updated:<br />{updated}</p>
                     </div>
                 </div>
-                <div className="form__action-buttons">
+                <div className="form__action-buttons" style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                     {canEdit && (
                         <>
-                            <ActionButton
-                                onClick={onSaveNoteClicked}
-                                disabled={!canSave}
-                                title="Save"
-                                icon={faSave}
-                            />
-                            <ActionButton
-                                onClick={onDeleteNoteClicked}
-                                title="Delete"
-                                icon={faTrashCan}
-                                className="delete-button"
-                            />
+                            <div style={{ display: 'flex', flexDirection: 'row', gap: '0.5em' }}>
+                                {!showDeleteConfirm && (
+                                    <>
+                                        <ActionButton
+                                            onClick={onSaveNoteClicked}
+                                            disabled={!canSave}
+                                            title="Save"
+                                            icon={faSave}
+                                        />
+                                        <ActionButton
+                                            onClick={() => setShowDeleteConfirm(true)}
+                                            title="Delete"
+                                            icon={faTrashCan}
+                                            className="delete-button"
+                                        />
+                                    </>
+                                )}
+                            </div>
+                            {showDeleteConfirm && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end', marginTop: '0.5em' }}>
+                                    <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
+                                    <ActionButton
+                                        onClick={onDeleteNoteClicked}
+                                        title="Yes, Delete"
+                                        icon={faTrashCan}
+                                        className="delete-button"
+                                    />
+                                    <ActionButton
+                                        onClick={() => setShowDeleteConfirm(false)}
+                                        title="Cancel"
+                                    />
+                                </div>
+                            )}
                         </>
                     )}
                 </div>

@@ -90,6 +90,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        editReply: builder.mutation({
+            query: ({ replyId, replyText }) => ({
+                url: `/notes/replies/${replyId}`,
+                method: 'PATCH',
+                body: { replyText },
+            }),
+        }),
          getNotifications: builder.query({
             query: () => ({
                 url: '/notifications',
@@ -138,6 +145,7 @@ export const {
     useAddReplyMutation,
     useGetRepliesQuery,
     useDeleteReplyMutation,
+    useEditReplyMutation,
     useGetNotificationsQuery,
     useMarkNotificationReadMutation,
     useCreateNotificationMutation,

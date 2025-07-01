@@ -30,7 +30,7 @@ const EditUserForm = ({ user }) => {
     const [password, setPassword] = useState('')
     const [validPassword, setValidPassword] = useState(false)
     const [roles, setRoles] = useState(user.roles)
-    const [active, setActive] = useState(user.active)
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         setValidUsername(USER_REGEX.test(username))
@@ -64,9 +64,9 @@ const EditUserForm = ({ user }) => {
 
     const onSaveUserClicked = async (e) => {
         if (password) {
-            await updateUser({ id: user.id, username, password, roles, active })
+            await updateUser({ id: user.id, username, password, roles })
         } else {
-            await updateUser({ id: user.id, username, roles, active })
+            await updateUser({ id: user.id, username, roles})
         }
     }
 
@@ -100,25 +100,39 @@ const EditUserForm = ({ user }) => {
 
     let saveButton = null
             saveButton = (
-                <button
-                    className="button"
-                    title="Save"
-                    onClick={onSaveUserClicked}
-                    disabled={!canSave}
-                >
-                   Save <FontAwesomeIcon icon={faSave} />
-                </button>
+                !showDeleteConfirm && (
+                    <button
+                        className="button"
+                        title="Save"
+                        onClick={onSaveUserClicked}
+                        disabled={!canSave}
+                    >
+                        Save <FontAwesomeIcon icon={faSave} />
+                    </button>
+                )
             )
     
         let deleteButton = null
             deleteButton = (
+              !showDeleteConfirm ? (
                 <button
-                    className="button delete-button"
-                    title="Delete"
-                    onClick={onDeleteUserClicked}
+                  className="button delete-button"
+                  title="Delete"
+                  onClick={() => setShowDeleteConfirm(true)}
                 >
-                   Delete <FontAwesomeIcon icon={faTrashCan} />
+                  Delete <FontAwesomeIcon icon={faTrashCan} />
                 </button>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end', marginTop: '0.5em' }}>
+                  <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
+                  <button className="button delete-button" onClick={onDeleteUserClicked}>
+                    Yes, Delete <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
+                  <button className="button" onClick={() => setShowDeleteConfirm(false)}>
+                    Cancel
+                  </button>
+                </div>
+              )
             )
 
     const content = (

@@ -1,13 +1,17 @@
 import { useGetUsersQuery } from '../users/usersApiSlice';
-import { useDeleteReplyMutation } from './notesApiSlice';
+import { useDeleteReplyMutation, useEditReplyMutation } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment';
 import { useEffect, useRef, useState, useCallback } from 'react';
+import EditReplyForm from './EditReplyForm';
 
 const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
   const { data: users } = useGetUsersQuery('usersList');
   const [deleteReply ] = useDeleteReplyMutation()
+  const [editReply, { isLoading: editLoading }] = useEditReplyMutation();
   const { userId } = useAuth()
+  const [editingReplyId, setEditingReplyId] = useState(null);
+  const [editText, setEditText] = useState('');
 
   const lastReplyRef = useRef(null);
 
@@ -15,6 +19,23 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
     await deleteReply({ replyId })
     refetchReplies()
   }, [deleteReply, refetchReplies]);
+
+  const handleEditClick = (reply) => {
+    setEditingReplyId(reply._id);
+    setEditText(reply.text);
+  };
+
+  const handleEditCancel = () => {
+    setEditingReplyId(null);
+    setEditText('');
+  };
+
+  const handleEditSave = async (replyId, newText) => {
+    await editReply({ replyId, replyText: newText });
+    setEditingReplyId(null);
+    setEditText('');
+    refetchReplies();
+  };
 
   useEffect(() => {
     if (highlightReplyId && lastReplyRef.current) {
@@ -37,6 +58,13 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
           handleDeleteReply={handleDeleteReply}
           refProp={reply._id === highlightReplyId ? lastReplyRef : null}
           highlight={reply._id === highlightReplyId}
+          isEditing={editingReplyId === reply._id}
+          editText={editText}
+          setEditText={setEditText}
+          onEditClick={() => handleEditClick(reply)}
+          onEditCancel={handleEditCancel}
+          onEditSave={(newText) => handleEditSave(reply._id, newText)}
+          editLoading={editLoading}
         />
       ))}
     </div>
@@ -47,7 +75,61 @@ const formatTimestamp = (timestamp) => {
   return moment(timestamp).format('MMMM D, YYYY h:mm A');
 };
 
-const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight }) => {
+const MenuButton = ({ onEdit, onDelete }) => {
+  const [open, setOpen] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+        setConfirmDelete(false);
+      }
+    };
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [open]);
+
+  return (
+    <div className={`reply-menu-wrapper`} ref={menuRef} style={{ position: 'relative', display: 'inline-block' }}>
+      <button
+        className="button reply-menu-button"
+        title="Show options"
+        onClick={() => { setOpen((prev) => !prev); setConfirmDelete(false); }}
+        aria-haspopup="true"
+        aria-expanded={open}
+      >
+        &#x22EE;
+      </button>
+      <div
+        className={`reply-menu-dropdown${open ? ' show' : ''}`}
+        style={{ position: 'absolute', right: 0, top: '100%', zIndex: 10 }}
+      >
+        {!confirmDelete ? (
+          <>
+            <button className="button" onClick={() => { setOpen(false); onEdit(); }}>Edit</button>
+            <button className="button delete-button" onClick={() => setConfirmDelete(true)}>Delete</button>
+          </>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'stretch' }}>
+            <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
+            <button className="button delete-button" onClick={() => { setOpen(false); setConfirmDelete(false); onDelete(); }}>Yes, Delete</button>
+            <button className="button" onClick={() => setConfirmDelete(false)}>Cancel</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight, isEditing, editText, setEditText, onEditClick, onEditCancel, onEditSave, editLoading }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
   useEffect(() => {
     if (highlight) {
@@ -56,26 +138,38 @@ const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight 
       return () => clearTimeout(timeout);
     }
   }, [highlight]);
+  const wasEdited = reply.updatedAt && reply.updatedAt !== reply.createdAt;
   return (
     <div className={`reply${isHighlighted ? ' reply--highlight' : ''}`} ref={refProp}>
       <div className="reply-header">
         <span className="username">{username}
           <span className='username-text'> Replied:</span>
         </span>
-        {userId === reply.user && (
-          <button
-            className="delete-button"
-            title="Delete Reply"
-            onClick={() => handleDeleteReply(reply._id)}
-          >
-            Delete
-          </button>
+        {userId === reply.user && !isEditing && (
+          <MenuButton
+            onEdit={onEditClick}
+            onDelete={() => handleDeleteReply(reply._id)}
+          />
         )}
       </div>
       <div className="reply-content">
-        <p>{reply.text}</p>
+        {isEditing ? (
+          <EditReplyForm
+            initialText={reply.text}
+            onSave={onEditSave}
+            onCancel={onEditCancel}
+            loading={editLoading}
+          />
+        ) : (
+          <p>{reply.text}</p>
+        )}
       </div>
-        <span className="timestamp">Replied on {formatTimestamp(reply.createdAt)}</span>
+      <span className="timestamp">
+        Replied on {formatTimestamp(reply.createdAt)}
+        {wasEdited && (
+          <span className="edited-timestamp"> (edited on {formatTimestamp(reply.updatedAt)})</span>
+        )}
+      </span>
     </div>
   );
 };

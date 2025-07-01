@@ -432,7 +432,7 @@ const Profile = () => {
                                   <h2>Change Password</h2>
                               </div>
                               {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
-                              {successMsg && <p className="msgmsg">{successMsg}</p>}
+                              {/* successMsg moved out of form */}
                               <label htmlFor="new-password">New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span></label>
                               <input
                                   id="new-password"
@@ -466,6 +466,8 @@ const Profile = () => {
                       </div>
                   </div>
                 )}
+                {/* Move successMsg here, above the horizontal rule */}
+                {successMsg && <p className="msgmsg">{successMsg}</p>}
                 <hr />
             </div>
             {/* Delete button always at the bottom when visible */}

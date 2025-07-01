@@ -134,6 +134,14 @@
     background-color: #cc0000; 
   }
 
+.button.cancel-edit-button {
+  background-color: #ff0000;
+  color: #ffffff;
+}
+.button.cancel-edit-button:hover {
+  background-color: #cc0000;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -923,6 +931,109 @@ tr {
   grid-template-columns: 2fr 3fr 2fr 1fr;
 }
 
+.table-scroll-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+  margin-bottom: 1em;
+}
+
+.table-scroll-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Profile section layout */
+.profile {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+.profile > div:first-child {
+  flex: 1;
+}
+
+/* Activity section spacing */
+.profile-wide-btn {
+  margin: 1.5em 0;
+}
+
+.profile-buttons-transition {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+/* Table scroll wrapper spacing for notes/replies */
+.table-scroll-wrapper {
+  margin-top: 1.5em;
+}
+
+/* Password section spacing */
+.profile .form {
+  margin-top: 1em;
+}
+
+/* Delete button at the bottom */
+.delete-button {
+  margin-top: auto;
+}
+
+/* Horizontal rule spacing */
+.profile hr {
+  margin: 2em 0;
+}
+
+/* Centered empty state in tables */
+.table__row td[colspan],
+.table__cell[colspan] {
+  text-align: center;
+}
+
+/* --- Edit Reply Form Styles --- */
+.edit-reply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-reply-textarea {
+  width: 100%;
+  min-height: 60px;
+  resize: vertical;
+  font-size: 1rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.edit-reply-form .edit-reply-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.edit-reply-action-button {
+  min-width: 80px;
+  height: 36px;
+  font-size: 1rem;
+  padding: 0.3em 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 400px) {
+  .edit-reply-action-button {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.85rem;
+  }
+}
+
 @media screen and (max-width: 400px) {
   h1 {
     font-size: 2rem;
@@ -952,6 +1063,28 @@ tr {
     
   .blog-post__content {
     font-size: 1.3rem;
+  }
+
+  .edit-button,
+  .delete-button {
+    padding: 0.30rem 0.60rem;
+    flex: 0 0 1;
+    min-width: 0;
+  }
+
+  .edit-reply-form .edit-reply-buttons,
+  .reply-header > div {
+    flex-direction: column !important;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .button.save-edit-button,
+  .button.cancel-edit-button,
+  .button.edit-button,
+  .button.delete-button {
+    width: 100%;
+    min-width: 0;
+    margin: 0;
   }
 }
 
@@ -1011,11 +1144,7 @@ tr {
   .form__submit-button {
     font-size: 1.1rem;
   }
-
-  .button {
-    font-size: 1.1rem;
-  }
-
+  
   .reply {
     padding: 15px;
   }
@@ -1082,62 +1211,69 @@ tr {
   }
 }
 
-.table-scroll-wrapper {
-  max-height: 400px;
-  overflow-y: auto;
-  margin-bottom: 1em;
+@media screen and (max-width: 768px) {
+  .button.save-edit-button,
+  .button.cancel-edit-button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.95rem;
+    min-width: 36px;
+  }
 }
 
-.table-scroll-wrapper thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+@media screen and (max-width: 400px) {
+  .button.save-edit-button,
+  .button.cancel-edit-button {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.85rem;
+    min-width: 28px;
+  }
 }
 
-/* Profile section layout */
-.profile {
+@media screen and (max-width: 332px) {
+  /* (No button stacking or width rules here anymore) */
+}
+
+.reply-menu-button {
+  background: transparent;
+  color: var(--COLOR);
+  font-size: 1.5rem;
+  padding: 0.2rem 0.7rem;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 0.5rem;
+}
+.reply-menu-button:hover,
+.reply-menu-button:focus-visible {
+  color: var(--LINK-COLOR);
+}
+.reply-menu-dropdown {
+  min-width: 120px;
   display: flex;
   flex-direction: column;
-  min-height: 80vh;
+  gap: 0.75rem;
+  padding: 1rem 0.5rem;
+  background-color: var(--BGCOLOR) !important;
+  border: 1px solid var(--BORDER-COLOR) !important;
+  border-radius: 8px !important;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW) !important;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-20px);
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
 }
-.profile > div:first-child {
-  flex: 1;
+.reply-menu-dropdown.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
-
-/* Activity section spacing */
-.profile-wide-btn {
-  margin: 1.5em 0;
-}
-
-.profile-buttons-transition {
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  margin-top: 1em;
-}
-
-/* Table scroll wrapper spacing for notes/replies */
-.table-scroll-wrapper {
-  margin-top: 1.5em;
-}
-
-/* Password section spacing */
-.profile .form {
-  margin-top: 1em;
-}
-
-/* Delete button at the bottom */
-.delete-button {
-  margin-top: auto;
-}
-
-/* Horizontal rule spacing */
-.profile hr {
-  margin: 2em 0;
-}
-
-/* Centered empty state in tables */
-.table__row td[colspan],
-.table__cell[colspan] {
-  text-align: center;
+.reply-menu-dropdown .button,
+.reply-menu-dropdown .button.delete-button {
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
