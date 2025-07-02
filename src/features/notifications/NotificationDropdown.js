@@ -1,5 +1,6 @@
 import React, { forwardRef } from 'react';
 import moment from 'moment';
+import NotificationItem from './NotificationItem';
 
 const NotificationDropdown = forwardRef(({
     notifications,
@@ -26,23 +27,11 @@ const NotificationDropdown = forwardRef(({
                     .filter((notification) => notification.username !== username)
                     .map((notification) => (
                         <div
-                            key={notification.id}
-                            className={`notification-item ${notification.read ? 'notification-read' : 'notification-unread'}`}
-                            data-note-id={notification.noteId}
-                            onClick={() => onNotificationClicked(notification)}
+                          key={notification.id}
+                          className={`notification-item${notification.read ? ' notification-read' : ''}`}
+                          onClick={() => onNotificationClicked(notification)}
                         >
-                            {notification.noteTitle && (
-                                <p className="notification-title">
-                                    <span className="notification-header">New Reply on: </span>
-                                    {notification.noteTitle}
-                                </p>
-                            )}
-                            <p>
-                                From: 
-                                <span className="username"> {notification.username}</span>
-                            </p>
-                            <p>"{notification.replyText}"</p>
-                            <p>{moment(notification.createdAt).fromNow()}</p>
+                          <NotificationItem notification={notification} />
                         </div>
                     ))}
                 <button

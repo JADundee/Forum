@@ -56,14 +56,22 @@ const NotificationsList = () => {
       <div className="all-notifications__content">
         <ul className="all-notifications__list">
           {notifications.map((notification) => (
-            <NotificationItem
+            <li
               key={notification.id}
-              notification={notification}
-              noteTitle={notes[notification.noteId]?.title || ''}
+              className={`all-notifications__item ${notification.read ? 'notification-read' : 'notification-unread'}`}
               onClick={() => handleNotificationClicked(notification)}
-              onDelete={e => handleDeleteNotification(e, notification.id)}
-              isDeleting={isDeleting}
-            />
+            >
+              <NotificationItem notification={notification} />
+              <button
+                className="button delete-button"
+                style={{ marginLeft: '10px' }}
+                onClick={e => handleDeleteNotification(e, notification.id)}
+                disabled={isDeleting}
+                title="Delete notification"
+              >
+                {isDeleting ? 'Deleting...' : 'Delete'}
+              </button>
+            </li>
           ))}
         </ul>
       </div>

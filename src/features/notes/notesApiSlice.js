@@ -66,7 +66,8 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Note', id: arg.id }
+                { type: 'Note', id: arg.id },
+                { type: 'Notification', id: 'LIST' }
             ]
         }),
         getReplies: builder.query({
@@ -74,6 +75,9 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 url: `/notes/${noteId}/replies`,
                 method: 'GET',
             }),
+            providesTags: (result, error, noteId) => [
+                { type: 'Replies', id: noteId }
+            ]
         }),
         addReply: builder.mutation({
             query: ({ noteId, userId, replyText, username }) => {
@@ -134,6 +138,43 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
         }),
+        toggleLikeNote: builder.mutation({
+            query: (noteId) => ({
+                url: `/notes/${noteId}/like`,
+                method: 'POST',
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Note', id: arg }
+            ]
+        }),
+        toggleLikeReply: builder.mutation({
+            query: ({ replyId }) => ({
+                url: `/notes/replies/${replyId}/like`,
+                method: 'POST',
+            }),
+            invalidatesTags: (result, error, arg) => [
+                { type: 'Replies', id: arg.noteId }
+            ]
+        }),
+        toggleLike: builder.mutation({
+            query: ({ targetId, targetType }) => ({
+                url: '/likes',
+                method: 'POST',
+                body: { targetId, targetType }
+            })
+        }),
+        getLikeCount: builder.query({
+            query: ({ targetId, targetType }) => ({
+                url: `/likes/count?targetId=${targetId}&targetType=${targetType}`,
+                method: 'GET'
+            })
+        }),
+        getUserLike: builder.query({
+            query: ({ targetId, targetType }) => ({
+                url: `/likes/user?targetId=${targetId}&targetType=${targetType}`,
+                method: 'GET'
+            })
+        }),
     }),
 })
 
@@ -150,7 +191,12 @@ export const {
     useMarkNotificationReadMutation,
     useCreateNotificationMutation,
     useMarkAllNotificationsReadMutation,
-    useDeleteNotificationMutation
+    useDeleteNotificationMutation,
+    useToggleLikeNoteMutation,
+    useToggleLikeReplyMutation,
+    useToggleLikeMutation,
+    useGetLikeCountQuery,
+    useGetUserLikeQuery
 } = notesApiSlice
 
 // returns the query result object

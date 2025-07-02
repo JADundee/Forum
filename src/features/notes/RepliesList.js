@@ -1,5 +1,5 @@
 import { useGetUsersQuery } from '../users/usersApiSlice';
-import { useDeleteReplyMutation, useEditReplyMutation } from './notesApiSlice';
+import { useDeleteReplyMutation, useEditReplyMutation, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from './notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment';
 import { useEffect, useRef, useState, useCallback } from 'react';
@@ -131,6 +131,22 @@ const MenuButton = ({ onEdit, onDelete }) => {
 
 const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight, isEditing, editText, setEditText, onEditClick, onEditCancel, onEditSave, editLoading }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
+  const [toggleLike] = useToggleLikeMutation();
+  const { data: likeCountData, refetch: refetchLikeCount } = useGetLikeCountQuery({ targetId: reply._id, targetType: 'reply' });
+  const { data: userLikeData, refetch: refetchUserLike } = useGetUserLikeQuery({ targetId: reply._id, targetType: 'reply' });
+  const [likeLoading, setLikeLoading] = useState(false);
+  const handleLike = async () => {
+    setLikeLoading(true);
+    try {
+      await toggleLike({ targetId: reply._id, targetType: 'reply' }).unwrap();
+      refetchLikeCount();
+      refetchUserLike();
+    } finally {
+      setLikeLoading(false);
+    }
+  };
+  const hasLiked = userLikeData?.liked;
+  const likeCount = likeCountData?.count || 0;
   useEffect(() => {
     if (highlight) {
       setIsHighlighted(true);
@@ -163,6 +179,16 @@ const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight,
         ) : (
           <p>{reply.text}</p>
         )}
+      </div>
+      <div className="reply-actions" style={{ marginTop: '0.5rem' }}>
+        <button
+          className={`like-button${hasLiked ? ' liked' : ''}`}
+          onClick={handleLike}
+          disabled={likeLoading}
+          aria-pressed={hasLiked}
+        >
+          {hasLiked ? '♥' : '♡'} Like ({likeCount})
+        </button>
       </div>
       <span className="timestamp">
         Replied on {formatTimestamp(reply.createdAt)}

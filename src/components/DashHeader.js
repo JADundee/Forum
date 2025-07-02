@@ -45,25 +45,28 @@ const DashHeader = () => {
     // Get notes data from useGetNotesQuery hook
     const { data, isLoading: notesLoading } = useGetNotesQuery("notesList");
 
-    // Memoized notes for current user
-    const userNotes = useMemo(() => {
+    // Memoized all notes
+    const allNotes = useMemo(() => {
         if (!notesLoading && data && data.entities) {
-            return Object.values(data.entities).filter(note => note.user === userId);
+            return Object.values(data.entities);
         }
         return [];
-    }, [data, notesLoading, userId]);
+    }, [data, notesLoading]);
 
-    // Optimize notification mapping with noteMap
+    // Optimize notification mapping with noteMap (all notes)
     const noteMap = useMemo(() => {
         const map = {};
-        userNotes.forEach(note => { map[note.id] = note.title; });
+        allNotes.forEach(note => { map[note.id] = note.title; });
         return map;
-    }, [userNotes]);
+    }, [allNotes]);
 
-    const notificationsWithTitles = useMemo(() => notifications.map(n => ({
+    // Filter out notifications for deleted notes
+    const filteredNotifications = useMemo(() => notifications.filter(n => !n.noteId || noteMap[n.noteId]), [notifications, noteMap]);
+
+    const notificationsWithTitles = useMemo(() => filteredNotifications.map(n => ({
         ...n,
         noteTitle: noteMap[n.noteId]
-    })), [notifications, noteMap]);
+    })), [filteredNotifications, noteMap]);
 
     // Initialize state for notification dropdown
     const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
@@ -122,8 +125,8 @@ const DashHeader = () => {
         if (isSuccess) navigate('/')
     }, [isSuccess, navigate])
 
-    // Count unread notifications
-    const unreadCount = notifications.filter(n => !n.read && n.username !== username).length;
+    // Count unread notifications (for existing notes only)
+    const unreadCount = filteredNotifications.filter(n => !n.read && n.username !== username).length;
 
     // Handler for marking all as read (to be implemented with backend support)
     const onMarkAllAsRead = async () => {
@@ -248,7 +251,7 @@ const DashHeader = () => {
             <>
                 {isNotes && renderNewNoteButton()}
                 {!isNotes && pathname.startsWith('/dash') && renderNotesButton()}
-                {isNoteExpand && (isAdmin || userNotes.find(note => note.id === id)?.username === username) && renderEditNoteButton()}
+                {isNoteExpand && (isAdmin || allNotes.find(note => note.id === id)?.username === username) && renderEditNoteButton()}
                 {isAdmin && !isUsers && renderUsersButton()}
                 {notificationButton}
                 {profileButton}

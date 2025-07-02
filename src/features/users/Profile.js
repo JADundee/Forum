@@ -1,6 +1,6 @@
 import useAuth from '../../hooks/useAuth'
 import { useState, useEffect, useRef } from 'react'
-import { useUpdateUserMutation, useGetUsersQuery, useDeleteUserMutation } from './usersApiSlice'
+import { useUpdateUserMutation, useGetUsersQuery, useDeleteUserMutation, useGetLikedNotesQuery, useGetLikedRepliesQuery } from './usersApiSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../auth/authSlice'
@@ -189,6 +189,11 @@ const Profile = () => {
         fetchUserReplies()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId, token])
+
+    // Fetch liked notes and replies
+    const { data: likedNotes = [], isLoading: likedNotesLoading, isError: likedNotesError } = useGetLikedNotesQuery(userId);
+    const { data: likedReplies = [], isLoading: likedRepliesLoading, isError: likedRepliesError } = useGetLikedRepliesQuery(userId);
+    const showLikesContent = useShowWithTimeout(showActivity && selectedActivity === 'likes');
 
     // Guard: if user is not loaded, show loading message
     if (!user) return <p>Loading profile...</p>
@@ -410,6 +415,76 @@ const Profile = () => {
                             tableClassName="table table--replies"
                             theadClassName="table__thead"
                         />
+                    )}
+                    </>
+                )}
+                </div>
+
+                {/* Show likes if Likes activity is selected */}
+                <div className={`profile-buttons-transition${showActivity && selectedActivity === 'likes' ? ' show' : ''}`}>
+                {showLikesContent && (
+                    <>
+                        <h3>Liked Notes</h3>
+                        {likedNotesLoading && <p>Loading liked notes...</p>}
+                        {likedNotesError && <p className="errmsg">Error loading liked notes</p>}
+                        {!likedNotesLoading && !likedNotesError && likedNotes.length === 0 && <p>No liked notes found.</p>}
+                        {!likedNotesLoading && !likedNotesError && likedNotes.length > 0 && (
+                            <table className="table table--notes">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Created</th>
+                                        <th>Expand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {likedNotes.map(note => (
+                                        <tr key={note._id} className="table__row">
+                                            <td className="table__cell">{note.title}</td>
+                                            <td className="table__cell">{note.user?.username || 'Unknown'}</td>
+                                            <td className="table__cell">{moment(note.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                            <td className="table__cell">
+                                                <button className="icon-button table__button" onClick={() => navigate(`/dash/notes/${note._id}/expand`)}>
+                                                    <FontAwesomeIcon icon={faExpand} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
+                        <h3 style={{ marginTop: '2rem' }}>Liked Replies</h3>
+                        {likedRepliesLoading && <p>Loading liked replies...</p>}
+                        {likedRepliesError && <p className="errmsg">Error loading liked replies</p>}
+                        {!likedRepliesLoading && !likedRepliesError && likedReplies.length === 0 && <p>No liked replies found.</p>}
+                        {!likedRepliesLoading && !likedRepliesError && likedReplies.length > 0 && (
+                            <table className="table table--notes">
+                                <thead>
+                                    <tr>
+                                        <th>Note Title</th>
+                                        <th>Reply</th>
+                                        <th>Author</th>
+                                        <th>Date</th>
+                                        <th>Expand</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {likedReplies.map(reply => (
+                                        <tr key={reply._id} className="table__row">
+                                            <td className="table__cell">{reply.note?.title || 'Unknown'}</td>
+                                            <td className="table__cell">{reply.text}</td>
+                                            <td className="table__cell">{reply.user?.username || 'Unknown'}</td>
+                                            <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                            <td className="table__cell">
+                                                <button className="icon-button table__button" onClick={() => navigate(`/dash/notes/${reply.note?._id || reply.note}`)}>
+                                                    <FontAwesomeIcon icon={faExpand} />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                     )}
                     </>
                 )}
