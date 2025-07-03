@@ -11,6 +11,7 @@ import { selectCurrentToken } from '../auth/authSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faExpand } from '@fortawesome/free-solid-svg-icons'
 import DataTable from '../../components/DataTable'
+import LikeItem from './LikeItem'
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
@@ -321,6 +322,19 @@ const Profile = () => {
         return "";
     };
 
+    // Handler for clicking a like item
+    const handleLikeClick = (like) => {
+        if (like._likeType === 'note') {
+            navigate(`/dash/notes/${like._id}/expand`);
+        } else if (like._likeType === 'reply') {
+            // like.note?._id is the note id, like._id is the reply id
+            const noteId = like.note?._id || like.note;
+            if (noteId) {
+                navigate(`/dash/notes/${noteId}/expand`, { state: { replyId: like._id } });
+            }
+        }
+    };
+
     return (
         <section className="profile">
             <div>
@@ -424,68 +438,25 @@ const Profile = () => {
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'likes' ? ' show' : ''}`}>
                 {showLikesContent && (
                     <>
-                        <h3>Liked Notes</h3>
-                        {likedNotesLoading && <p>Loading liked notes...</p>}
-                        {likedNotesError && <p className="errmsg">Error loading liked notes</p>}
-                        {!likedNotesLoading && !likedNotesError && likedNotes.length === 0 && <p>No liked notes found.</p>}
-                        {!likedNotesLoading && !likedNotesError && likedNotes.length > 0 && (
-                            <table className="table table--notes">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Author</th>
-                                        <th>Created</th>
-                                        <th>Expand</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {likedNotes.map(note => (
-                                        <tr key={note._id} className="table__row">
-                                            <td className="table__cell">{note.title}</td>
-                                            <td className="table__cell">{note.user?.username || 'Unknown'}</td>
-                                            <td className="table__cell">{moment(note.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                                            <td className="table__cell">
-                                                <button className="icon-button table__button" onClick={() => navigate(`/dash/notes/${note._id}/expand`)}>
-                                                    <FontAwesomeIcon icon={faExpand} />
-                                                </button>
-                                            </td>
-                                        </tr>
+                        {(likedNotesLoading || likedRepliesLoading) && <p>Loading likes...</p>}
+                        {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
+                        {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
+                        {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
+                            <div className="all-notifications__content">
+                                <ul className="all-notifications__list">
+                                    {[
+                                        ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
+                                        ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
+                                    ]
+                                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                                    .map(like => (
+                                        <li key={like._id} className="all-notifications__item">
+                                            <LikeItem like={like} type={like._likeType} onClick={() => handleLikeClick(like)} />
+                                        </li>
                                     ))}
-                                </tbody>
-                            </table>
+                                </ul>
+                            </div>
                         )}
-                        <h3 style={{ marginTop: '2rem' }}>Liked Replies</h3>
-                        {likedRepliesLoading && <p>Loading liked replies...</p>}
-                        {likedRepliesError && <p className="errmsg">Error loading liked replies</p>}
-                        {!likedRepliesLoading && !likedRepliesError && likedReplies.length === 0 && <p>No liked replies found.</p>}
-                        {!likedRepliesLoading && !likedRepliesError && likedReplies.length > 0 && (
-                            <table className="table table--notes">
-                                <thead>
-                                    <tr>
-                                        <th>Note Title</th>
-                                        <th>Reply</th>
-                                        <th>Author</th>
-                                        <th>Date</th>
-                                        <th>Expand</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {likedReplies.map(reply => (
-                                        <tr key={reply._id} className="table__row">
-                                            <td className="table__cell">{reply.note?.title || 'Unknown'}</td>
-                                            <td className="table__cell">{reply.text}</td>
-                                            <td className="table__cell">{reply.user?.username || 'Unknown'}</td>
-                                            <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                                            <td className="table__cell">
-                                                <button className="icon-button table__button" onClick={() => navigate(`/dash/notes/${reply.note?._id || reply.note}`)}>
-                                                    <FontAwesomeIcon icon={faExpand} />
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                    )}
                     </>
                 )}
                 </div>
