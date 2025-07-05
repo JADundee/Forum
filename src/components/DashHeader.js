@@ -159,17 +159,17 @@ const DashHeader = () => {
     // Check if current pathname does not match "/dash/users/notifications/all"
     if (!isNotificationsAll) {
         notificationButton = (
-            <button
-                ref={notificationButtonRef}
-                className="icon-button notification-button"
-                title="Notifications"
-                onClick={e => { e.stopPropagation(); setNotificationDropdownOpen(prev => !prev); }}
-                style={{ position: 'relative' }}
-            >
-                <FontAwesomeIcon icon={faBell} />
-                {unreadCount > 0 && (
-                    <span className="notification-badge">{unreadCount}</span>
-                )}
+            <div ref={notificationButtonRef} style={{ position: 'relative' }}>
+                <button
+                    className="icon-button notification-button"
+                    title="Notifications"
+                    onClick={e => { e.stopPropagation(); setNotificationDropdownOpen(prev => !prev); }}
+                >
+                    <FontAwesomeIcon icon={faBell} />
+                    {unreadCount > 0 && (
+                        <span className="notification-badge">{unreadCount}</span>
+                    )}
+                </button>
                 <NotificationDropdown
                     ref={notificationDropdownRef}
                     notifications={notificationsWithTitles}
@@ -184,7 +184,7 @@ const DashHeader = () => {
                     onDropdownClick={e => e.stopPropagation()}
                     isOpen={notificationDropdownOpen}
                 />
-            </button>
+            </div>
         );
     }
 

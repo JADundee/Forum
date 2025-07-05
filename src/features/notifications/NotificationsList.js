@@ -61,16 +61,20 @@ const NotificationsList = () => {
               className={`all-notifications__item ${notification.read ? 'notification-read' : 'notification-unread'}`}
               onClick={() => handleNotificationClicked(notification)}
             >
-              <NotificationItem notification={notification} />
-              <button
-                className="button delete-button"
-                style={{ marginLeft: '10px' }}
-                onClick={e => handleDeleteNotification(e, notification.id)}
-                disabled={isDeleting}
-                title="Delete notification"
-              >
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <NotificationItem notification={notification} />
+                </div>
+                <button
+                  className="button delete-button"
+                  onClick={e => handleDeleteNotification(e, notification.id)}
+                  disabled={isDeleting}
+                  title="Delete notification"
+                  style={{ marginLeft: '10px', flexShrink: 0 }}
+                >
+                  {isDeleting ? 'Deleting...' : 'Delete'}
+                </button>
+              </div>
             </li>
           ))}
         </ul>

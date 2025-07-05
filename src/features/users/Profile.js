@@ -337,14 +337,17 @@ const Profile = () => {
 
     return (
         <section className="profile">
-            <div>
-            <h2>My Profile</h2>
-            <p><strong>Username:</strong> {username}</p>
-            {email && <p><strong>Email:</strong> {email}</p>}
-            <p><strong>Roles:</strong> {roles && roles.length ? roles.join(', ') : 'None'}</p>
-
-                {/* User Activity Button */}
+            {!showActivity && (
                 <div>
+                    <h2>My Profile</h2>
+                    <p><strong>Username:</strong> {username}</p>
+                    {email && <p><strong>Email:</strong> {email}</p>}
+                    <p><strong>Roles:</strong> {roles && roles.length ? roles.join(', ') : 'None'}</p>
+                </div>
+            )}
+            <div>
+                {/* User Activity Button */}
+                <div className="profile-activity-container">
                     <button className="button profile-wide-btn" onClick={handleShowActivityToggle}>
                         {showActivity ? 'Hide User Activity' : 'Show User Activity'}
                     </button>
@@ -442,19 +445,25 @@ const Profile = () => {
                         {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
                         {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
                         {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
-                            <div className="all-notifications__content">
-                                <ul className="all-notifications__list">
-                                    {[
-                                        ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
-                                        ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
-                                    ]
-                                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                                    .map(like => (
-                                        <li key={like._id} className="all-notifications__item">
-                                            <LikeItem like={like} type={like._likeType} onClick={() => handleLikeClick(like)} />
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="all-notifications">
+                                <div className="all-notifications__header">
+                                    <h1>My Likes</h1>
+                                    <span style={{ display: 'inline-block', minWidth: 0 }}></span>
+                                </div>
+                                <div className="all-notifications__content">
+                                    <ul className="all-notifications__list">
+                                        {[
+                                            ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
+                                            ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
+                                        ]
+                                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                                        .map(like => (
+                                            <li key={like._id} className="all-notifications__item">
+                                                <LikeItem like={like} type={like._likeType} onClick={() => handleLikeClick(like)} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
                             </div>
                         )}
                     </>
@@ -462,7 +471,7 @@ const Profile = () => {
                 </div>
 
                 {/* Change Password button and form always visible */}
-                {selectedActivity === null && (
+                {!showActivity && (
                   <div>
                       <button className="button profile-wide-btn" onClick={handleShowChangePwdToggle}>
                           {showChangePwd ? 'Cancel' : 'Change Password'}
@@ -514,10 +523,10 @@ const Profile = () => {
                 )}
                 {/* Move successMsg here, above the horizontal rule */}
                 {successMsg && <p className="msgmsg">{successMsg}</p>}
-                <hr />
+                {!showActivity && <hr />}
             </div>
             {/* Delete button always at the bottom when visible */}
-            {!selectedActivity && (
+            {!showActivity && (
                 <div>
             <button className="button delete-button" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
                 Delete My Account

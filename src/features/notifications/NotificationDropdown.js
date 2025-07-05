@@ -1,4 +1,5 @@
 import React, { forwardRef } from 'react';
+import { createPortal } from 'react-dom';
 import moment from 'moment';
 import NotificationItem from './NotificationItem';
 
@@ -15,7 +16,7 @@ const NotificationDropdown = forwardRef(({
     onDropdownClick,
     isOpen,
 }, ref) => {
-    return (
+    const dropdownContent = (
         <div ref={ref} className={`notification-dropdown${isOpen ? ' show' : ''}`} onClick={onDropdownClick}>
             {notificationsLoading ? (
                 <p className="notification-item">Loading...</p>
@@ -51,6 +52,9 @@ const NotificationDropdown = forwardRef(({
             </button>
         </div>
     );
+
+    // Use portal to render dropdown directly to document body
+    return createPortal(dropdownContent, document.body);
 });
 
 export default NotificationDropdown; 
