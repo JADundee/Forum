@@ -189,7 +189,8 @@ const DashHeader = () => {
     }
 
     // Define profile button element
-    const profileButton = (
+    const isProfilePage = pathname === '/dash/profile';
+    const profileButton = !isProfilePage && (
         <button
             className="icon-button"
             title="Profile"

@@ -107,7 +107,7 @@ const EditUserForm = ({ user }) => {
                         onClick={onSaveUserClicked}
                         disabled={!canSave}
                     >
-                        Save <FontAwesomeIcon icon={faSave} />
+                        Save 
                     </button>
                 )
             )
@@ -120,13 +120,13 @@ const EditUserForm = ({ user }) => {
                   title="Delete"
                   onClick={() => setShowDeleteConfirm(true)}
                 >
-                  Delete <FontAwesomeIcon icon={faTrashCan} />
+                  Delete
                 </button>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end', marginTop: '0.5em' }}>
                   <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
                   <button className="button delete-button" onClick={onDeleteUserClicked}>
-                    Yes, Delete <FontAwesomeIcon icon={faTrashCan} />
+                    Yes, Delete
                   </button>
                   <button className="button" onClick={() => setShowDeleteConfirm(false)}>
                     Cancel
@@ -134,6 +134,19 @@ const EditUserForm = ({ user }) => {
                 </div>
               )
             )
+
+    let cancelButton = null
+    cancelButton = (
+        !showDeleteConfirm && (
+            <button
+                type="button"
+                className="button delete-button"
+                onClick={() => navigate(-1)}
+            >
+                Cancel
+            </button>
+        )
+    )
 
     const content = (
         <>
@@ -172,7 +185,7 @@ const EditUserForm = ({ user }) => {
                     name="roles"
                     className={`form__check ${validRolesClass}`}
                     multiple={true}
-                    size="3"
+                    size="2"
                     value={roles}
                     onChange={onRolesChanged}
                 >
@@ -180,7 +193,8 @@ const EditUserForm = ({ user }) => {
                 </select>
                 <div className="form__action-buttons">
                     {saveButton}
-                    {deleteButton}  
+                    {deleteButton}
+                    {cancelButton}
                 </div>
             </form>
         </>

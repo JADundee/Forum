@@ -2,6 +2,7 @@ import { useGetNotesQuery } from "./notesApiSlice"
 import Note from "./Note"
 import { useState } from "react"
 import useAuth from '../../hooks/useAuth'
+import DataTable from '../../components/DataTable'
 
 const NotesList = () => {
     // Add state for search query
@@ -99,11 +100,19 @@ const NotesList = () => {
             });
         };
 
-        const tableContent = filteredIds?.length && filteredIds.map(noteId => <Note key={noteId} noteId={noteId} />)
+        // Define columns for DataTable
+        const columns = [
+            { key: 'title', label: 'Title', sortable: true },
+            { key: 'username', label: 'Owner', sortable: true },
+            { key: 'createdAt', label: 'Created', sortable: true },
+            { key: 'updatedAt', label: 'Updated', sortable: true },
+        ];
+
+        // Render row using the existing Note component
+        const renderRow = (noteId) => <Note key={noteId} noteId={noteId} />
 
         content = (
             <>
-                {/* Search Bar and My Notes Toggle */}
                 <div className="notes-filter-bar">
                     <input
                         type="text"
@@ -119,68 +128,17 @@ const NotesList = () => {
                         {showMine ? 'Show All Notes' : 'Show My Notes'}
                     </button>
                 </div>
-                <table className="table table--notes">
-                    <thead className="table__thead">
-                        <tr>    
-                            <th
-                                scope="col"
-                                className="table__th table__title"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('title')}
-                            >
-                                <span className="header-text">Title</span>{' '}
-                                {sortConfig.key === 'title' ? (
-                                    <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                                ) : ''}
-                            </th>
-                            <th
-                                scope="col"
-                                className="table__th table__username"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('username')}
-                            >
-                                <span className="header-text">Owner</span>{' '}
-                                {sortConfig.key === 'username' ? (
-                                    <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                                ) : ''}
-                            </th>
-                            <th
-                                scope="col"
-                                className="table__th note__created"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('createdAt')}
-                            >
-                                <span className="header-text table__created">Created</span>{' '}
-                                {sortConfig.key === 'createdAt' ? (
-                                    <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                                ) : ''}
-                            </th>
-                            <th
-                                scope="col"
-                                className="table__th note__updated"
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => handleSort('updatedAt')}
-                            >
-                                <span className="header-text table__updated">Updated</span>{' '}
-                                {sortConfig.key === 'updatedAt' ? (
-                                    <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                                ) : ''}
-                            </th>
-                            <th scope="col" className="table__th note__expand">
-                                <span className="header-text">Expand</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredIds.length === 0 ? (
-                            <tr>
-                                <td colSpan="5" style={{ textAlign: 'center' }}>0 Search results</td>
-                            </tr>
-                        ) : (
-                            tableContent
-                        )}
-                    </tbody>
-                </table>
+                <div className="table-scroll-wrapper">
+                    <DataTable
+                        columns={columns}
+                        data={filteredIds}
+                        emptyMsg="0 Search results"
+                        renderRow={renderRow}
+                        sortConfig={sortConfig}
+                        onSort={handleSort}
+                        tableClassName="table"
+                    />
+                </div>
             </>
         )
     }

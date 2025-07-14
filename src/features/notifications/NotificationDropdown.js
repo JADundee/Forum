@@ -36,7 +36,7 @@ const NotificationDropdown = forwardRef(({
                         </div>
                     ))}
                 <button
-                    className="button mark-all-read-btn"
+                    className="button alt-button"
                     onClick={onMarkAllAsRead}
                     disabled={unreadCount === 0 || isMarkingAll}
                 >

@@ -105,12 +105,12 @@ const Public = () => {
                         />
                         Trust This Device
                     </label>
-                    <button className="button form__login-button" disabled={!canLogin}>Sign In</button>
-                    <button className="button form__forgot-password-button" type="button" onClick={onForgotPasswordClicked}>
+                    <button className="button" disabled={!canLogin}>Sign In</button>
+                    <button className="button delete-button" type="button" onClick={onForgotPasswordClicked}>
                             Forgot Password?
                     </button>
                     <p>New to the Forum?</p>
-                    <button className="button form__register-button" onClick={onNewUserClicked}>
+                    <button className="button alt-button" onClick={onNewUserClicked}>
                             Register
                         </button>
                 </form>

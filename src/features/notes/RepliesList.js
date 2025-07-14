@@ -98,7 +98,7 @@ const MenuButton = ({ onEdit, onDelete }) => {
   }, [open]);
 
   return (
-    <div className={`reply-menu-wrapper`} ref={menuRef} style={{ position: 'relative', display: 'inline-block' }}>
+    <div ref={menuRef}>
       <button
         className="button reply-menu-button"
         title="Show options"
@@ -109,8 +109,7 @@ const MenuButton = ({ onEdit, onDelete }) => {
         &#x22EE;
       </button>
       <div
-        className={`reply-menu-dropdown${open ? ' show' : ''}`}
-        style={{ position: 'absolute', right: 0, top: '100%', zIndex: 10 }}
+        className={`reply-dropdown${open ? ' show' : ''}`}
       >
         {!confirmDelete ? (
           <>
@@ -118,8 +117,8 @@ const MenuButton = ({ onEdit, onDelete }) => {
             <button className="button delete-button" onClick={() => setConfirmDelete(true)}>Delete</button>
           </>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'stretch' }}>
-            <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
+          <div>
+            <span>Are you sure?</span>
             <button className="button delete-button" onClick={() => { setOpen(false); setConfirmDelete(false); onDelete(); }}>Yes, Delete</button>
             <button className="button" onClick={() => setConfirmDelete(false)}>Cancel</button>
           </div>
@@ -180,20 +179,22 @@ const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight,
           <p>{reply.text}</p>
         )}
       </div>
-      <div className="reply-actions" style={{ marginTop: '0.5rem' }}>
-        <button
-          className={`like-button${hasLiked ? ' liked' : ''}`}
-          onClick={handleLike}
-          disabled={likeLoading}
-          aria-pressed={hasLiked}
-        >
-          {hasLiked ? '♥' : '♡'} Like ({likeCount})
-        </button>
-      </div>
+        <div className="like-button-container">
+          <button
+            className={`like-button${hasLiked ? ' liked' : ''}`}
+            onClick={handleLike}
+            disabled={likeLoading}
+            aria-pressed={hasLiked}
+            title={`${likeCount} like${likeCount !== 1 ? 's' : ''}`}
+          >
+            {hasLiked ? '♥' : '♡'}
+          </button>
+          <span className="like-count">{likeCount} like{likeCount !== 1 ? 's' : ''}</span>
+        </div>
       <span className="timestamp">
         Replied on {formatTimestamp(reply.createdAt)}
         {wasEdited && (
-          <span className="edited-timestamp"> (edited on {formatTimestamp(reply.updatedAt)})</span>
+          <span> (edited on {formatTimestamp(reply.updatedAt)})</span>
         )}
       </span>
     </div>

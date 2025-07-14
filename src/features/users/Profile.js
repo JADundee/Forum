@@ -8,14 +8,11 @@ import { useGetNotesQuery } from '../notes/notesApiSlice'
 import Note from '../notes/Note'
 import moment from 'moment'
 import { selectCurrentToken } from '../auth/authSlice'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExpand } from '@fortawesome/free-solid-svg-icons'
 import DataTable from '../../components/DataTable'
 import LikeItem from './LikeItem'
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
-// --- DRY HELPERS ---
 function useShowWithTimeout(show, timeout = 1500) {
     const [showContent, setShowContent] = useState(false);
     const timeoutRef = useRef(null);
@@ -62,7 +59,7 @@ function getSortedData(arr, config, keyMap) {
 // DRY empty row renderer
 const renderEmptyRow = (colCount, message) => (
     <tr>
-        <td colSpan={colCount} style={{ textAlign: 'center' }}>{message}</td>
+        <td colSpan={colCount}>{message}</td>
     </tr>
 );
 
@@ -79,12 +76,11 @@ function TableHeader({ columns, sortConfig, onSort }) {
                 <th
                     key={col.key}
                     className={col.className}
-                    style={col.sortable ? { cursor: 'pointer' } : undefined}
                     onClick={col.sortable ? () => onSort(col.key) : undefined}
                 >
                     <span className="header-text">{col.label}</span>
                     {col.sortable && sortConfig.key === col.key ? (
-                        <span className="sort-arrow">{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
+                        <span>{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
                     ) : ''}
                 </th>
             ))}
@@ -279,17 +275,15 @@ const Profile = () => {
 
     // Table columns
     const notesColumns = [
-        { key: 'title', label: 'Title', className: 'table__th table__title', sortable: true },
-        { key: 'username', label: 'Owner', className: 'table__th table__username', sortable: true },
-        { key: 'createdAt', label: 'Created', className: 'table__th note__created', sortable: true },
-        { key: 'updatedAt', label: 'Updated', className: 'table__th note__updated', sortable: true },
-        { key: 'expand', label: 'Expand', className: 'table__th note__expand', sortable: false }
+        { key: 'title', label: 'Title', className: 'table__title', sortable: true },
+        { key: 'username', label: 'Owner', className: 'table__username', sortable: true },
+        { key: 'createdAt', label: 'Created', className: 'note__created', sortable: true },
+        { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true }
     ];
     const repliesColumns = [
-        { key: 'noteTitle', label: 'Note Title', className: 'table__th', sortable: true },
-        { key: 'text', label: 'Reply', className: 'table__th', sortable: true },
-        { key: 'createdAt', label: 'Date', className: 'table__th', sortable: true },
-        { key: 'expand', label: 'Expand', className: 'table__th note__expand', sortable: false }
+        { key: 'noteTitle', label: 'Note Title', sortable: true },
+        { key: 'text', label: 'Reply', sortable: true },
+        { key: 'createdAt', label: 'Date', sortable: true }
     ];
 
     // Activity buttons
@@ -297,7 +291,6 @@ const Profile = () => {
         ? notesData.ids.filter(noteId => notesData.entities[noteId].username === username).length
         : 0;
     const userRepliesCount = userReplies.length;
-    const badgeStyle = { marginLeft: 8, background: '#236323', color: '#fff', borderRadius: '12px', padding: '2px 8px', fontSize: '0.9em', display: 'inline-block' };
     const activities = [
         { key: 'notes', label: 'Notes', count: userNotesCount },
         { key: 'replies', label: 'Replies', count: userRepliesCount },
@@ -308,7 +301,7 @@ const Profile = () => {
     const renderActivityLabel = (label, count) => (
         <>
             {label}
-            {count > 0 && <span style={badgeStyle}>{count}</span>}
+            {count > 0 && <span className='notification-counter'>{count}</span>}
         </>
     );
 
@@ -347,8 +340,8 @@ const Profile = () => {
             )}
             <div>
                 {/* User Activity Button */}
-                <div className="profile-activity-container">
-                    <button className="button profile-wide-btn" onClick={handleShowActivityToggle}>
+                <div>
+                    <button className="button" onClick={handleShowActivityToggle}>
                         {showActivity ? 'Hide User Activity' : 'Show User Activity'}
                     </button>
                     {/* Activity buttons always rendered, visibility controlled by class */}
@@ -362,7 +355,6 @@ const Profile = () => {
                                 className="button profile-btn"
                                 type="button"
                                 tabIndex={showActivity ? 0 : -1}
-                                style={{ pointerEvents: showActivity ? 'auto' : 'none' }}
                                 onClick={() => handleActivitySelect(act.key)}
                             >
                                 {renderActivityLabel(act.label, act.count)}
@@ -373,6 +365,10 @@ const Profile = () => {
                     <div className={`profile-buttons-transition${showActivity && selectedActivity === 'notes' ? ' show' : ''}`}>
                     {showNotesContent && (
                         <>
+                            {/* Notes Header */}
+                            <div className="all-notifications__header">
+                                <h1>My Notes</h1>
+                            </div>
                             {/* Search Bar */}
                             <div className="notes-filter-bar">
                                 <input
@@ -385,53 +381,55 @@ const Profile = () => {
                             {/* Notes Table */}
                             {renderStatus({ loading: notesLoading, error: notesError, errorMsg: notesErrorObj?.data?.message || 'Error loading notes' })}
                             {notesSuccess && notesData && (
-                                <DataTable
-                                    columns={notesColumns}
-                                    data={sortedAndFilteredNoteIds}
-                                    emptyMsg="No notes found"
-                                    renderRow={noteId => <Note key={noteId} noteId={noteId} />}
-                                    sortConfig={notesSortConfig}
-                                    onSort={handleNotesSort}
-                                    tableClassName="table table--notes"
-                                    theadClassName="table__thead"
-                                />
+                                <div className="table-scroll-wrapper">
+                                    <DataTable
+                                        columns={notesColumns}
+                                        data={sortedAndFilteredNoteIds}
+                                        emptyMsg="No notes found"
+                                        renderRow={noteId => <Note key={noteId} noteId={noteId} />}
+                                        sortConfig={notesSortConfig}
+                                        onSort={handleNotesSort}
+                                        tableClassName="table"
+                                        theadClassName="table__thead"
+                                    />
+                                </div>
                             )}
                         </>
                     )}
                     </div>
-                </div>
 
                 {/* Show replies table if Replies activity is selected */}
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'replies' ? ' show' : ''}`}>
                 {showRepliesContent && (
                     <>
+                    {/* Replies Header */}
+                    <div className="all-notifications__header">
+                        <h1>My Replies</h1>
+                    </div>
                     {renderStatus({ loading: repliesLoading, error: repliesError, errorMsg: repliesError })}
                     {!repliesLoading && !repliesError && (
-                        <DataTable
-                            columns={repliesColumns}
-                            data={sortedReplies}
-                            emptyMsg="No replies found"
-                            renderRow={reply => (
-                                <tr key={reply._id} className="table__row">
-                                    <td className="table__cell">{reply.noteTitle}</td>
-                                    <td className="table__cell">{reply.text}</td>
-                                    <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                                    <td className="table__cell">
-                                        <button
-                                            className="icon-button table__button"
-                                            title="Expand Note"
-                                            onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
-                                        >
-                                            <FontAwesomeIcon icon={faExpand} />
-                                        </button>
-                                    </td>
-                                </tr>
-                            )}
-                            sortConfig={repliesSortConfig}
-                            onSort={handleRepliesSort}
-                            tableClassName="table table--replies"
-                            theadClassName="table__thead"
-                        />
+                        <div className="table-scroll-wrapper">
+                            <DataTable
+                                columns={repliesColumns}
+                                data={sortedReplies}
+                                emptyMsg="No replies found"
+                                renderRow={reply => (
+                                    <tr 
+                                        key={reply._id} 
+                                        className="table__row"
+                                        onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
+                                    >
+                                        <td className="table__cell">{reply.noteTitle}</td>
+                                        <td className="table__cell">{reply.text}</td>
+                                        <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                    </tr>
+                                )}
+                                sortConfig={repliesSortConfig}
+                                onSort={handleRepliesSort}
+                                tableClassName="table"
+                                theadClassName="table__thead"
+                            />
+                        </div>
                     )}
                     </>
                 )}
@@ -445,13 +443,10 @@ const Profile = () => {
                         {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
                         {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
                         {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
-                            <div className="all-notifications">
-                                <div className="all-notifications__header">
+                            <div className="all-notifications__header">
                                     <h1>My Likes</h1>
-                                    <span style={{ display: 'inline-block', minWidth: 0 }}></span>
-                                </div>
                                 <div className="all-notifications__content">
-                                    <ul className="all-notifications__list">
+                                    <ul>
                                         {[
                                             ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
                                             ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
@@ -473,7 +468,7 @@ const Profile = () => {
                 {/* Change Password button and form always visible */}
                 {!showActivity && (
                   <div>
-                      <button className="button profile-wide-btn" onClick={handleShowChangePwdToggle}>
+                      <button className="button" onClick={handleShowChangePwdToggle}>
                           {showChangePwd ? 'Cancel' : 'Change Password'}
                       </button>
                       <div className={`profile-buttons-transition${showChangePwd ? ' show' : ''}`}>
@@ -513,7 +508,7 @@ const Profile = () => {
                               />
                               {getConfirmError() && <p className="errmsg">{getConfirmError()}</p>}
                               <div className="form__action-buttons">
-                                  <button className="button form__login-button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
+                                  <button className="button" type="submit" disabled={isLoading || !pwdValid || !passwordsMatch || !user}>
                                       {isLoading ? 'Updating...' : 'Set New Password'}
                                   </button>
                               </div>
@@ -525,6 +520,8 @@ const Profile = () => {
                 {successMsg && <p className="msgmsg">{successMsg}</p>}
                 {!showActivity && <hr />}
             </div>
+            {/* Close main profile content div */}
+            </div>
             {/* Delete button always at the bottom when visible */}
             {!showActivity && (
                 <div>
@@ -535,11 +532,11 @@ const Profile = () => {
             {showDeleteConfirmContent && (
                 <>
                     <p>Are you sure you want to delete your account? This action cannot be undone.</p>
-                    <div className="delete-confirm-actions">
-                        <button className="button delete-button" onClick={handleDeleteAccount} disabled={isDeleting}>
+                    <div>
+                        <button className="delete-button form__action-buttons" onClick={handleDeleteAccount} disabled={isDeleting}>
                             {isDeleting ? 'Deleting...' : 'Yes, Delete My Account'}
                         </button>
-                        <button className="button" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
+                        <button className="button form__action-buttons" onClick={() => setShowDeleteConfirm(false)} disabled={isDeleting}>
                             Cancel
                         </button>
                     </div>

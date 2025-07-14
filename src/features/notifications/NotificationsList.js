@@ -53,12 +53,11 @@ const NotificationsList = () => {
           Mark all as read
         </button>
       </div>
-      <div className="all-notifications__content">
-        <ul className="all-notifications__list">
+        <ul className="all-notifications__content">
           {notifications.map((notification) => (
             <li
               key={notification.id}
-              className={`all-notifications__item ${notification.read ? 'notification-read' : 'notification-unread'}`}
+              className={`all-notifications__item ${notification.read ? 'notification-read' : ''}`}
               onClick={() => handleNotificationClicked(notification)}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
@@ -78,7 +77,6 @@ const NotificationsList = () => {
             </li>
           ))}
         </ul>
-      </div>
     </div>
   );
 

@@ -92,7 +92,7 @@ const ResetPassword = () => {
                         />
                         {!passwordsMatch && <p className="errmsg">Passwords do not match</p>}
                         <div className="form__action-buttons">
-                            <button className={`button form__login-button`} type="submit" disabled={!canSubmit}>
+                            <button className={`button`} type="submit" disabled={!canSubmit}>
                                 {loading ? 'Resetting...' : 'Reset Password'}
                             </button>
                             <button className="button" type="button" onClick={() => navigate('/')}>Back to Login</button>

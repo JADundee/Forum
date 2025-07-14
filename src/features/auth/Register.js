@@ -117,7 +117,7 @@ const Register = () => {
 
                     <div className="form__action-buttons">
                         <button
-                            className="button form__register-button"
+                            className="button"
                             title="Save"
                             disabled={!canSave}>
                                 Create Account

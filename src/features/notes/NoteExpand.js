@@ -97,15 +97,18 @@ const NoteExpand = () => {
                         <span className="blog-post__created">Published: {created}</span> | 
                         <span className="blog-post__updated">Updated: {updated}</span>
                 </p>
-                <button
-                    className={`like-button${hasLiked ? ' liked' : ''}`}
-                    onClick={handleLike}
-                    disabled={likeLoading}
-                    aria-pressed={hasLiked}
-                    style={{ marginTop: '1rem' }}
-                >
-                    {hasLiked ? '♥' : '♡'} Like ({likeCount})
-                </button>
+                <div className="like-button-container">
+                    <button
+                        className={`like-button${hasLiked ? ' liked' : ''}`}
+                        onClick={handleLike}
+                        disabled={likeLoading}
+                        aria-pressed={hasLiked}
+                        title={`${likeCount} like${likeCount !== 1 ? 's' : ''}`}
+                    >
+                        {hasLiked ? '♥' : '♡'}
+                    </button>
+                    <span className="like-count">{likeCount} like{likeCount !== 1 ? 's' : ''}</span>
+                </div>
             </div>
 
             <section className="blog-post__form">
@@ -113,10 +116,8 @@ const NoteExpand = () => {
             </section>
             
             <section className="blog-post__replies">
-                <div>
                     <h2>Replies</h2>
                     <RepliesList replies={replies} refetchReplies={refetch} highlightReplyId={highlightReplyId} />
-                </div>
             </section>
         </article>
     );

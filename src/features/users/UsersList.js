@@ -1,5 +1,6 @@
 import { useGetUsersQuery } from "./usersApiSlice"
 import User from './User'
+import DataTable from '../../components/DataTable'
 
 const UsersList = () => {
 
@@ -24,26 +25,30 @@ const UsersList = () => {
     }
 
     if (isSuccess) {
-
         const { ids } = users
 
-        const tableContent = ids?.length
-            && ids.map(userId => <User key={userId} userId={userId} />)
-            
+        // Define columns to match the current table
+        const columns = [
+            { key: 'username', label: 'Username' },
+            { key: 'roles', label: 'Roles' },
+            { key: 'edit', label: 'Edit' },
+        ]
+
+        // Data is just the array of user IDs
+        const data = ids || []
+
+        // Render row using the existing User component
+        const renderRow = (userId) => <User key={userId} userId={userId} />
 
         content = (
-            <table className="table table--users">
-                <thead className="table__thead">
-                    <tr>
-                        <th scope="col" className="table__th user__username">Username</th>
-                        <th scope="col" className="table__th user__roles">Roles</th>
-                        <th scope="col" className="table__th user__edit">Edit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tableContent}
-                </tbody>
-            </table>
+            <DataTable
+                columns={columns}
+                data={data}
+                emptyMsg="No users found."
+                renderRow={renderRow}
+                // Pass the same className for styling
+                tableClassName="table table--users"
+            />
         )
     }
 

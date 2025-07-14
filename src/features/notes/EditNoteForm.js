@@ -98,11 +98,9 @@ const EditNoteForm = ({ note }) => {
                     value={text}
                     onChange={onTextChanged}
                 />
-                <div className="form__row">
-                    <div className="form__divider">
-                        <p className="form__created">Created:<br />{created}</p>
-                        <p className="form__updated">Updated:<br />{updated}</p>
-                    </div>
+                <div>
+                    <p>Created:<br />{created}</p>
+                    <p>Updated:<br />{updated}</p>
                 </div>
                 <div className="form__action-buttons" style={{ flexDirection: 'column', alignItems: 'flex-end' }}>
                     {canEdit && (
@@ -114,14 +112,19 @@ const EditNoteForm = ({ note }) => {
                                             onClick={onSaveNoteClicked}
                                             disabled={!canSave}
                                             title="Save"
-                                            icon={faSave}
                                         />
                                         <ActionButton
                                             onClick={() => setShowDeleteConfirm(true)}
                                             title="Delete"
-                                            icon={faTrashCan}
                                             className="delete-button"
                                         />
+                                        <button
+                                            type="button"
+                                            className="button delete-button"
+                                            onClick={() => navigate(-1)}
+                                        >
+                                            Cancel
+                                        </button>
                                     </>
                                 )}
                             </div>

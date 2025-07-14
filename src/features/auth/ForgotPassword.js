@@ -52,7 +52,7 @@ const ForgotPassword = () => {
                             required
                         />
                         <div className="form__action-buttons">
-                            <button className="button form__login-button" type="submit" disabled={loading}>
+                            <button className="button" type="submit" disabled={loading}>
                                 {loading ? 'Sending...' : 'Send Reset Link'}
                             </button>
                             <button className="button" type="button" onClick={() => navigate('/')}>Return to Login</button>
