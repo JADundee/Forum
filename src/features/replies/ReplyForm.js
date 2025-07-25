@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAddReplyMutation } from './notesApiSlice';
+import { useAddReplyMutation } from '../notes/notesApiSlice';
 import useAuth from '../../hooks/useAuth';
 
 const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitted }) => {

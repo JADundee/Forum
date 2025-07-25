@@ -1,8 +1,8 @@
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { useGetNotesQuery, useGetRepliesQuery, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from './notesApiSlice'
 import useAuth from '../../hooks/useAuth'
-import ReplyForm from './ReplyForm'
-import RepliesList from './RepliesList'
+import ReplyForm from '../replies/ReplyForm'
+import RepliesList from '../replies/RepliesList'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 
@@ -10,7 +10,7 @@ const NoteExpand = () => {
     const { id } = useParams()
     const location = useLocation();
     const navigate = useNavigate();
-    const { username, isAdmin, userId } = useAuth()
+    const { username, isAdmin} = useAuth()
     const [highlightReplyId, setHighlightReplyId] = useState(null);
     const [toggleLike] = useToggleLikeMutation();
     const { data: likeCountData, refetch: refetchLikeCount } = useGetLikeCountQuery({ targetId: id, targetType: 'note' });

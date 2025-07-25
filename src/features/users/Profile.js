@@ -1,92 +1,16 @@
 import useAuth from '../../hooks/useAuth'
-import { useState, useEffect, useRef } from 'react'
-import { useUpdateUserMutation, useGetUsersQuery, useDeleteUserMutation, useGetLikedNotesQuery, useGetLikedRepliesQuery } from './usersApiSlice'
+import { useState } from 'react'
+import { useUpdateUserMutation, useGetUsersQuery, useDeleteUserMutation } from './usersApiSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../auth/authSlice'
-import { useGetNotesQuery } from '../notes/notesApiSlice'
-import Note from '../notes/Note'
-import moment from 'moment'
 import { selectCurrentToken } from '../auth/authSlice'
-import DataTable from '../../components/DataTable'
-import LikeItem from './LikeItem'
+import LikeActivity from '../likes/LikeActivity';
+import NoteActivity from '../notes/NoteActivity';
+import ReplyActivity from '../replies/ReplyActivity';
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
-function useShowWithTimeout(show, timeout = 1500) {
-    const [showContent, setShowContent] = useState(false);
-    const timeoutRef = useRef(null);
-    useEffect(() => {
-        if (show) {
-            setShowContent(true);
-        } else {
-            timeoutRef.current = setTimeout(() => setShowContent(false), timeout);
-        }
-        return () => clearTimeout(timeoutRef.current);
-    }, [show, timeout]);
-    return showContent;
-}
-
-function useSortableData(initialConfig) {
-    const [sortConfig, setSortConfig] = useState(initialConfig);
-    const handleSort = (key) => {
-        setSortConfig(prev => {
-            if (prev.key === key) {
-                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-            } else {
-                return { key, direction: 'desc' };
-            }
-        });
-    };
-    return [sortConfig, handleSort];
-}
-
-// DRY sorting utility
-function getSortedData(arr, config, keyMap) {
-    return [...arr].sort((a, b) => {
-        let valA = keyMap[config.key](a);
-        let valB = keyMap[config.key](b);
-        if (config.key === 'createdAt' || config.key === 'updatedAt') {
-            return config.direction === 'desc' ? valB - valA : valA - valB;
-        } else {
-            return config.direction === 'desc'
-                ? valB.localeCompare(valA)
-                : valA.localeCompare(valB);
-        }
-    });
-}
-
-// DRY empty row renderer
-const renderEmptyRow = (colCount, message) => (
-    <tr>
-        <td colSpan={colCount}>{message}</td>
-    </tr>
-);
-
-function renderStatus({ loading, error, errorMsg }) {
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p className="errmsg">{errorMsg}</p>;
-    return null;
-}
-
-function TableHeader({ columns, sortConfig, onSort }) {
-    return (
-        <tr>
-            {columns.map(col => (
-                <th
-                    key={col.key}
-                    className={col.className}
-                    onClick={col.sortable ? () => onSort(col.key) : undefined}
-                >
-                    <span className="header-text">{col.label}</span>
-                    {col.sortable && sortConfig.key === col.key ? (
-                        <span>{sortConfig.direction === 'desc' ? '▼' : '▲'}</span>
-                    ) : ''}
-                </th>
-            ))}
-        </tr>
-    );
-}
 
 // --- MAIN COMPONENT ---
 const Profile = () => {
@@ -135,62 +59,41 @@ const Profile = () => {
     const email = user?.email
 
     // Fetch all notes for the notes table
-    const {
-        data: notesData,
-        isLoading: notesLoading,
-        isError: notesError,
-        error: notesErrorObj,
-        isSuccess: notesSuccess
-    } = useGetNotesQuery('notesList', {
-        pollingInterval: 15000,
-        refetchOnFocus: true,
-        refetchOnMountOrArgChange: true
-    })
+    // const {
+    //     data: notesData,
+    //     isLoading: notesLoading,
+    //     isError: notesError,
+    //     error: notesErrorObj,
+    //     isSuccess: notesSuccess
+    // } = useGetNotesQuery('notesList', {
+    //     pollingInterval: 15000,
+    //     refetchOnFocus: true,
+    //     refetchOnMountOrArgChange: true
+    // })
 
     // State for search in notes table
-    const [notesSearch, setNotesSearch] = useState("");
+    // const [notesSearch, setNotesSearch] = useState("");
 
     // State for user replies aggregation
-    const [userReplies, setUserReplies] = useState([])
-    const [repliesLoading, setRepliesLoading] = useState(false)
-    const [repliesError, setRepliesError] = useState(null)
-
-    // Sorting hooks for notes and replies
-    const [notesSortConfig, handleNotesSort] = useSortableData({ key: 'updatedAt', direction: 'desc' });
-    const [repliesSortConfig, handleRepliesSort] = useSortableData({ key: 'createdAt', direction: 'desc' });
-
-    // Show/hide transitions
-    const showNotesContent = useShowWithTimeout(showActivity && selectedActivity === 'notes');
-    const showRepliesContent = useShowWithTimeout(showActivity && selectedActivity === 'replies');
-    const showDeleteConfirmContent = useShowWithTimeout(showDeleteConfirm);
-
-    // Fetch user replies as soon as userId and token are available
-    useEffect(() => {
-        const fetchUserReplies = async () => {
-            if (userId && token) {
-                setRepliesLoading(true)
-                setRepliesError(null)
-                try {
-                    const res = await fetch(`http://localhost:3500/notes/replies-by-user?userId=${userId}`,
-                        { headers: { 'Authorization': `Bearer ${token}` } })
-                    if (!res.ok) throw new Error('Failed to fetch')
-                    const replies = await res.json()
-                    setUserReplies(replies)
-                } catch (err) {
-                    setRepliesError('Failed to load replies')
-                } finally {
-                    setRepliesLoading(false)
-                }
-            }
-        }
-        fetchUserReplies()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userId, token])
+    // const [userReplies, setUserReplies] = useState([])
+    // const [repliesLoading, setRepliesLoading] = useState(false)
+    // const [repliesError, setRepliesError] = useState(null)
+    // Sorting hooks for replies
+    // const [repliesSortConfig, handleRepliesSort] = useSortableData({ key: 'createdAt', direction: 'desc' });
+    // For replies sorting
+    // const sortedReplies = getSortedData(userReplies, repliesSortConfig, ...)
+    // Table columns for replies
+    // const repliesColumns = [...];
+    // Activity buttons: userRepliesCount
+    // const userRepliesCount = userReplies.length;
+    // ... existing code ...
 
     // Fetch liked notes and replies
-    const { data: likedNotes = [], isLoading: likedNotesLoading, isError: likedNotesError } = useGetLikedNotesQuery(userId);
-    const { data: likedReplies = [], isLoading: likedRepliesLoading, isError: likedRepliesError } = useGetLikedRepliesQuery(userId);
-    const showLikesContent = useShowWithTimeout(showActivity && selectedActivity === 'likes');
+    // const { data: likedNotes = [], isLoading: likedNotesLoading, isError: likedNotesError } = useGetLikedNotesQuery(userId);
+    // const { data: likedReplies = [], isLoading: likedRepliesLoading, isError: likedRepliesError } = useGetLikedRepliesQuery(userId);
+    // const showLikesContent = useShowWithTimeout(showActivity && selectedActivity === 'likes');
+    // Handler for clicking a like
+    // const handleLikeClick = (like) => { ... }
 
     // Guard: if user is not loaded, show loading message
     if (!user) return <p>Loading profile...</p>
@@ -245,55 +148,55 @@ const Profile = () => {
     }
 
     // For notes sorting and filtering
-    let sortedAndFilteredNoteIds = [];
-    if (notesSuccess && notesData) {
-        sortedAndFilteredNoteIds = notesData.ids
-            .filter(noteId => notesData.entities[noteId].username === username)
-            .filter(noteId => {
-                const note = notesData.entities[noteId];
-                const searchLower = notesSearch.toLowerCase();
-                return note.title.toLowerCase().includes(searchLower);
-            });
-        sortedAndFilteredNoteIds = getSortedData(
-            sortedAndFilteredNoteIds,
-            notesSortConfig,
-            {
-                title: id => notesData.entities[id].title.toLowerCase(),
-                username: id => notesData.entities[id].username.toLowerCase(),
-                createdAt: id => new Date(notesData.entities[id].createdAt),
-                updatedAt: id => new Date(notesData.entities[id].updatedAt)
-            }
-        );
-    }
+    // let sortedAndFilteredNoteIds = [];
+    // if (notesSuccess && notesData) {
+    //     sortedAndFilteredNoteIds = notesData.ids
+    //         .filter(noteId => notesData.entities[noteId].username === username)
+    //         .filter(noteId => {
+    //             const note = notesData.entities[noteId];
+    //             const searchLower = notesSearch.toLowerCase();
+    //             return note.title.toLowerCase().includes(searchLower);
+    //         });
+    //     sortedAndFilteredNoteIds = getSortedData(
+    //         sortedAndFilteredNoteIds,
+    //         notesSortConfig,
+    //         {
+    //             title: id => notesData.entities[id].title.toLowerCase(),
+    //             username: id => notesData.entities[id].username.toLowerCase(),
+    //             createdAt: id => new Date(notesData.entities[id].createdAt),
+    //             updatedAt: id => new Date(notesData.entities[id].updatedAt)
+    //         }
+    //     );
+    // }
 
     // For replies sorting
-    const sortedReplies = getSortedData(userReplies, repliesSortConfig, {
-        noteTitle: r => r.noteTitle.toLowerCase(),
-        text: r => r.text.toLowerCase(),
-        createdAt: r => new Date(r.createdAt)
-    });
+    // const sortedReplies = getSortedData(userReplies, repliesSortConfig, {
+    //     noteTitle: r => r.noteTitle.toLowerCase(),
+    //     text: r => r.text.toLowerCase(),
+    //     createdAt: r => new Date(r.createdAt)
+    // });
 
     // Table columns
-    const notesColumns = [
-        { key: 'title', label: 'Title', className: 'table__title', sortable: true },
-        { key: 'username', label: 'Owner', className: 'table__username', sortable: true },
-        { key: 'createdAt', label: 'Created', className: 'note__created', sortable: true },
-        { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true }
-    ];
-    const repliesColumns = [
-        { key: 'noteTitle', label: 'Note Title', sortable: true },
-        { key: 'text', label: 'Reply', sortable: true },
-        { key: 'createdAt', label: 'Date', sortable: true }
-    ];
+    // const notesColumns = [
+    //     { key: 'title', label: 'Title', className: 'table__title', sortable: true },
+    //     { key: 'username', label: 'Owner', className: 'table__username', sortable: true },
+    //     { key: 'createdAt', label: 'Created', className: 'note__created', sortable: true },
+    //     { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true }
+    // ];
+    // const repliesColumns = [
+    //     { key: 'noteTitle', label: 'Note Title', sortable: true },
+    //     { key: 'text', label: 'Reply', sortable: true },
+    //     { key: 'createdAt', label: 'Date', sortable: true }
+    // ];
 
     // Activity buttons
-    const userNotesCount = notesSuccess && notesData
-        ? notesData.ids.filter(noteId => notesData.entities[noteId].username === username).length
-        : 0;
-    const userRepliesCount = userReplies.length;
+    // const userNotesCount = notesSuccess && notesData
+    //     ? notesData.ids.filter(noteId => notesData.entities[noteId].username === username).length
+    //     : 0;
+    // const userRepliesCount = userReplies.length;
     const activities = [
-        { key: 'notes', label: 'Notes', count: userNotesCount },
-        { key: 'replies', label: 'Replies', count: userRepliesCount },
+        { key: 'notes', label: 'Notes', count: 0 },
+        { key: 'replies', label: 'Replies', count: 0 },
         { key: 'likes', label: 'Likes' }
     ];
 
@@ -316,17 +219,7 @@ const Profile = () => {
     };
 
     // Handler for clicking a like item
-    const handleLikeClick = (like) => {
-        if (like._likeType === 'note') {
-            navigate(`/dash/notes/${like._id}/expand`);
-        } else if (like._likeType === 'reply') {
-            // like.note?._id is the note id, like._id is the reply id
-            const noteId = like.note?._id || like.note;
-            if (noteId) {
-                navigate(`/dash/notes/${noteId}/expand`, { state: { replyId: like._id } });
-            }
-        }
-    };
+    // const handleLikeClick = (like) => { ... }
 
     return (
         <section className="profile">
@@ -363,106 +256,17 @@ const Profile = () => {
                     </div>
                     {/* Show notes table if Notes activity is selected */}
                     <div className={`profile-buttons-transition${showActivity && selectedActivity === 'notes' ? ' show' : ''}`}>
-                    {showNotesContent && (
-                        <>
-                            {/* Notes Header */}
-                            <div className="all-notifications__header">
-                                <h1>My Notes</h1>
-                            </div>
-                            {/* Search Bar */}
-                            <div className="notes-filter-bar">
-                                <input
-                                    type="text"
-                                    placeholder="Search by title or owner..."
-                                    value={notesSearch}
-                                    onChange={e => setNotesSearch(e.target.value)}
-                                />
-                            </div>
-                            {/* Notes Table */}
-                            {renderStatus({ loading: notesLoading, error: notesError, errorMsg: notesErrorObj?.data?.message || 'Error loading notes' })}
-                            {notesSuccess && notesData && (
-                                <div className="table-scroll-wrapper">
-                                    <DataTable
-                                        columns={notesColumns}
-                                        data={sortedAndFilteredNoteIds}
-                                        emptyMsg="No notes found"
-                                        renderRow={noteId => <Note key={noteId} noteId={noteId} />}
-                                        sortConfig={notesSortConfig}
-                                        onSort={handleNotesSort}
-                                        tableClassName="table"
-                                        theadClassName="table__thead"
-                                    />
-                                </div>
-                            )}
-                        </>
-                    )}
+                        <NoteActivity userId={userId} username={username} show={showActivity && selectedActivity === 'notes'} />
                     </div>
 
                 {/* Show replies table if Replies activity is selected */}
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'replies' ? ' show' : ''}`}>
-                {showRepliesContent && (
-                    <>
-                    {/* Replies Header */}
-                    <div className="all-notifications__header">
-                        <h1>My Replies</h1>
-                    </div>
-                    {renderStatus({ loading: repliesLoading, error: repliesError, errorMsg: repliesError })}
-                    {!repliesLoading && !repliesError && (
-                        <div className="table-scroll-wrapper">
-                            <DataTable
-                                columns={repliesColumns}
-                                data={sortedReplies}
-                                emptyMsg="No replies found"
-                                renderRow={reply => (
-                                    <tr 
-                                        key={reply._id} 
-                                        className="table__row"
-                                        onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
-                                    >
-                                        <td className="table__cell">{reply.noteTitle}</td>
-                                        <td className="table__cell">{reply.text}</td>
-                                        <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                                    </tr>
-                                )}
-                                sortConfig={repliesSortConfig}
-                                onSort={handleRepliesSort}
-                                tableClassName="table"
-                                theadClassName="table__thead"
-                            />
-                        </div>
-                    )}
-                    </>
-                )}
+                    <ReplyActivity userId={userId} token={token} show={showActivity && selectedActivity === 'replies'} />
                 </div>
 
                 {/* Show likes if Likes activity is selected */}
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'likes' ? ' show' : ''}`}>
-                {showLikesContent && (
-                    <>
-                        {(likedNotesLoading || likedRepliesLoading) && <p>Loading likes...</p>}
-                        {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
-                        {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
-                        {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
-                            <div className="all-notifications__header">
-                                    <h1>My Likes</h1>
-                                <div className="all-notifications__content">
-                                    <ul>
-                                        {[
-                                            ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
-                                            ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
-                                        ]
-                                        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-                                        .map(like => (
-                                            <li key={like._id} className="all-notifications__item">
-                                                <LikeItem like={like} type={like._likeType} onClick={() => handleLikeClick(like)} />
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        )}
-                    </>
-                )}
+                    <LikeActivity userId={userId} show={showActivity && selectedActivity === 'likes'} />
                 </div>
 
                 {/* Change Password button and form always visible */}
@@ -529,7 +333,7 @@ const Profile = () => {
                 Delete My Account
             </button>
             <div className={`profile-buttons-transition${showDeleteConfirm ? ' show' : ''}`}>
-            {showDeleteConfirmContent && (
+            {(
                 <>
                     <p>Are you sure you want to delete your account? This action cannot be undone.</p>
                     <div>
