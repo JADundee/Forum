@@ -11,7 +11,6 @@ import ReplyActivity from '../replies/ReplyActivity';
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
-
 // --- MAIN COMPONENT ---
 const Profile = () => {
     const { username, roles, userId } = useAuth()
@@ -57,43 +56,6 @@ const Profile = () => {
         })
     })
     const email = user?.email
-
-    // Fetch all notes for the notes table
-    // const {
-    //     data: notesData,
-    //     isLoading: notesLoading,
-    //     isError: notesError,
-    //     error: notesErrorObj,
-    //     isSuccess: notesSuccess
-    // } = useGetNotesQuery('notesList', {
-    //     pollingInterval: 15000,
-    //     refetchOnFocus: true,
-    //     refetchOnMountOrArgChange: true
-    // })
-
-    // State for search in notes table
-    // const [notesSearch, setNotesSearch] = useState("");
-
-    // State for user replies aggregation
-    // const [userReplies, setUserReplies] = useState([])
-    // const [repliesLoading, setRepliesLoading] = useState(false)
-    // const [repliesError, setRepliesError] = useState(null)
-    // Sorting hooks for replies
-    // const [repliesSortConfig, handleRepliesSort] = useSortableData({ key: 'createdAt', direction: 'desc' });
-    // For replies sorting
-    // const sortedReplies = getSortedData(userReplies, repliesSortConfig, ...)
-    // Table columns for replies
-    // const repliesColumns = [...];
-    // Activity buttons: userRepliesCount
-    // const userRepliesCount = userReplies.length;
-    // ... existing code ...
-
-    // Fetch liked notes and replies
-    // const { data: likedNotes = [], isLoading: likedNotesLoading, isError: likedNotesError } = useGetLikedNotesQuery(userId);
-    // const { data: likedReplies = [], isLoading: likedRepliesLoading, isError: likedRepliesError } = useGetLikedRepliesQuery(userId);
-    // const showLikesContent = useShowWithTimeout(showActivity && selectedActivity === 'likes');
-    // Handler for clicking a like
-    // const handleLikeClick = (like) => { ... }
 
     // Guard: if user is not loaded, show loading message
     if (!user) return <p>Loading profile...</p>
@@ -147,53 +109,6 @@ const Profile = () => {
         }
     }
 
-    // For notes sorting and filtering
-    // let sortedAndFilteredNoteIds = [];
-    // if (notesSuccess && notesData) {
-    //     sortedAndFilteredNoteIds = notesData.ids
-    //         .filter(noteId => notesData.entities[noteId].username === username)
-    //         .filter(noteId => {
-    //             const note = notesData.entities[noteId];
-    //             const searchLower = notesSearch.toLowerCase();
-    //             return note.title.toLowerCase().includes(searchLower);
-    //         });
-    //     sortedAndFilteredNoteIds = getSortedData(
-    //         sortedAndFilteredNoteIds,
-    //         notesSortConfig,
-    //         {
-    //             title: id => notesData.entities[id].title.toLowerCase(),
-    //             username: id => notesData.entities[id].username.toLowerCase(),
-    //             createdAt: id => new Date(notesData.entities[id].createdAt),
-    //             updatedAt: id => new Date(notesData.entities[id].updatedAt)
-    //         }
-    //     );
-    // }
-
-    // For replies sorting
-    // const sortedReplies = getSortedData(userReplies, repliesSortConfig, {
-    //     noteTitle: r => r.noteTitle.toLowerCase(),
-    //     text: r => r.text.toLowerCase(),
-    //     createdAt: r => new Date(r.createdAt)
-    // });
-
-    // Table columns
-    // const notesColumns = [
-    //     { key: 'title', label: 'Title', className: 'table__title', sortable: true },
-    //     { key: 'username', label: 'Owner', className: 'table__username', sortable: true },
-    //     { key: 'createdAt', label: 'Created', className: 'note__created', sortable: true },
-    //     { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true }
-    // ];
-    // const repliesColumns = [
-    //     { key: 'noteTitle', label: 'Note Title', sortable: true },
-    //     { key: 'text', label: 'Reply', sortable: true },
-    //     { key: 'createdAt', label: 'Date', sortable: true }
-    // ];
-
-    // Activity buttons
-    // const userNotesCount = notesSuccess && notesData
-    //     ? notesData.ids.filter(noteId => notesData.entities[noteId].username === username).length
-    //     : 0;
-    // const userRepliesCount = userReplies.length;
     const activities = [
         { key: 'notes', label: 'Notes', count: 0 },
         { key: 'replies', label: 'Replies', count: 0 },
@@ -218,9 +133,6 @@ const Profile = () => {
         return "";
     };
 
-    // Handler for clicking a like item
-    // const handleLikeClick = (like) => { ... }
-
     return (
         <section className="profile">
             {!showActivity && (
@@ -232,12 +144,10 @@ const Profile = () => {
                 </div>
             )}
             <div>
-                {/* User Activity Button */}
                 <div>
                     <button className="button" onClick={handleShowActivityToggle}>
                         {showActivity ? 'Hide User Activity' : 'Show User Activity'}
                     </button>
-                    {/* Activity buttons always rendered, visibility controlled by class */}
                     <div
                         className={`profile-buttons-transition${showActivity && !selectedActivity ? ' show' : ''}`}
                         aria-hidden={!showActivity || !!selectedActivity}
@@ -254,22 +164,18 @@ const Profile = () => {
                             </button>
                         ))}
                     </div>
-                    {/* Show notes table if Notes activity is selected */}
                     <div className={`profile-buttons-transition${showActivity && selectedActivity === 'notes' ? ' show' : ''}`}>
                         <NoteActivity userId={userId} username={username} show={showActivity && selectedActivity === 'notes'} />
                     </div>
 
-                {/* Show replies table if Replies activity is selected */}
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'replies' ? ' show' : ''}`}>
                     <ReplyActivity userId={userId} token={token} show={showActivity && selectedActivity === 'replies'} />
                 </div>
 
-                {/* Show likes if Likes activity is selected */}
                 <div className={`profile-buttons-transition${showActivity && selectedActivity === 'likes' ? ' show' : ''}`}>
                     <LikeActivity userId={userId} show={showActivity && selectedActivity === 'likes'} />
                 </div>
 
-                {/* Change Password button and form always visible */}
                 {!showActivity && (
                   <div>
                       <button className="button" onClick={handleShowChangePwdToggle}>
@@ -286,7 +192,6 @@ const Profile = () => {
                                   <h2>Change Password</h2>
                               </div>
                               {isError && <p className="errmsg">{error?.data?.message || 'Error updating password'}</p>}
-                              {/* successMsg moved out of form */}
                               <label htmlFor="new-password">New Password: <span className="nowrap">[4-12 characters. Letters, numbers, !@#$% only]</span></label>
                               <input
                                   id="new-password"
@@ -320,13 +225,10 @@ const Profile = () => {
                       </div>
                   </div>
                 )}
-                {/* Move successMsg here, above the horizontal rule */}
                 {successMsg && <p className="msgmsg">{successMsg}</p>}
                 {!showActivity && <hr />}
             </div>
-            {/* Close main profile content div */}
             </div>
-            {/* Delete button always at the bottom when visible */}
             {!showActivity && (
                 <div>
             <button className="button delete-button" onClick={() => setShowDeleteConfirm(true)} disabled={isDeleting}>
