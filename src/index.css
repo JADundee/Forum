@@ -414,10 +414,6 @@ a:any-link:focus-visible {
  /* center buttons */
 }
 
-.table__header {
-  
-}
-
 .header-text {
   text-decoration: underline;
 }
@@ -865,6 +861,11 @@ a:any-link:focus-visible {
   gap: 0.5em;
 }
 
+.change-password-btn {
+ margin-bottom: 8px;
+ width: 13rem;
+}
+
 .profile-activity-container .button {
   width: 13rem;
   margin-bottom: 8px;
@@ -873,6 +874,16 @@ a:any-link:focus-visible {
 .profile-buttons-transition .form__action-buttons {
  width: 13rem;
  margin-bottom: 10px;
+}
+
+.activity-counter-badge {
+  padding: 1px;
+  font-weight: bold;
+  color: #fff;
+  background: var(--LINK-HOVER);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
 }
 
 .edit-reply-form {

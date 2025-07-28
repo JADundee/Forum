@@ -1,6 +1,7 @@
 import useAuth from '../../hooks/useAuth'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useUpdateUserMutation, useGetUsersQuery, useDeleteUserMutation } from './usersApiSlice'
+import { useGetNotesQuery } from '../notes/notesApiSlice'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { logOut } from '../auth/authSlice'
@@ -26,9 +27,34 @@ const Profile = () => {
     const [confirmTouched, setConfirmTouched] = useState(false)
     const [showActivity, setShowActivity] = useState(false)
     const [selectedActivity, setSelectedActivity] = useState(null)
+    const [repliesCount, setRepliesCount] = useState(0);
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const token = useSelector(selectCurrentToken)
+
+    // Fetch notes count for this user
+    const { data: notesData } = useGetNotesQuery('notesList');
+    const notesCount = notesData
+        ? notesData.ids.filter(id => notesData.entities[id].username === username).length
+        : 0;
+
+    // Fetch replies count for this user
+    useEffect(() => {
+        const fetchRepliesCount = async () => {
+            if (userId && token) {
+                try {
+                    const res = await fetch(`http://localhost:3500/notes/replies-by-user?userId=${userId}`,
+                        { headers: { 'Authorization': `Bearer ${token}` } });
+                    if (!res.ok) throw new Error('Failed to fetch');
+                    const replies = await res.json();
+                    setRepliesCount(Array.isArray(replies) ? replies.length : 0);
+                } catch {
+                    setRepliesCount(0);
+                }
+            }
+        };
+        fetchRepliesCount();
+    }, [userId, token]);
 
     // Centralized handlers for toggling UI states
     const handleActivitySelect = (activity) => {
@@ -109,9 +135,10 @@ const Profile = () => {
         }
     }
 
+    // Update activities array to use real counts
     const activities = [
-        { key: 'notes', label: 'Notes', count: 0 },
-        { key: 'replies', label: 'Replies', count: 0 },
+        { key: 'notes', label: 'Notes', count: notesCount },
+        { key: 'replies', label: 'Replies', count: repliesCount },
         { key: 'likes', label: 'Likes' }
     ];
 
@@ -119,7 +146,7 @@ const Profile = () => {
     const renderActivityLabel = (label, count) => (
         <>
             {label}
-            {count > 0 && <span className='notification-counter'>{count}</span>}
+            {count > 0 && <span className="activity-counter-badge">{count}</span>}
         </>
     );
 
@@ -178,7 +205,7 @@ const Profile = () => {
 
                 {!showActivity && (
                   <div>
-                      <button className="button" onClick={handleShowChangePwdToggle}>
+                      <button className="button change-password-btn" onClick={handleShowChangePwdToggle}>
                           {showChangePwd ? 'Cancel' : 'Change Password'}
                       </button>
                       <div className={`profile-buttons-transition${showChangePwd ? ' show' : ''}`}>
