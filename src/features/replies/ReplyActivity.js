@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import DataTable from '../../components/DataTable';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import filterAndSort from '../../hooks/useSearch';
 
 const ReplyActivity = ({ userId, token, show }) => {
     const [userReplies, setUserReplies] = useState([]);
     const [repliesLoading, setRepliesLoading] = useState(false);
     const [repliesError, setRepliesError] = useState(null);
     const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
+    const [search, setSearch] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,26 +33,7 @@ const ReplyActivity = ({ userId, token, show }) => {
         fetchUserReplies();
     }, [userId, token]);
 
-    // DRY sorting utility
-    function getSortedData(arr, config, keyMap) {
-        return [...arr].sort((a, b) => {
-            let valA = keyMap[config.key](a);
-            let valB = keyMap[config.key](b);
-            if (config.key === 'createdAt') {
-                return config.direction === 'desc' ? valB - valA : valA - valB;
-            } else {
-                return config.direction === 'desc'
-                    ? valB.localeCompare(valA)
-                    : valA.localeCompare(valB);
-            }
-        });
-    }
-
-    const sortedReplies = getSortedData(userReplies, sortConfig, {
-        noteTitle: r => r.noteTitle.toLowerCase(),
-        text: r => r.text.toLowerCase(),
-        createdAt: r => new Date(r.createdAt)
-    });
+    const sortedAndFilteredReplies = filterAndSort.runReplies(userReplies, search, sortConfig);
 
     const repliesColumns = [
         { key: 'noteTitle', label: 'Note Title', sortable: true },
@@ -75,13 +58,21 @@ const ReplyActivity = ({ userId, token, show }) => {
             <div className="all-notifications__header">
                 <h1>My Replies</h1>
             </div>
+            <div className="notes-filter-bar">
+                <input
+                    type="text"
+                    placeholder="Search by note title or reply text..."
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                />
+            </div>
             {repliesLoading && <p>Loading...</p>}
             {repliesError && <p className="errmsg">{repliesError}</p>}
             {!repliesLoading && !repliesError && (
                 <div className="table-scroll-wrapper">
                     <DataTable
                         columns={repliesColumns}
-                        data={sortedReplies}
+                        data={sortedAndFilteredReplies}
                         emptyMsg="No replies found"
                         renderRow={reply => (
                             <tr 
