@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import PublicHeader from '../../components/PublicHeader'
+import { useResetPasswordMutation } from './authApiSlice'
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
 
@@ -15,6 +16,7 @@ const ResetPassword = () => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const [resetPassword] = useResetPasswordMutation()
 
     const handlePasswordChange = (e) => {
         const value = e.target.value
@@ -36,19 +38,10 @@ const ResetPassword = () => {
         setError('')
         setMessage('')
         try {
-            const response = await fetch('http://localhost:3500/auth/reset-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, password })
-            })
-            const data = await response.json()
-            if (response.ok) {
-                setMessage(data.message)
-            } else {
-                setError(data.message || 'Something went wrong')
-            }
+            const result = await resetPassword({ token, password }).unwrap()
+            setMessage(result.message)
         } catch (err) {
-            setError('Network error')
+            setError(err?.data?.message || 'Something went wrong')
         } finally {
             setLoading(false)
         }

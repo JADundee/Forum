@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PublicHeader from '../../components/PublicHeader'
+import { useForgotPasswordMutation } from './authApiSlice'
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState('')
@@ -8,6 +9,7 @@ const ForgotPassword = () => {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const [forgotPassword] = useForgotPasswordMutation()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -15,19 +17,10 @@ const ForgotPassword = () => {
         setError('')
         setMessage('')
         try {
-            const response = await fetch('http://localhost:3500/auth/forgot-password', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
-            })
-            const data = await response.json()
-            if (response.ok) {
-                setMessage(data.message)
-            } else {
-                setError(data.message || 'Something went wrong')
-            }
+            const result = await forgotPassword({ email }).unwrap()
+            setMessage(result.message)
         } catch (err) {
-            setError('Network error')
+            setError(err?.data?.message || 'Something went wrong')
         } finally {
             setLoading(false)
         }
