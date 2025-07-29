@@ -38,34 +38,6 @@ const filterAndSort = {
             }
         });
         return filtered;
-    },
-    runReplies(replies, search, sortConfig) {
-        const searchLower = search.toLowerCase();
-        let filtered = replies.filter(reply =>
-            reply.noteTitle.toLowerCase().includes(searchLower) ||
-            reply.text.toLowerCase().includes(searchLower)
-        );
-        filtered.sort((a, b) => {
-            let valA, valB;
-            if (sortConfig.key === 'createdAt') {
-                valA = new Date(a.createdAt);
-                valB = new Date(b.createdAt);
-            } else if (sortConfig.key === 'noteTitle') {
-                valA = a.noteTitle.toLowerCase();
-                valB = b.noteTitle.toLowerCase();
-            } else if (sortConfig.key === 'text') {
-                valA = a.text.toLowerCase();
-                valB = b.text.toLowerCase();
-            }
-            if (sortConfig.key === 'createdAt') {
-                return sortConfig.direction === 'desc' ? valB - valA : valA - valB;
-            } else {
-                return sortConfig.direction === 'desc'
-                    ? valB.localeCompare(valA)
-                    : valA.localeCompare(valB);
-            }
-        });
-        return filtered;
     }
 };
 
