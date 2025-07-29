@@ -3,8 +3,9 @@ import { useGetNotesQuery } from './notesApiSlice';
 import DataTable from '../../components/DataTable';
 import Note from './Note';
 import useSort from '../../hooks/useSort';
+import filterAndSort from '../../hooks/useSearch';
 
-const NoteActivity = ({ userId, username, show }) => {
+const NoteActivity = ({ username, show }) => {
     const {
         data: notesData,
         isLoading: notesLoading,
@@ -18,18 +19,17 @@ const NoteActivity = ({ userId, username, show }) => {
     });
 
     const [notesSearch, setNotesSearch] = useState("");
-    const { sortConfig, handleSort, sortData } = useSort('updatedAt', 'desc');
+    const { sortConfig, handleSort} = useSort('updatedAt', 'desc');
 
     let sortedAndFilteredNoteIds = [];
     if (notesSuccess && notesData) {
-        let filteredIds = notesData.ids.filter(id => {
-            const note = notesData.entities[id];
-            const matchesSearch = note.title.toLowerCase().includes(notesSearch.toLowerCase()) ||
-                                  note.username.toLowerCase().includes(notesSearch.toLowerCase());
-            const matchesUser = !username || note.username === username;
-            return matchesSearch && matchesUser;
-        });
-        sortedAndFilteredNoteIds = sortData(filteredIds, notesData.entities);
+        sortedAndFilteredNoteIds = filterAndSort.run(
+            notesData.ids,
+            notesData.entities,
+            notesSearch,
+            sortConfig,
+            username
+        );
     }
 
     const notesColumns = [

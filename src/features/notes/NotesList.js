@@ -9,7 +9,6 @@ const NotesList = () => {
     const [search, setSearch] = useState("");
     const [showMine, setShowMine] = useState(false);
     const { username } = useAuth();
-
     const { sortConfig, handleSort, sortData } = useSort('updatedAt', 'desc');
 
     const {
