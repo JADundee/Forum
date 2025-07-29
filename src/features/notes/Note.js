@@ -40,11 +40,13 @@ const Note = ({ noteId, showSettingsMenu }) => {
                 {showSettingsMenu && (
                   <td
                     className="table__cell"
+                    style={{ position: 'relative' }}
                     onClick={e => e.stopPropagation()} // <-- Prevents row click when clicking menu
                   >
                     <MenuButton
                       onEdit={handleEdit} // <-- Navigates to edit page
                       onDelete={handleDelete} // <-- Use the same logic as edit page
+                      variant="profile-activity-menu-button"
                     />
                   </td>
                 )}

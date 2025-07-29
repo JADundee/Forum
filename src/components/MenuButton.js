@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const MenuButton = ({ onEdit, onDelete }) => {
+const MenuButton = ({ onEdit, onDelete, variant = "" }) => {
   const [open, setOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const menuRef = useRef(null);
@@ -25,7 +25,7 @@ const MenuButton = ({ onEdit, onDelete }) => {
   return (
     <div ref={menuRef}>
       <button
-        className="button reply-menu-button"
+        className={`button menu-button${variant ? ` ${variant}` : ""}`}
         title="Show options"
         onClick={() => { setOpen((prev) => !prev); setConfirmDelete(false); }}
         aria-haspopup="true"
@@ -33,7 +33,7 @@ const MenuButton = ({ onEdit, onDelete }) => {
       >
         &#x22EE;
       </button>
-      <div className={`reply-dropdown${open ? ' show' : ''}`}>
+      <div className={`reply-dropdown${open ? ' show' : ''}${variant ? ` ${variant}-dropdown` : ''}`}>
         {!confirmDelete ? (
           <>
             <button className="button" onClick={() => { setOpen(false); onEdit(); }}>Edit</button>

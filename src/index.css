@@ -126,7 +126,6 @@
     background-color: var(--CANCELBUTTON-HOVER); 
   }
 
-  /* Mark all as read button */
 .alt-button {
   background: var(--ALTBUTTON);
   
@@ -173,7 +172,6 @@ body {
   background-size: cover;
   background-position: top right;
   background-blend-mode: multiply;
-  /* overflow: hidden; */
 }
 
 input,
@@ -190,7 +188,6 @@ select {
   height: 100vh;
   display: flex;
   flex-flow: column nowrap;
-  /* overflow: hidden; */
 }
 
 a:any-link {
@@ -205,8 +202,6 @@ a:any-link:focus-visible {
 }
 
 /* || PAGES */
-
-/* theForum header link style for consistent branding */
 
 .public__header {
   position: sticky;
@@ -411,7 +406,6 @@ a:any-link:focus-visible {
 .table__button {
   padding: 0.25em;
   font-size: 1.5rem;
- /* center buttons */
 }
 
 .header-text {
@@ -682,7 +676,6 @@ a:any-link:focus-visible {
 }
 
 .all-notifications__item {
-  /* Style each notification item */
   padding: 10px;
   margin: 5px;
   border-bottom: 1px solid var(--BORDER-COLOR);
@@ -694,11 +687,10 @@ a:any-link:focus-visible {
 }
 
 .all-notifications__item p {
-  font-size: 14px; /* Set a smaller font size for the notification text */
+  font-size: 14px;
 }
 
 .all-notifications__item:hover {
-  /* Add hover effect to each notification item */
   background-color: var(--LINK-HOVER);
   width: 100%;
   cursor: pointer;
@@ -717,7 +709,6 @@ a:any-link:focus-visible {
   opacity: 1;
 }
 
-/* Unread count badge */
 .notification-badge {
   position: absolute;
   top: 2px;
@@ -732,7 +723,7 @@ a:any-link:focus-visible {
 }
 
 
-.reply-menu-button {
+.menu-button {
   background: transparent;
   color: var(--COLOR);
   font-size: 1.5rem;
@@ -744,9 +735,26 @@ a:any-link:focus-visible {
   margin-left: 0.5rem;
 }
 
-.reply-menu-button:hover,
-.reply-menu-button:focus-visible {
+.menu-button:hover,
+.menu-button:focus-visible {
   color: var(--LINK-COLOR);
+}
+
+.profile-activity-menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0;
+}
+
+.profile-activity-menu-button-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  min-width: 120px;
+  z-index: 2000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .reply-dropdown {
@@ -755,10 +763,10 @@ a:any-link:focus-visible {
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem 0.5rem;
-  background-color: var(--BGCOLOR) !important;
-  border: 1px solid var(--BORDER-COLOR) !important;
-  border-radius: 8px !important;
-  box-shadow: 5px 5px 0px var(--BOX-SHADOW) !important;
+  background-color: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR) ;
+  border-radius: 8px;
+  box-shadow: 5px 5px 0px var(--BOX-SHADOW) ;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
@@ -789,7 +797,6 @@ a:any-link:focus-visible {
   box-sizing: border-box;
 }
 
-/* delete button standard small */
 .all-notifications__item .delete-button {
   padding: 0.3rem 0.6rem;
   font-size: 0.95rem;
