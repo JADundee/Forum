@@ -4,12 +4,14 @@ import { useState } from "react"
 import useAuth from '../../hooks/useAuth'
 import DataTable from '../../components/DataTable'
 import filterAndSort from '../../hooks/useSearch'
+import useSort from '../../hooks/useSort'
 
 const NotesList = () => {
     const [search, setSearch] = useState("");
-    const [sortConfig, setSortConfig] = useState({ key: 'updatedAt', direction: 'desc' });
     const [showMine, setShowMine] = useState(false);
     const { username } = useAuth();
+
+    const { sortConfig, handleSort, sortData } = useSort('updatedAt', 'desc');
 
     const {
         data: notes,
@@ -33,23 +35,15 @@ const NotesList = () => {
 
     if (isSuccess) {
         const { ids, entities } = notes
-        const filteredIds = filterAndSort.run(
-            ids,
-            entities,
-            search,
-            sortConfig,
-            showMine && username ? username : undefined
-        );
-
-        const handleSort = (key) => {
-            setSortConfig(prev => {
-                if (prev.key === key) {
-                    return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-                } else {
-                    return { key, direction: 'desc' };
-                }
-            });
-        };
+        // Filter first, then sort
+        let filteredIds = ids.filter(id => {
+            const note = entities[id];
+            const matchesSearch = note.title.toLowerCase().includes(search.toLowerCase()) ||
+                                  note.username.toLowerCase().includes(search.toLowerCase());
+            const matchesMine = !showMine || (username && note.username === username);
+            return matchesSearch && matchesMine;
+        });
+        filteredIds = sortData(filteredIds, entities);
 
         const columns = [
             { key: 'title', label: 'Title', sortable: true },

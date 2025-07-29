@@ -1,9 +1,9 @@
 import { useGetUsersQuery } from "./usersApiSlice"
 import User from './User'
 import DataTable from '../../components/DataTable'
+import useSort from '../../hooks/useSort'
 
 const UsersList = () => {
-
     const {
         data: users,
         isLoading,
@@ -16,6 +16,8 @@ const UsersList = () => {
         refetchOnMountOrArgChange: true
     })
 
+    const { sortConfig, handleSort, sortData } = useSort('username', 'asc');
+
     let content
 
     if (isLoading) content = <p>Loading...</p>
@@ -25,19 +27,16 @@ const UsersList = () => {
     }
 
     if (isSuccess) {
-        const { ids } = users
+        const { ids, entities } = users
 
-        // Define columns to match the current table
         const columns = [
-            { key: 'username', label: 'Username' },
+            { key: 'username', label: 'Username', sortable: true },
             { key: 'roles', label: 'Roles' },
             { key: 'edit', label: 'Edit' },
         ]
 
-        // Data is just the array of user IDs
-        const data = ids || []
+        const data = sortData(ids, entities);
 
-        // Render row using the existing User component
         const renderRow = (userId) => <User key={userId} userId={userId} />
 
         content = (
@@ -46,7 +45,8 @@ const UsersList = () => {
                 data={data}
                 emptyMsg="No users found."
                 renderRow={renderRow}
-                // Pass the same className for styling
+                sortConfig={sortConfig}
+                onSort={handleSort}
                 tableClassName="table table--users"
             />
         )

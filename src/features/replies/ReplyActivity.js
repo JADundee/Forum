@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import DataTable from '../../components/DataTable';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import filterAndSort from '../../hooks/useSearch';
+import useSort from '../../hooks/useSort';
 
 const ReplyActivity = ({ userId, token, show }) => {
-    const [userReplies, setUserReplies] = useState([]);
+    const [userReplies, setUserReplies] = useState({ ids: [], entities: {} });
     const [repliesLoading, setRepliesLoading] = useState(false);
     const [repliesError, setRepliesError] = useState(null);
-    const [sortConfig, setSortConfig] = useState({ key: 'createdAt', direction: 'desc' });
     const [search, setSearch] = useState("");
+    const { sortConfig, handleSort, sortData } = useSort('createdAt', 'desc');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +22,12 @@ const ReplyActivity = ({ userId, token, show }) => {
                         { headers: { 'Authorization': `Bearer ${token}` } });
                     if (!res.ok) throw new Error('Failed to fetch');
                     const replies = await res.json();
-                    setUserReplies(replies);
+                    const ids = Array.isArray(replies) ? replies.map(r => r._id) : [];
+                    const entities = {};
+                    if (Array.isArray(replies)) {
+                        replies.forEach(r => { entities[r._id] = r; });
+                    }
+                    setUserReplies({ ids, entities });
                 } catch (err) {
                     setRepliesError('Failed to load replies');
                 } finally {
@@ -33,23 +38,23 @@ const ReplyActivity = ({ userId, token, show }) => {
         fetchUserReplies();
     }, [userId, token]);
 
-    const sortedAndFilteredReplies = filterAndSort.runReplies(userReplies, search, sortConfig);
+    const sortedAndFilteredReplies = (() => {
+        const { ids, entities } = userReplies;
+        let filteredIds = ids.filter(id => {
+            const reply = entities[id];
+            return (
+                reply.noteTitle.toLowerCase().includes(search.toLowerCase()) ||
+                reply.text.toLowerCase().includes(search.toLowerCase())
+            );
+        });
+        return sortData(filteredIds, entities);
+    })();
 
     const repliesColumns = [
         { key: 'noteTitle', label: 'Note Title', sortable: true },
         { key: 'text', label: 'Reply', sortable: true },
         { key: 'createdAt', label: 'Date', sortable: true }
     ];
-
-    const handleSort = (key) => {
-        setSortConfig(prev => {
-            if (prev.key === key) {
-                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-            } else {
-                return { key, direction: 'desc' };
-            }
-        });
-    };
 
     if (!show) return null;
 
@@ -74,17 +79,20 @@ const ReplyActivity = ({ userId, token, show }) => {
                         columns={repliesColumns}
                         data={sortedAndFilteredReplies}
                         emptyMsg="No replies found"
-                        renderRow={reply => (
-                            <tr 
-                                key={reply._id} 
-                                className="table__row"
-                                onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
-                            >
-                                <td className="table__cell">{reply.noteTitle}</td>
-                                <td className="table__cell">{reply.text}</td>
-                                <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
-                            </tr>
-                        )}
+                        renderRow={replyId => {
+                            const reply = userReplies.entities[replyId];
+                            return (
+                                <tr 
+                                    key={reply._id} 
+                                    className="table__row"
+                                    onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
+                                >
+                                    <td className="table__cell">{reply.noteTitle}</td>
+                                    <td className="table__cell">{reply.text}</td>
+                                    <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                </tr>
+                            );
+                        }}
                         sortConfig={sortConfig}
                         onSort={handleSort}
                         tableClassName="table"

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useGetNotesQuery } from './notesApiSlice';
 import DataTable from '../../components/DataTable';
 import Note from './Note';
-import filterAndSort from '../../hooks/useSearch';
+import useSort from '../../hooks/useSort';
 
 const NoteActivity = ({ userId, username, show }) => {
     const {
@@ -18,26 +18,18 @@ const NoteActivity = ({ userId, username, show }) => {
     });
 
     const [notesSearch, setNotesSearch] = useState("");
-    const [sortConfig, setSortConfig] = useState({ key: 'updatedAt', direction: 'desc' });
-    const handleSort = (key) => {
-        setSortConfig(prev => {
-            if (prev.key === key) {
-                return { key, direction: prev.direction === 'desc' ? 'asc' : 'desc' };
-            } else {
-                return { key, direction: 'desc' };
-            }
-        });
-    };
+    const { sortConfig, handleSort, sortData } = useSort('updatedAt', 'desc');
 
     let sortedAndFilteredNoteIds = [];
     if (notesSuccess && notesData) {
-        sortedAndFilteredNoteIds = filterAndSort.run(
-            notesData.ids,
-            notesData.entities,
-            notesSearch,
-            sortConfig,
-            username
-        );
+        let filteredIds = notesData.ids.filter(id => {
+            const note = notesData.entities[id];
+            const matchesSearch = note.title.toLowerCase().includes(notesSearch.toLowerCase()) ||
+                                  note.username.toLowerCase().includes(notesSearch.toLowerCase());
+            const matchesUser = !username || note.username === username;
+            return matchesSearch && matchesUser;
+        });
+        sortedAndFilteredNoteIds = sortData(filteredIds, notesData.entities);
     }
 
     const notesColumns = [
