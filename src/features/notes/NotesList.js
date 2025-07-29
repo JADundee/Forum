@@ -3,7 +3,6 @@ import Note from "./Note"
 import { useState } from "react"
 import useAuth from '../../hooks/useAuth'
 import DataTable from '../../components/DataTable'
-import filterAndSort from '../../hooks/useSearch'
 import useSort from '../../hooks/useSort'
 
 const NotesList = () => {

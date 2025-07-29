@@ -1,6 +1,5 @@
-import React, { forwardRef } from 'react';
+import  { forwardRef } from 'react';
 import { createPortal } from 'react-dom';
-import moment from 'moment';
 import NotificationItem from './NotificationItem';
 
 const NotificationDropdown = forwardRef(({

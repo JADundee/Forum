@@ -26,7 +26,7 @@ const USERS_REGEX = /^\/dash\/users(\/)?$/
 // Define the DashHeader component
 const DashHeader = () => {
     // Get user authentication data from useAuth hook
-    const { isAdmin, username, userId } = useAuth()
+    const { isAdmin, username } = useAuth()
     const { id } = useParams(); 
     
     // Get navigate function from React Router

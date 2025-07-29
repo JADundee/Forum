@@ -1,14 +1,13 @@
 import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation, useDeleteNotificationMutation } from '../notes/notesApiSlice';
 import { useNavigate } from 'react-router-dom';
-import moment from 'moment';
-import React, { useCallback } from 'react';
+import  { useCallback } from 'react';
 import NotificationItem from './NotificationItem';
 
 const NotificationsList = () => {
   const navigate = useNavigate();
 
-  const { data: notificationsData, isLoading, isError, error } = useGetNotificationsQuery();
-  const { data: notesData, isLoading: notesLoading, isError: notesError, error: notesErrObj } = useGetNotesQuery();
+  const { data: notificationsData, isLoading, isError } = useGetNotificationsQuery();
+  const { isLoading: notesLoading, isError: notesError } = useGetNotesQuery();
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const [markAllNotificationsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
   const [deleteNotification, { isLoading: isDeleting }] = useDeleteNotificationMutation();
@@ -31,7 +30,6 @@ const NotificationsList = () => {
     return <p>Error fetching notifications or notes</p>;
   }
 
-  const notes = notesData?.entities || {};
   const notifications = notificationsData || [];
   const unreadCount = notifications.filter(n => !n.read).length;
 
