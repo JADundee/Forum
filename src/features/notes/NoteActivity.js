@@ -4,6 +4,7 @@ import DataTable from '../../components/DataTable';
 import Note from './Note';
 import useSort from '../../hooks/useSort';
 import filterAndSort from '../../hooks/useSearch';
+import MenuButton from '../../components/MenuButton';
 
 const NoteActivity = ({ username, show }) => {
     const {
@@ -36,7 +37,8 @@ const NoteActivity = ({ username, show }) => {
         { key: 'title', label: 'Title', className: 'table__title', sortable: true },
         { key: 'username', label: 'Owner', className: 'table__username', sortable: true },
         { key: 'createdAt', label: 'Created', className: 'note__created', sortable: true },
-        { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true }
+        { key: 'updatedAt', label: 'Updated', className: 'note__updated', sortable: true },
+        { key: 'settings', label: 'Settings' }
     ];
 
     if (!show) return null;
@@ -62,7 +64,7 @@ const NoteActivity = ({ username, show }) => {
                         columns={notesColumns}
                         data={sortedAndFilteredNoteIds}
                         emptyMsg="No notes found"
-                        renderRow={noteId => <Note key={noteId} noteId={noteId} />}
+                        renderRow={noteId => <Note key={noteId} noteId={noteId} showSettingsMenu />}
                         sortConfig={sortConfig}
                         onSort={handleSort}
                         tableClassName="table"

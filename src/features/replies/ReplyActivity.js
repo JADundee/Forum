@@ -1,47 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import DataTable from '../../components/DataTable';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import useSort from '../../hooks/useSort';
 import filterAndSort from '../../hooks/useSearch';
+import MenuButton from '../../components/MenuButton';
+import { useGetRepliesByUserQuery, useDeleteReplyMutation } from '../notes/notesApiSlice';
 
-const ReplyActivity = ({ userId, token, show }) => {
-    const [userReplies, setUserReplies] = useState({ ids: [], entities: {} });
-    const [repliesLoading, setRepliesLoading] = useState(false);
-    const [repliesError, setRepliesError] = useState(null);
+const ReplyActivity = ({ userId, show }) => {
+    const {
+        data: userReplies = { ids: [], entities: {} },
+        isLoading: repliesLoading,
+        isError: repliesError,
+        refetch
+    } = useGetRepliesByUserQuery(userId, { skip: !userId });
+
     const [search, setSearch] = useState("");
     const { sortConfig, handleSort } = useSort('createdAt', 'desc');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const fetchUserReplies = async () => {
-            if (userId && token) {
-                setRepliesLoading(true);
-                setRepliesError(null);
-                try {
-                    const res = await fetch(`http://localhost:3500/notes/replies-by-user?userId=${userId}`,
-                        { headers: { 'Authorization': `Bearer ${token}` } });
-                    if (!res.ok) throw new Error('Failed to fetch');
-                    const replies = await res.json();
-                    const ids = Array.isArray(replies) ? replies.map(r => r._id) : [];
-                    const entities = {};
-                    if (Array.isArray(replies)) {
-                        replies.forEach(r => { entities[r._id] = r; });
-                    }
-                    setUserReplies({ ids, entities });
-                } catch (err) {
-                    setRepliesError('Failed to load replies');
-                } finally {
-                    setRepliesLoading(false);
-                }
-            }
-        };
-        fetchUserReplies();
-    }, [userId, token]);
+    const [deleteReply] = useDeleteReplyMutation();
 
     const sortedAndFilteredReplies = filterAndSort.runRepliesById(
-        userReplies.ids,
-        userReplies.entities,
+        userReplies?.ids || [],
+        userReplies?.entities || {},
         search,
         sortConfig
     );
@@ -49,10 +30,22 @@ const ReplyActivity = ({ userId, token, show }) => {
     const repliesColumns = [
         { key: 'noteTitle', label: 'Note Title', sortable: true },
         { key: 'text', label: 'Reply', sortable: true },
-        { key: 'createdAt', label: 'Date', sortable: true }
+        { key: 'createdAt', label: 'Date', sortable: true },
+        { key: 'settings', label: 'Settings' }
     ];
 
     if (!show) return null;
+
+    const handleDelete = async (replyId) => {
+        await deleteReply({ replyId });
+        refetch();
+    };
+
+    const handleEdit = (reply) => {
+        navigate(`/dash/notes/${reply.note._id}/expand`, {
+            state: { replyId: reply._id, editReply: true }
+        });
+    };
 
     return (
         <>
@@ -78,14 +71,23 @@ const ReplyActivity = ({ userId, token, show }) => {
                         renderRow={replyId => {
                             const reply = userReplies.entities[replyId];
                             return (
-                                <tr 
-                                    key={reply._id} 
+                                <tr
+                                    key={reply._id}
                                     className="table__row"
                                     onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
                                 >
                                     <td className="table__cell">{reply.noteTitle}</td>
                                     <td className="table__cell">{reply.text}</td>
                                     <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
+                                    <td
+                                        className="table__cell"
+                                        onClick={e => e.stopPropagation()} // <-- Prevents row click when clicking menu
+                                    >
+                                        <MenuButton
+                                          onEdit={() => handleEdit(reply)}
+                                          onDelete={() => handleDelete(reply._id)}
+                                        />
+                                    </td>
                                 </tr>
                             );
                         }}

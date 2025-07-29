@@ -4,8 +4,9 @@ import useAuth from '../../hooks/useAuth';
 import moment from 'moment';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import EditReplyForm from './EditReplyForm';
+import MenuButton from '../../components/MenuButton';
 
-const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
+const RepliesList = ({ replies, refetchReplies, highlightReplyId, editReplyId }) => {
   const { data: users } = useGetUsersQuery('usersList');
   const [deleteReply ] = useDeleteReplyMutation()
   const [editReply, { isLoading: editLoading }] = useEditReplyMutation();
@@ -43,6 +44,12 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
     }
   }, [highlightReplyId, replies]);
 
+  useEffect(() => {
+    if (editReplyId) {
+      setEditingReplyId(editReplyId);
+    }
+  }, [editReplyId]);
+
   if (!Array.isArray(replies)) {
     return <p>No replies found</p>;
   }
@@ -73,59 +80,6 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId }) => {
 
 const formatTimestamp = (timestamp) => {
   return moment(timestamp).format('MMMM D, YYYY h:mm A');
-};
-
-const MenuButton = ({ onEdit, onDelete }) => {
-  const [open, setOpen] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const menuRef = useRef(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setOpen(false);
-        setConfirmDelete(false);
-      }
-    };
-    if (open) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [open]);
-
-  return (
-    <div ref={menuRef}>
-      <button
-        className="button reply-menu-button"
-        title="Show options"
-        onClick={() => { setOpen((prev) => !prev); setConfirmDelete(false); }}
-        aria-haspopup="true"
-        aria-expanded={open}
-      >
-        &#x22EE;
-      </button>
-      <div
-        className={`reply-dropdown${open ? ' show' : ''}`}
-      >
-        {!confirmDelete ? (
-          <>
-            <button className="button" onClick={() => { setOpen(false); onEdit(); }}>Edit</button>
-            <button className="button delete-button" onClick={() => setConfirmDelete(true)}>Delete</button>
-          </>
-        ) : (
-          <div>
-            <span>Are you sure?</span>
-            <button className="button delete-button" onClick={() => { setOpen(false); setConfirmDelete(false); onDelete(); }}>Yes, Delete</button>
-            <button className="button" onClick={() => setConfirmDelete(false)}>Cancel</button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
 };
 
 const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight, isEditing, editText, setEditText, onEditClick, onEditCancel, onEditSave, editLoading }) => {

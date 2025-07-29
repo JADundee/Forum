@@ -72,6 +72,8 @@ const NoteExpand = () => {
     const hasLiked = userLikeData?.liked;
     const likeCount = likeCountData?.count || 0;
 
+    const editReplyId = location.state?.editReply ? location.state.replyId : null;
+
     const content = (
         <article className="blog-post">
             <div className='blog-post__op'>
@@ -117,7 +119,12 @@ const NoteExpand = () => {
             
             <section className="blog-post__replies">
                     <h2>Replies</h2>
-                    <RepliesList replies={replies} refetchReplies={refetch} highlightReplyId={highlightReplyId} />
+                    <RepliesList
+                        replies={replies}
+                        refetchReplies={refetch}
+                        highlightReplyId={highlightReplyId}
+                        editReplyId={editReplyId}
+                    />
             </section>
         </article>
     );

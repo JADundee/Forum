@@ -175,6 +175,24 @@ export const notesApiSlice = apiSlice.injectEndpoints({
                 method: 'GET'
             })
         }),
+        getRepliesByUser: builder.query({
+            query: (userId) => ({
+                url: `/notes/replies-by-user?userId=${userId}`,
+                method: 'GET',
+            }),
+            transformResponse: (response) => {
+                if (Array.isArray(response)) {
+                    const ids = response.map(r => r._id);
+                    const entities = {};
+                    response.forEach(r => { entities[r._id] = r; });
+                    return { ids, entities };
+                }
+                return response;
+            },
+            providesTags: (result, error, userId) => [
+                { type: 'Replies', id: userId }
+            ]
+        }),
     }),
 })
 
@@ -196,7 +214,8 @@ export const {
     useToggleLikeReplyMutation,
     useToggleLikeMutation,
     useGetLikeCountQuery,
-    useGetUserLikeQuery
+    useGetUserLikeQuery,
+    useGetRepliesByUserQuery
 } = notesApiSlice
 
 // returns the query result object
