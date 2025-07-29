@@ -3,13 +3,14 @@ import DataTable from '../../components/DataTable';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import useSort from '../../hooks/useSort';
+import filterAndSort from '../../hooks/useSearch';
 
 const ReplyActivity = ({ userId, token, show }) => {
     const [userReplies, setUserReplies] = useState({ ids: [], entities: {} });
     const [repliesLoading, setRepliesLoading] = useState(false);
     const [repliesError, setRepliesError] = useState(null);
     const [search, setSearch] = useState("");
-    const { sortConfig, handleSort, sortData } = useSort('createdAt', 'desc');
+    const { sortConfig, handleSort } = useSort('createdAt', 'desc');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,17 +39,12 @@ const ReplyActivity = ({ userId, token, show }) => {
         fetchUserReplies();
     }, [userId, token]);
 
-    const sortedAndFilteredReplies = (() => {
-        const { ids, entities } = userReplies;
-        let filteredIds = ids.filter(id => {
-            const reply = entities[id];
-            return (
-                reply.noteTitle.toLowerCase().includes(search.toLowerCase()) ||
-                reply.text.toLowerCase().includes(search.toLowerCase())
-            );
-        });
-        return sortData(filteredIds, entities);
-    })();
+    const sortedAndFilteredReplies = filterAndSort.runRepliesById(
+        userReplies.ids,
+        userReplies.entities,
+        search,
+        sortConfig
+    );
 
     const repliesColumns = [
         { key: 'noteTitle', label: 'Note Title', sortable: true },

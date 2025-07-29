@@ -38,6 +38,39 @@ const filterAndSort = {
             }
         });
         return filtered;
+    },
+    runRepliesById(ids, entities, search, sortConfig) {
+        const searchLower = search.toLowerCase();
+        let filtered = ids.filter(id => {
+            const reply = entities[id];
+            return (
+                reply.noteTitle.toLowerCase().includes(searchLower) ||
+                reply.text.toLowerCase().includes(searchLower)
+            );
+        });
+        filtered.sort((a, b) => {
+            const replyA = entities[a];
+            const replyB = entities[b];
+            let valA, valB;
+            if (sortConfig.key === 'createdAt') {
+                valA = new Date(replyA.createdAt);
+                valB = new Date(replyB.createdAt);
+            } else if (sortConfig.key === 'noteTitle') {
+                valA = replyA.noteTitle.toLowerCase();
+                valB = replyB.noteTitle.toLowerCase();
+            } else if (sortConfig.key === 'text') {
+                valA = replyA.text.toLowerCase();
+                valB = replyB.text.toLowerCase();
+            }
+            if (sortConfig.key === 'createdAt') {
+                return sortConfig.direction === 'desc' ? valB - valA : valA - valB;
+            } else {
+                return sortConfig.direction === 'desc'
+                    ? valB.localeCompare(valA)
+                    : valA.localeCompare(valB);
+            }
+        });
+        return filtered;
     }
 };
 
