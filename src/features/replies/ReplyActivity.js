@@ -81,11 +81,13 @@ const ReplyActivity = ({ userId, show }) => {
                                     <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
                                     <td
                                         className="table__cell"
+                                        style={{ position: 'relative' }}
                                         onClick={e => e.stopPropagation()} // <-- Prevents row click when clicking menu
                                     >
                                         <MenuButton
                                           onEdit={() => handleEdit(reply)}
                                           onDelete={() => handleDelete(reply._id)}
+                                          variant="profile-activity-menu-button"
                                         />
                                     </td>
                                 </tr>
