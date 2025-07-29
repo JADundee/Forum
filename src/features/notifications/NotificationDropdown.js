@@ -24,7 +24,6 @@ const NotificationDropdown = forwardRef(({
             ) : (
                 <>
                 {notifications
-                    .filter((notification) => notification.username !== username)
                     .map((notification) => (
                         <div
                           key={notification.id}

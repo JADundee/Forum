@@ -24,6 +24,16 @@ const NotificationItem = ({ notification }) => (
         {notification.noteTitle && <span> on <span className="note-title">{notification.noteTitle}</span></span>}
       </p>
     )}
+    {notification.type === 'tag' && (
+      <>
+        <p>
+          <span className="username">{notification.username}</span> mentioned you in a reply on <span className="note-title">{notification.noteTitle}</span>
+        </p>
+        <p>
+          <span className="reply-text">"{notification.replyText}"</span>
+        </p>
+      </>
+    )}
     <p className="all-notifications__timestamp">
       <span className="timestamp">{moment(notification.createdAt).fromNow()}</span>
     </p>

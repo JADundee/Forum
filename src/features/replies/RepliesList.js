@@ -78,9 +78,20 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId, editReplyId })
   );
 };
 
-const formatTimestamp = (timestamp) => {
+// Helper to highlight @username tags
+function highlightTags(text) {
+  return text.split(/(@\w+)/g).map((part, i) => {
+    if (/^@\w+$/.test(part)) {
+      return <span key={i} className="tagged-username">{part}</span>;
+    }
+    return part;
+  });
+}
+
+// Helper to format timestamps
+function formatTimestamp(timestamp) {
   return moment(timestamp).format('MMMM D, YYYY h:mm A');
-};
+}
 
 const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight, isEditing, editText, setEditText, onEditClick, onEditCancel, onEditSave, editLoading }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);
@@ -130,7 +141,7 @@ const Reply = ({ reply, username, userId, handleDeleteReply, refProp, highlight,
             loading={editLoading}
           />
         ) : (
-          <p>{reply.text}</p>
+          <p>{highlightTags(reply.text)}</p>
         )}
       </div>
         <div className="like-button-container">

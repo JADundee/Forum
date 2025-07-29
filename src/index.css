@@ -357,7 +357,7 @@ a:any-link:focus-visible {
 .notification-item:hover {
   background-color: var(--LINK-HOVER);
   width: 100%;
-  
+  cursor: pointer;
 }
 
 .notification-dropdown .button {
@@ -1066,4 +1066,49 @@ a:any-link:focus-visible {
   .dash-footer-date {
     display: none;
   }
+}
+
+.tagged-username {
+  color: var(--LINK-COLOR);
+  font-weight: bold;
+  background: var(--NOTE-BGCOLOR);
+  border-radius: 4px;
+  padding: 0 2px;
+  cursor: pointer;
+}
+.tagged-username:hover {
+  text-decoration: underline;
+  background: var(--LINK-HOVER);
+  color: #fff;
+}
+
+.tag-dropdown {
+  position: absolute;
+  left: 0;
+  top: 2.5em;
+  background: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR);
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 220px;
+  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
+}
+
+.tag-dropdown-item {
+  padding: 0.5em;
+  cursor: pointer;
+  color: var(--COLOR);
+  background: var(--BGCOLOR);
+  transition: background 0.2s;
+}
+
+.tag-dropdown-item.selected,
+.tag-dropdown-item:hover {
+  background: var(--LINK-COLOR);
+  color: #fff;
 }
