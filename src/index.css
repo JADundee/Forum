@@ -11,7 +11,7 @@
 :root {
   /* COLORS */
   --BGCOLOR: #F7F7F7;
-  --BORDER-COLOR: #E5E5E5;
+  --BORDER-COLOR: #333;
   --BOX-SHADOW: #309230;
   --BOX-SHADOW-ALT: #bdbdbd;
   --COLOR: #333;
@@ -27,6 +27,7 @@
   --INPUT-INVALID: #F00;
   --BUTTON: #309230;
   --BUTTON-HOVER: #236323;
+  --BUTTON-TEXT: #FFF;
   --ALTBUTTON: #82a8ff;
   --ALTBUTTON-HOVER: #6388ff;
   --CANCELBUTTON: firebrick;
@@ -38,12 +39,17 @@
   :root {
     --BGCOLOR: #0F172A;
     --BOX-SHADOW: #309230;
+    --BORDER-COLOR: #E5E5E5;
     --COLOR: #FFFFFF;
     --LINK-COLOR: #309230;
     --LINK-HOVER: #236323;
     --NOTE-BGCOLOR: #333333;
     --TABLE-BGCOLOR: #333333;
     --TABLE-COLOR: #FFFFFF;
+  }
+
+  body {
+    /*background-iamge: url('./img/background-dark.jpg'); */
   }
 }
 
@@ -90,7 +96,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--COLOR);
+  color: var(--BUTTON-TEXT);
   padding: 10px 20px;
   font-size: 1.2rem;
   border: none;
@@ -115,7 +121,7 @@
 
 .delete-button {
     background-color: var(--CANCELBUTTON); 
-    color: #ffffff; 
+    color: var(--BUTTON-TEXT); 
     border: none;
     padding: 10px 20px;
     border-radius: 8px;
@@ -128,7 +134,7 @@
 
 .alt-button {
   background: var(--ALTBUTTON);
-  
+  color: var(--BUTTON-TEXT);
 }
 .alt-button:hover {
   background: var(--ALTBUTTON-HOVER);
@@ -172,6 +178,7 @@ body {
   background-size: cover;
   background-position: top right;
   background-blend-mode: multiply;
+  background-image: url('./img/background.jpg');
 }
 
 input,
@@ -434,7 +441,7 @@ a:any-link:focus-visible {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: var(--BGCOLOR);
+  background-color: var(--NOTE-BGCOLOR);
   margin-bottom: 1rem;
   display: flex;
   gap: 1rem;
@@ -673,26 +680,29 @@ a:any-link:focus-visible {
 
 .all-notifications__header {
   font-weight: bold;
-  font-size: 16px;
   margin-bottom: 5px;
   color: var(--COLOR);
   text-align: center;
   text-decoration: underline;
   background: var(--BGCOLOR);
   border-radius: 12px 12px 0 0;
-  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
   padding: 1.2rem 0.5rem 0.5rem 0.5rem;
+  font-size: 1.5rem;
 }
 
 .all-notifications__item {
+  width: 100%; /* Make items take full width of container */
+  max-width: 500px; /* Optional: limit max width for better appearance */
+  margin: 0.75rem 0; /* Only vertical margin */
   padding: 10px;
-  margin: 5px;
   border-bottom: 1px solid var(--BORDER-COLOR);
   color: var(--COLOR);
-  width: 100%;
   box-sizing: border-box;
   border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
+  background: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: background 0.2s, box-shadow 0.2s;
 }
 
 .all-notifications__item p {
@@ -808,16 +818,24 @@ a:any-link:focus-visible {
 }
 
 .all-notifications__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
   max-height: 60vh;
   overflow-y: auto;
   overflow-x: hidden;
-  width: 100%;
   box-sizing: border-box;
   background: var(--BGCOLOR);
   border-radius: 0 0 12px 12px;
-  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
   padding: 1.2rem 0.5rem 0.5rem 0.5rem;
   margin-bottom: 2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  background: var(--CARD-BGCOLOR);
+  border-radius: 12px;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-height: 200px;
+  width: 100%;
 }
 
 .all-notifications__item .delete-button {
@@ -827,8 +845,9 @@ a:any-link:focus-visible {
 }
 
 .mark-all-read-btn {
-  float: right;
-  margin: 12px;
+  display: block;
+  margin: 0 auto 1.5rem auto; /* Center horizontally and add space below */
+  float: none;
 }
 
 .profile {
@@ -911,7 +930,7 @@ a:any-link:focus-visible {
 
 .profile-activity-container .button {
   width: 13rem;
-  margin-bottom: 8px;
+ margin-bottom: 8px;
  }
 
 .profile-buttons-transition .form__action-buttons {
