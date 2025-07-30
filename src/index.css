@@ -404,8 +404,13 @@ a:any-link:focus-visible {
 }
 
 .table__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.25em;
   font-size: 1.5rem;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 .header-text {
@@ -843,10 +848,15 @@ a:any-link:focus-visible {
   grid-column: auto;
   transition: color 0.3s ease;
   text-align: center;
+  vertical-align: middle;
   border: none;
   border-bottom: 1px solid var(--TABLE-COLOR);
   background-color: var(--TABLE-BGCOLOR);
   color: var(--COLOR);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 300px;
 }
 
 .table__row:hover .table__cell {
@@ -919,11 +929,6 @@ a:any-link:focus-visible {
   text-align: center;
 }
 
-.menu-button-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
 .edit-reply-form {
   display: flex;
   flex-direction: column;
@@ -953,52 +958,6 @@ a:any-link:focus-visible {
 
 .reply--highlight {
   animation: reply-flash 1.2s ease;
-}
-
-
-.tagged-username {
-  color: var(--LINK-COLOR);
-  font-weight: bold;
-  background: var(--NOTE-BGCOLOR);
-  border-radius: 4px;
-  padding: 0 2px;
-  cursor: pointer;
-}
-.tagged-username:hover {
-  text-decoration: underline;
-  background: var(--LINK-HOVER);
-  color: #fff;
-}
-
-.tag-dropdown {
-  position: absolute;
-  left: 0;
-  top: 2.5em;
-  background: var(--BGCOLOR);
-  border: 1px solid var(--BORDER-COLOR);
-  border-radius: 8px;
-  z-index: 1000;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 150px;
-  overflow-y: auto;
-  width: 220px;
-  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
-}
-
-.tag-dropdown-item {
-  padding: 0.5em;
-  cursor: pointer;
-  color: var(--COLOR);
-  background: var(--BGCOLOR);
-  transition: background 0.2s;
-}
-
-.tag-dropdown-item.selected,
-.tag-dropdown-item:hover {
-  background: var(--LINK-COLOR);
-  color: #fff;
 }
 
 @keyframes reply-flash {
@@ -1136,8 +1095,47 @@ a:any-link:focus-visible {
   }
 }
 
-@media screen and (max-width: 480px) {
-  .fa-user-gear {
-    display: none;
-  }
+.tagged-username {
+  color: var(--LINK-COLOR);
+  font-weight: bold;
+  background: var(--NOTE-BGCOLOR);
+  border-radius: 4px;
+  padding: 0 2px;
+  cursor: pointer;
+}
+.tagged-username:hover {
+  text-decoration: underline;
+  background: var(--LINK-HOVER);
+  color: #fff;
+}
+
+.tag-dropdown {
+  position: absolute;
+  left: 0;
+  top: 2.5em;
+  background: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR);
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 220px;
+  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
+}
+
+.tag-dropdown-item {
+  padding: 0.5em;
+  cursor: pointer;
+  color: var(--COLOR);
+  background: var(--BGCOLOR);
+  transition: background 0.2s;
+}
+
+.tag-dropdown-item.selected,
+.tag-dropdown-item:hover {
+  background: var(--LINK-COLOR);
+  color: #fff;
 }
