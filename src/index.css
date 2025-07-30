@@ -673,6 +673,10 @@ a:any-link:focus-visible {
   color: var(--COLOR);
   text-align: center;
   text-decoration: underline;
+  background: var(--BGCOLOR);
+  border-radius: 12px 12px 0 0;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+  padding: 1.2rem 0.5rem 0.5rem 0.5rem;
 }
 
 .all-notifications__item {
@@ -733,6 +737,10 @@ a:any-link:focus-visible {
   cursor: pointer;
   transition: background 0.2s;
   margin-left: 0.5rem;
+  align-items: center;
+  display: flex;
+  position: relative;
+  z-index: 1;
 }
 
 .menu-button:hover,
@@ -759,16 +767,20 @@ a:any-link:focus-visible {
 }
 
 .reply-dropdown {
+  position: absolute;
+  top: 100%;         /* Stick directly below the button */
+  right: 0;          /* Align right edge of dropdown with button */
   min-width: 120px;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem 0.5rem;
-  background-color: var(--BGCOLOR);
-  border: 1px solid var(--BORDER-COLOR) ;
+  background: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR);
   border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--BOX-SHADOW) ;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 1000;
+  margin-top: 0.25rem; /* Small gap below button */
   opacity: 0;
   pointer-events: none;
   transform: translateY(-20px);
@@ -796,6 +808,11 @@ a:any-link:focus-visible {
   overflow-x: hidden;
   width: 100%;
   box-sizing: border-box;
+  background: var(--BGCOLOR);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
+  padding: 1.2rem 0.5rem 0.5rem 0.5rem;
+  margin-bottom: 2rem;
 }
 
 .all-notifications__item .delete-button {
@@ -902,6 +919,11 @@ a:any-link:focus-visible {
   text-align: center;
 }
 
+.menu-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .edit-reply-form {
   display: flex;
   flex-direction: column;
@@ -931,6 +953,52 @@ a:any-link:focus-visible {
 
 .reply--highlight {
   animation: reply-flash 1.2s ease;
+}
+
+
+.tagged-username {
+  color: var(--LINK-COLOR);
+  font-weight: bold;
+  background: var(--NOTE-BGCOLOR);
+  border-radius: 4px;
+  padding: 0 2px;
+  cursor: pointer;
+}
+.tagged-username:hover {
+  text-decoration: underline;
+  background: var(--LINK-HOVER);
+  color: #fff;
+}
+
+.tag-dropdown {
+  position: absolute;
+  left: 0;
+  top: 2.5em;
+  background: var(--BGCOLOR);
+  border: 1px solid var(--BORDER-COLOR);
+  border-radius: 8px;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 150px;
+  overflow-y: auto;
+  width: 220px;
+  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
+}
+
+.tag-dropdown-item {
+  padding: 0.5em;
+  cursor: pointer;
+  color: var(--COLOR);
+  background: var(--BGCOLOR);
+  transition: background 0.2s;
+}
+
+.tag-dropdown-item.selected,
+.tag-dropdown-item:hover {
+  background: var(--LINK-COLOR);
+  color: #fff;
 }
 
 @keyframes reply-flash {
@@ -1068,47 +1136,8 @@ a:any-link:focus-visible {
   }
 }
 
-.tagged-username {
-  color: var(--LINK-COLOR);
-  font-weight: bold;
-  background: var(--NOTE-BGCOLOR);
-  border-radius: 4px;
-  padding: 0 2px;
-  cursor: pointer;
-}
-.tagged-username:hover {
-  text-decoration: underline;
-  background: var(--LINK-HOVER);
-  color: #fff;
-}
-
-.tag-dropdown {
-  position: absolute;
-  left: 0;
-  top: 2.5em;
-  background: var(--BGCOLOR);
-  border: 1px solid var(--BORDER-COLOR);
-  border-radius: 8px;
-  z-index: 1000;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 150px;
-  overflow-y: auto;
-  width: 220px;
-  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
-}
-
-.tag-dropdown-item {
-  padding: 0.5em;
-  cursor: pointer;
-  color: var(--COLOR);
-  background: var(--BGCOLOR);
-  transition: background 0.2s;
-}
-
-.tag-dropdown-item.selected,
-.tag-dropdown-item:hover {
-  background: var(--LINK-COLOR);
-  color: #fff;
+@media screen and (max-width: 480px) {
+  .fa-user-gear {
+    display: none;
+  }
 }

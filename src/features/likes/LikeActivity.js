@@ -24,8 +24,10 @@ const LikeActivity = ({ userId, show }) => {
             {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
             {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
             {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
-                <div className="all-notifications__header">
-                    <h1>My Likes</h1>
+                <>
+                    <div className="all-notifications__header">
+                        <h1>My Likes</h1>
+                    </div>
                     <div className="all-notifications__content">
                         <ul>
                             {[
@@ -40,7 +42,7 @@ const LikeActivity = ({ userId, show }) => {
                             ))}
                         </ul>
                     </div>
-                </div>
+                </>
             )}
         </>
     );
