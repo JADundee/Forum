@@ -495,7 +495,6 @@ a:any-link:focus-visible {
   position: sticky;
   top: 0;
   z-index: 10;
-  background-color: var(--NOTE-BGCOLOR);
   margin-bottom: 1rem;
   display: flex;
   gap: 1rem;
@@ -623,7 +622,7 @@ a:any-link:focus-visible {
   max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
-  background-color: var(--BGCOLOR);
+
   border-radius: 12px;
   font-family: 'Inter', sans-serif;
   display: flex;
@@ -641,7 +640,6 @@ a:any-link:focus-visible {
 .blog-post__header {
   margin-top: 40px;
   padding: 20px;
-  background-color: var(--BGCOLOR);
   border-radius: 10px;
   text-align: center;
   margin-bottom: 10px;
@@ -810,7 +808,6 @@ a:any-link:focus-visible {
   color: var(--COLOR);
   text-align: center;
   text-decoration: underline;
-  background: var(--BGCOLOR);
   border-radius: 12px 12px 0 0;
   padding: 1.2rem 0.5rem 0.5rem 0.5rem;
   font-size: 1.5rem;
@@ -818,17 +815,16 @@ a:any-link:focus-visible {
 
 .all-notifications__item {
   width: 100%; 
-  max-width: 500px; 
   margin: 0.75rem 0;
   padding: 10px;
-  border-bottom: 1px solid var(--BORDER-COLOR);
   color: var(--COLOR);
-  box-sizing: border-box;
   border-radius: 8px;
   background: var(--BGCOLOR);
   border: 1px solid var(--BORDER-COLOR);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   transition: background 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .all-notifications__item p {
@@ -890,6 +886,8 @@ a:any-link:focus-visible {
   padding: 0.3rem 0.6rem;
   font-size: 0.95rem;
   width: auto;
+  margin-left: 10px;
+  flex-shrink: 0;
 }
 
 .mark-all-read-btn {
