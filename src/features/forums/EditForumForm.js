@@ -74,7 +74,7 @@ const EditForumForm = ({ forum }) => {
             <p className={errClass}>{errContent}</p>
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
-                    <h2>Edit Thread: {forum.title}</h2>
+                    <h2>Edit Forum: {forum.title}</h2>
                 </div>
                 <label className="form__label" htmlFor="forum-title">
                     Title:

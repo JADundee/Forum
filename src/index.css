@@ -607,7 +607,7 @@ a:any-link:focus-visible {
 
 /* || EXPANDED FORUM */
 
-.blog-post {
+.forum-post {
   max-width: 1000px;
   margin: 40px auto;
   padding: 20px;
@@ -618,7 +618,7 @@ a:any-link:focus-visible {
   flex-direction: column;
 }
 
-.blog-post__op {
+.forum-post__op {
   margin-bottom: 20px;
   padding: 20px;
   border-bottom: 1px solid var(--BORDER-COLOR);
@@ -626,7 +626,7 @@ a:any-link:focus-visible {
   box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
 
-.blog-post__header {
+.forum-post__header {
   margin-top: 40px;
   padding: 20px;
   border-radius: 10px;
@@ -636,7 +636,7 @@ a:any-link:focus-visible {
   font-weight: 600;
 }
 
-.blog-post__content {
+.forum-post__content {
   padding: 10px;
   color: var(--COLOR);
   background-color: var(--BGCOLOR);
@@ -644,15 +644,15 @@ a:any-link:focus-visible {
   border-radius: 10px;
 }
 
-.blog-post__author {
+.forum-post__author {
   margin-top: 10px;
 }
 
-.blog-post__author span {
+.forum-post__author span {
   margin-left: 5px;
 }
 
-.blog-post__meta {
+.forum-post__meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -662,11 +662,11 @@ a:any-link:focus-visible {
   font-size: 14px;
 }
 
-.blog-post__meta span:last-child {
+.forum-post__meta span:last-child {
   margin-right: 0;
 }
 
-.blog-post__form {
+.forum-post__form {
   padding: 20px;
   background-color: var(--BGCOLOR);
   font-size: 1.2rem;
@@ -677,7 +677,7 @@ a:any-link:focus-visible {
   border-radius: 8px;
 }
 
-.blog-post__form textarea {
+.forum-post__form textarea {
   width: 100%;
   height: 100px;
   padding: 10px;
@@ -687,7 +687,7 @@ a:any-link:focus-visible {
   border-radius: 8px;
 }
 
-.blog-post__replies h2 {
+.forum-post__replies h2 {
   font-size: 1.8rem;
   font-weight: 600;
   color: var(--COLOR);
@@ -985,15 +985,15 @@ a:any-link:focus-visible {
     font-size: 0.9em;
   }
 
-  .blog-post {
+  .forum-post {
     padding: 20px;
   }
     
-  .blog-post__header h1 {
+  .forum-post__header h1 {
     font-size: 2.2rem;
   }
     
-  .blog-post__content {
+  .forum-post__content {
     font-size: 1.3rem;
   }
 
@@ -1025,17 +1025,17 @@ a:any-link:focus-visible {
     font-size: 1rem;
   }
 
-  .blog-post {
+  .forum-post {
     max-width: 90%;
     margin: 30px auto;
     padding: 25px;
   }
 
-  .blog-post__header h1 {
+  .forum-post__header h1 {
     font-size: 1.6rem;
   }
 
-  .blog-post__content {
+  .forum-post__content {
     font-size: 1.1rem;
   }
 

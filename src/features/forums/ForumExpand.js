@@ -75,29 +75,29 @@ const ForumExpand = () => {
     const editReplyId = location.state?.editReply ? location.state.replyId : null;
 
     const content = (
-        <article className="blog-post">
-            <div className='blog-post__op'>
-                <header className="blog-post__header">
+        <article className="forum-post">
+            <div className='forum-post__op'>
+                <header className="forum-post__header">
                     <h1>{forum.title}</h1>
                 </header>
 
-                <section className="blog-post__content">
+                <section className="forum-post__content">
                     <p>{forum.text}</p>
                 </section>
 
-                <p className='blog-post__author'>Author:
+                <p className='forum-post__author'>Author:
                     <span className="username">
                         {forum.username}
                     </span>
                 </p>
 
                 {forum.editedBy && (
-                    <p className="blog-post__edited-by">Edited by: <span className="username">{forum.editedBy}</span></p>
+                    <p className="forum-post__edited-by">Edited by: <span className="username">{forum.editedBy}</span></p>
                 )}
 
-                <p className="blog-post__meta">
-                        <span className="blog-post__created">Published: {created}</span> | 
-                        <span className="blog-post__updated">Updated: {updated}</span>
+                <p className="forum-post__meta">
+                        <span className="forum-post__created">Published: {created}</span> | 
+                        <span className="forum-post__updated">Updated: {updated}</span>
                 </p>
                 <div className="like-button-container">
                     <button
@@ -113,11 +113,11 @@ const ForumExpand = () => {
                 </div>
             </div>
 
-            <section className="blog-post__form">
+            <section className="forum-post__form">
                 <ReplyForm forumId={forum.id} userId={forum.user} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
             </section>
             
-            <section className="blog-post__replies">
+            <section className="forum-post__replies">
                     <h2>Replies</h2>
                     <RepliesList
                         replies={replies}

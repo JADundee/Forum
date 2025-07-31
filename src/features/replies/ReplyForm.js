@@ -95,7 +95,7 @@ const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmi
     const canReply = replyText.trim() !== ''
     
     return (
-        <form onSubmit={handleSubmit} className='blog-post__replies' style={{ position: 'relative' }}>
+        <form onSubmit={handleSubmit} className='forum-post__replies' style={{ position: 'relative' }}>
             <textarea 
                 ref={textareaRef}
                 value={replyText} 
