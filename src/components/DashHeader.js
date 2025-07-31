@@ -14,12 +14,12 @@ import {
 // Import necessary hooks from React Router and Redux
 import { useNavigate, Link, useLocation, useParams } from 'react-router-dom'
 import { useSendLogoutMutation } from '../features/auth/authApiSlice'
-import {useGetNotesQuery, useGetNotificationsQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation} from '../features/notes/notesApiSlice'
+import {useGetForumsQuery, useGetNotificationsQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation} from '../features/forums/forumsApiSlice'
 import useAuth from '../hooks/useAuth'
 import NotificationDropdown from '../features/notifications/NotificationDropdown'
 
 // Define regular expressions for matching dashboard routes
-const NOTES_REGEX = /^\/dash\/notes(\/)?$/
+const FORUMS_REGEX = /^\/dash\/forums(\/)?$/
 const USERS_REGEX = /^\/dash\/users(\/)?$/
 
 
@@ -42,41 +42,41 @@ const DashHeader = () => {
     // Use notificationsData directly, but memoize to avoid ESLint warning
     const notifications = useMemo(() => notificationsData || [], [notificationsData]);
 
-    // Get notes data from useGetNotesQuery hook
-    const { data, isLoading: notesLoading } = useGetNotesQuery("notesList");
+    // Get forums data from useGetForumsQuery hook
+    const { data, isLoading: forumsLoading } = useGetForumsQuery("forumsList");
 
-    // Memoized all notes
-    const allNotes = useMemo(() => {
-        if (!notesLoading && data && data.entities) {
+    // Memoized all forums
+    const allForums = useMemo(() => {
+        if (!forumsLoading && data && data.entities) {
             return Object.values(data.entities);
         }
         return [];
-    }, [data, notesLoading]);
+    }, [data, forumsLoading]);
 
-    // Optimize notification mapping with noteMap (all notes)
-    const noteMap = useMemo(() => {
+    // Optimize notification mapping with forumMap (all forums)
+    const forumMap = useMemo(() => {
         const map = {};
-        allNotes.forEach(note => { map[note.id] = note.title; });
+        allForums.forEach(forum => { map[forum.id] = forum.title; });
         return map;
-    }, [allNotes]);
+    }, [allForums]);
 
-    // Filter out notifications for deleted notes
-    const filteredNotifications = useMemo(() => notifications.filter(n => !n.noteId || noteMap[n.noteId]), [notifications, noteMap]);
+    // Filter out notifications for deleted forums
+    const filteredNotifications = useMemo(() => notifications.filter(n => !n.forumId || forumMap[n.forumId]), [notifications, forumMap]);
 
     const notificationsWithTitles = useMemo(() => filteredNotifications.map(n => ({
         ...n,
-        noteTitle: noteMap[n.noteId]
-    })), [filteredNotifications, noteMap]);
+        forumTitle: forumMap[n.forumId]
+    })), [filteredNotifications, forumMap]);
 
     // Initialize state for notification dropdown
     const [notificationDropdownOpen, setNotificationDropdownOpen] = useState(false);
 
     // Pathname/regex checks as booleans
     const isDash = pathname === '/dash';
-    const isNotes = useMemo(() => NOTES_REGEX.test(pathname), [pathname]);
+    const isForums = useMemo(() => FORUMS_REGEX.test(pathname), [pathname]);
     const isUsers = useMemo(() => USERS_REGEX.test(pathname), [pathname]);
     const isNotificationsAll = pathname.includes('/dash/users/notifications/all');
-    const isNoteExpand = useMemo(() => pathname.includes(`/dash/notes/${id}/expand`), [pathname, id]);
+    const isForumExpand = useMemo(() => pathname.includes(`/dash/forums/${id}/expand`), [pathname, id]);
 
     // Add refs for notification button and dropdown
     const notificationButtonRef = useRef(null);
@@ -125,7 +125,7 @@ const DashHeader = () => {
         if (isSuccess) navigate('/')
     }, [isSuccess, navigate])
 
-    // Count unread notifications (for existing notes only)
+    // Count unread notifications (for existing forums only)
     const unreadCount = filteredNotifications.filter(n => !n.read && n.username !== username).length;
 
     // Handler for marking all as read (to be implemented with backend support)
@@ -141,13 +141,13 @@ const DashHeader = () => {
         if (!notification.read) {
             await markNotificationRead(notification.id);
         }
-        // Optionally, navigate to the note or reply
-        if (notification.noteId) {
+        // Optionally, navigate to the forum or reply
+        if (notification.forumId) {
             // If replyId exists, pass it in location state for highlighting
             if (notification.replyId) {
-                navigate(`/dash/notes/${notification.noteId}/expand`, { state: { replyId: notification.replyId } });
+                navigate(`/dash/forums/${notification.forumId}/expand`, { state: { replyId: notification.replyId } });
             } else {
-                navigate(`/dash/notes/${notification.noteId}/expand`);
+                navigate(`/dash/forums/${notification.forumId}/expand`);
             }
             setNotificationDropdownOpen(false);
         }
@@ -215,20 +215,20 @@ const DashHeader = () => {
     const errClass = isError ? "errmsg" : "offscreen"
 
     // Button render helpers (move these above buttonContent logic)
-    const renderNewNoteButton = () => (
-        <button className="icon-button" title="New Note" onClick={handleNavigate('/dash/notes/new')}>
+    const renderNewForumButton = () => (
+        <button className="icon-button" title="New Forum" onClick={handleNavigate('/dash/forums/new')}>
             <FontAwesomeIcon icon={faFileCirclePlus} />
         </button>
     );
 
-    const renderNotesButton = () => (
-        <button className="icon-button" title="Notes" onClick={handleNavigate('/dash/notes')}>
+    const renderForumsButton = () => (
+        <button className="icon-button" title="Forums" onClick={handleNavigate('/dash/forums')}>
             <FontAwesomeIcon icon={faFile} />
         </button>
     );
 
-    const renderEditNoteButton = () => (
-        <button className="icon-button" title="Edit Note" onClick={handleNavigate(`/dash/notes/${id}/edit`)}>
+    const renderEditForumButton = () => (
+        <button className="icon-button" title="Edit Forum" onClick={handleNavigate(`/dash/forums/${id}/edit`)}>
             <FontAwesomeIcon icon={faFilePen} />
         </button>
     );
@@ -250,9 +250,9 @@ const DashHeader = () => {
         // Otherwise, display navigation buttons
         buttonContent = (
             <>
-                {isNotes && renderNewNoteButton()}
-                {!isNotes && pathname.startsWith('/dash') && renderNotesButton()}
-                {isNoteExpand && (isAdmin || allNotes.find(note => note.id === id)?.username === username) && renderEditNoteButton()}
+                {isForums && renderNewForumButton()}
+                {!isForums && pathname.startsWith('/dash') && renderForumsButton()}
+                {isForumExpand && (isAdmin || allForums.find(forum => forum.id === id)?.username === username) && renderEditForumButton()}
                 {isAdmin && !isUsers && renderUsersButton()}
                 {notificationButton}
                 {profileButton}

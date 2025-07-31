@@ -6,15 +6,15 @@ import {
   useDeleteUserMutation,
 } from "./usersApiSlice";
 import {
-  useGetNotesQuery,
+  useGetForumsQuery,
   useGetRepliesCountByUserQuery,
-} from "../notes/notesApiSlice";
+} from "../forums/forumsApiSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../auth/authSlice";
 import { selectCurrentToken } from "../auth/authSlice";
 import LikeActivity from "../likes/LikeActivity";
-import NoteActivity from "../notes/NoteActivity";
+import ForumActivity from "../forums/ForumActivity";
 import ReplyActivity from "../replies/ReplyActivity";
 
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
@@ -41,10 +41,10 @@ const Profile = () => {
   const dispatch = useDispatch();
   const token = useSelector(selectCurrentToken);
 
-  // Fetch notes count for this user
-  const { data: notesData } = useGetNotesQuery("notesList");
-  const notesCount = notesData
-    ? notesData.ids.filter((id) => notesData.entities[id].username === username)
+  // Fetch forums count for this user
+  const { data: forumsData } = useGetForumsQuery("forumsList");
+  const forumsCount = forumsData
+    ? forumsData.ids.filter((id) => forumsData.entities[id].username === username)
         .length
     : 0;
 
@@ -134,7 +134,7 @@ const Profile = () => {
 
   // Update activities array to use real counts
   const activities = [
-    { key: "notes", label: "Notes", count: notesCount },
+    { key: "forums", label: "Forums", count: forumsCount },
     { key: "replies", label: "Replies", count: repliesCount },
     { key: "likes", label: "Likes" },
   ];
@@ -201,12 +201,12 @@ const Profile = () => {
 
           <div
             className={`profile-buttons-transition${
-              showActivity && selectedActivity === "notes" ? " show" : ""
+              showActivity && selectedActivity === "forums" ? " show" : ""
             }`}>
-            <NoteActivity
+            <ForumActivity
               userId={userId}
               username={username}
-              show={showActivity && selectedActivity === "notes"}
+              show={showActivity && selectedActivity === "forums"}
             />
           </div>
 

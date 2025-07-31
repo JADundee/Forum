@@ -1,5 +1,5 @@
 import { useGetUsersQuery } from '../users/usersApiSlice';
-import { useDeleteReplyMutation, useEditReplyMutation, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from '../notes/notesApiSlice';
+import { useDeleteReplyMutation, useEditReplyMutation, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from '../forums/forumsApiSlice';
 import useAuth from '../../hooks/useAuth';
 import moment from 'moment';
 import { useEffect, useRef, useState, useCallback } from 'react';

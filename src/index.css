@@ -19,7 +19,7 @@
   --INACTIVE: #CCC;
   --LINK-COLOR: #309230;
   --LINK-HOVER: #236323;
-  --NOTE-BGCOLOR: #F0F0F0;
+  --FORUM-BGCOLOR: #F0F0F0;
   --STATUS-COMPLETE: #309230;
   --STATUS-OPEN: firebrick;
   --TABLE-BGCOLOR: #FFF;
@@ -40,7 +40,7 @@
     --BGCOLOR: #0F172A;
     --BORDER-COLOR: #E5E5E5;
     --COLOR: #FFFFFF;
-    --NOTE-BGCOLOR: #333333;
+    --FORUM-BGCOLOR: #333333;
     --TABLE-BGCOLOR: #333333;
     --TABLE-COLOR: #FFFFFF;
   }
@@ -481,7 +481,7 @@ a:any-link:focus-visible {
   position: relative;
 }
 
-.notes-filter-bar {
+.forums-filter-bar {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -495,7 +495,7 @@ a:any-link:focus-visible {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.notes-filter-bar input[type="text"] {
+.forums-filter-bar input[type="text"] {
   padding: 0.5rem;
   width: 100%;
   max-width: 400px;
@@ -505,7 +505,7 @@ a:any-link:focus-visible {
   border-radius: 8px;
 }
 
-.notes-filter-bar .button {
+.forums-filter-bar .button {
   height: 40px;
   font-size: 1rem;
   padding: 0 20px;
@@ -1090,7 +1090,7 @@ a:any-link:focus-visible {
 .tagged-username {
   color: var(--LINK-COLOR);
   font-weight: bold;
-  background: var(--NOTE-BGCOLOR);
+  background: var(--FORUM-BGCOLOR);
   border-radius: 4px;
   padding: 0 2px;
   cursor: pointer;

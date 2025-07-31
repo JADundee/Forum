@@ -4,17 +4,17 @@ import Public from './components/Public'
 import Register from './features/auth/Register'
 import DashLayout from './components/DashLayout'
 import Welcome from './features/auth/Welcome'
-import NotesList from './features/notes/NotesList'
+import ForumsList from './features/forums/ForumsList'
 import UsersList from './features/users/UsersList'
 import EditUser from './features/users/EditUser'
-import EditNote from './features/notes/EditNote'
-import NewNote from './features/notes/NewNote'
+import EditForum from './features/forums/EditForum'
+import NewForum from './features/forums/NewForum'
 import Prefetch from './features/auth/Prefetch'
 import PersistLogin from './features/auth/PersistLogin';
 import RequireAuth from './features/auth/RequireAuth'
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
-import NoteExpand from './features/notes/NoteExpand'
+import ForumExpand from './features/forums/ForumExpand'
 import NotificationsList from './features/notifications/NotificationsList'
 import ForgotPassword from './features/auth/ForgotPassword'
 import ResetPassword from './features/auth/ResetPassword'
@@ -52,11 +52,11 @@ function App() {
                   </Route>
                 </Route>
 
-                <Route path="notes">
-                  <Route index element={<NotesList />} />
-                  <Route path=":id/edit" element={<EditNote />} />
-                  <Route path=":id/expand" element={<NoteExpand />} />
-                  <Route path="new" element={<NewNote />} />
+                <Route path="forums">
+                  <Route index element={<ForumsList />} />
+                  <Route path=":id/edit" element={<EditForum />} />
+                  <Route path=":id/expand" element={<ForumExpand />} />
+                  <Route path="new" element={<NewForum />} />
                 </Route>
 
               </Route>{/* End Dash */}

@@ -1,28 +1,28 @@
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { useGetNotesQuery, useGetRepliesQuery, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from './notesApiSlice'
+import { useGetForumsQuery, useGetRepliesQuery, useToggleLikeMutation, useGetLikeCountQuery, useGetUserLikeQuery } from './forumsApiSlice'
 import useAuth from '../../hooks/useAuth'
 import ReplyForm from '../replies/ReplyForm'
 import RepliesList from '../replies/RepliesList'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 
-const NoteExpand = () => {
+const ForumExpand = () => {
     const { id } = useParams()
     const location = useLocation();
     const navigate = useNavigate();
     const { username, isAdmin} = useAuth()
     const [highlightReplyId, setHighlightReplyId] = useState(null);
     const [toggleLike] = useToggleLikeMutation();
-    const { data: likeCountData, refetch: refetchLikeCount } = useGetLikeCountQuery({ targetId: id, targetType: 'note' });
-    const { data: userLikeData, refetch: refetchUserLike } = useGetUserLikeQuery({ targetId: id, targetType: 'note' });
+    const { data: likeCountData, refetch: refetchLikeCount } = useGetLikeCountQuery({ targetId: id, targetType: 'forum' });
+    const { data: userLikeData, refetch: refetchUserLike } = useGetUserLikeQuery({ targetId: id, targetType: 'forum' });
     const [likeLoading, setLikeLoading] = useState(false);
 
-    const { note } = useGetNotesQuery("notesList", {
+    const { forum } = useGetForumsQuery("forumsList", {
         selectFromResult: ({ data }) => ({
-            note: data?.entities[id]
+            forum: data?.entities[id]
         }),
     })
-    const { data: replies, isLoading, isError, refetch } = useGetRepliesQuery(note?.id);
+    const { data: replies, isLoading, isError, refetch } = useGetRepliesQuery(forum?.id);
 
     useEffect(() => {
         if (location.state?.replyId && replies && replies.length > 0) {
@@ -31,12 +31,12 @@ const NoteExpand = () => {
         }
     }, [location.state, replies, navigate, location.pathname]);
 
-    if (!note) {
-        return <p>Loading note...</p>;
+    if (!forum) {
+        return <p>Loading forum...</p>;
     }
 
     // Combined access checks
-    if (!note || !note.id || (!isAdmin && note.username !== username && window.location.pathname.includes('edit'))) {
+    if (!forum || !forum.id || (!isAdmin && forum.username !== username && window.location.pathname.includes('edit'))) {
         return <p className="errmsg">No access</p>
     }
 
@@ -51,8 +51,8 @@ const NoteExpand = () => {
         return <p>No replies found</p>;
     }
 
-    const created = moment(note.createdAt).format('MMMM D, YYYY h:mm A');
-    const updated = moment(note.updatedAt).format('MMMM D, YYYY h:mm A');
+    const created = moment(forum.createdAt).format('MMMM D, YYYY h:mm A');
+    const updated = moment(forum.updatedAt).format('MMMM D, YYYY h:mm A');
 
     const handleReplySubmitted = (replyId) => {
         setHighlightReplyId(replyId);
@@ -61,7 +61,7 @@ const NoteExpand = () => {
     const handleLike = async () => {
         setLikeLoading(true);
         try {
-            await toggleLike({ targetId: id, targetType: 'note' }).unwrap();
+            await toggleLike({ targetId: id, targetType: 'forum' }).unwrap();
             refetchLikeCount();
             refetchUserLike();
         } finally {
@@ -78,21 +78,21 @@ const NoteExpand = () => {
         <article className="blog-post">
             <div className='blog-post__op'>
                 <header className="blog-post__header">
-                    <h1>{note.title}</h1>
+                    <h1>{forum.title}</h1>
                 </header>
 
                 <section className="blog-post__content">
-                    <p>{note.text}</p>
+                    <p>{forum.text}</p>
                 </section>
 
                 <p className='blog-post__author'>Author:
                     <span className="username">
-                        {note.username}
+                        {forum.username}
                     </span>
                 </p>
 
-                {note.editedBy && (
-                    <p className="blog-post__edited-by">Edited by: <span className="username">{note.editedBy}</span></p>
+                {forum.editedBy && (
+                    <p className="blog-post__edited-by">Edited by: <span className="username">{forum.editedBy}</span></p>
                 )}
 
                 <p className="blog-post__meta">
@@ -114,7 +114,7 @@ const NoteExpand = () => {
             </div>
 
             <section className="blog-post__form">
-                <ReplyForm noteId={note.id} userId={note.user} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
+                <ReplyForm forumId={forum.id} userId={forum.user} refetchReplies={refetch} onReplySubmitted={handleReplySubmitted} />
             </section>
             
             <section className="blog-post__replies">
@@ -132,4 +132,4 @@ const NoteExpand = () => {
     return content;
 
 }
-export default NoteExpand
+export default ForumExpand

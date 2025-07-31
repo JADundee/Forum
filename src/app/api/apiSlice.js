@@ -49,20 +49,20 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 export const apiSlice = createApi({
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Note', 'User'],
+    tagTypes: ['Forum', 'User'],
     endpoints: builder => ({
           addReply: builder.mutation({
-      query: ({ noteId, userId, replyText }) => {
+      query: ({ forumId, userId, replyText }) => {
         return {
-          url: `/notes/${noteId}/replies`,
+          url: `/forums/${forumId}/replies`,
           method: 'POST',
           body: { userId, replyText },
         };
         
       },
-        async queryFn({ noteId, userId, replyText }) {
+        async queryFn({ forumId, userId, replyText }) {
             console.log('Add reply query function:', {
-            noteId,
+            forumId,
             userId,
             replyText,
             });

@@ -65,8 +65,8 @@ export const usersApiSlice = apiSlice.injectEndpoints({
                 { type: 'User', id: arg.id }
             ]
         }),
-        getLikedNotes: builder.query({
-            query: (userId) => `/users/${userId}/liked-notes`,
+        getLikedForums: builder.query({
+            query: (userId) => `/users/${userId}/liked-forums`,
         }),
         getLikedReplies: builder.query({
             query: (userId) => `/users/${userId}/liked-replies`,
@@ -79,7 +79,7 @@ export const {
     useAddNewUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
-    useGetLikedNotesQuery,
+    useGetLikedForumsQuery,
     useGetLikedRepliesQuery,
 } = usersApiSlice
 

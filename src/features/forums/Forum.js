@@ -1,40 +1,40 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetNotesQuery, useDeleteNoteMutation, useDeleteReplyMutation } from './notesApiSlice'
+import { useGetForumsQuery, useDeleteForumMutation, useDeleteReplyMutation } from './forumsApiSlice'
 import { memo } from 'react'
 import moment from 'moment'
 import MenuButton from '../../components/MenuButton';
 
-const Note = ({ noteId, showSettingsMenu }) => {
+const Forum = ({ forumId, showSettingsMenu }) => {
 
     const navigate = useNavigate()
-    const [deleteNote] = useDeleteNoteMutation();
+    const [deleteForum] = useDeleteForumMutation();
     const [deleteReply] = useDeleteReplyMutation();
 
-    const { note } = useGetNotesQuery("notesList", {
+    const { forum } = useGetForumsQuery("forumsList", {
         selectFromResult: ({ data }) => ({
-            note: data?.entities[noteId]
+            forum: data?.entities[forumId]
         }),
     })
 
-    if (note) {
-        const created = moment(note.createdAt).format('MMMM D, YYYY h:mm A');
-        const updated = moment(note.updatedAt).format('MMMM D, YYYY h:mm A');
+    if (forum) {
+        const created = moment(forum.createdAt).format('MMMM D, YYYY h:mm A');
+        const updated = moment(forum.updatedAt).format('MMMM D, YYYY h:mm A');
 
       
 
-        const handleRowClick = () => navigate(`/dash/notes/${noteId}/expand`)
-        const handleEdit = () => navigate(`/dash/notes/${noteId}/edit`); // <-- Edit page
+        const handleRowClick = () => navigate(`/dash/forums/${forumId}/expand`)
+        const handleEdit = () => navigate(`/dash/forums/${forumId}/edit`); // <-- Edit page
 
         // Delete handler
         const handleDelete = async () => {
-            await deleteNote({ id: noteId });
+            await deleteForum({ id: forumId });
         };
 
         return (
             <tr className="table__row" onClick={handleRowClick}>
-                <td className="table__cell">{note.title}</td>
-                <td className="table__cell">{note.username}</td>
+                <td className="table__cell">{forum.title}</td>
+                <td className="table__cell">{forum.username}</td>
                 <td className="table__cell">{created}</td>
                 <td className="table__cell">{updated}</td>
                 {showSettingsMenu && (
@@ -56,6 +56,6 @@ const Note = ({ noteId, showSettingsMenu }) => {
     } else return null
 }
 
-const memoizedNote = memo(Note)
+const memoizedForum = memo(Forum)
 
-export default memoizedNote
+export default memoizedForum

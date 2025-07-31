@@ -1,21 +1,21 @@
 import { useParams } from 'react-router-dom'
-import EditNoteForm from './EditNoteForm'
-import { useGetNotesQuery } from './notesApiSlice'
+import EditForumForm from './EditForumForm'
+import { useGetForumsQuery } from './forumsApiSlice'
 import { useGetUsersQuery } from '../users/usersApiSlice'
 import useAuth from '../../hooks/useAuth'
 import PulseLoader from 'react-spinners/PulseLoader'
 import useTitle from '../../hooks/useTitle'
 
-const EditNote = () => {
-    useTitle('techNotes: Edit Note')
+const EditForum = () => {
+    useTitle('techForums: Edit Forum')
 
     const { id } = useParams()
 
     const { username, isAdmin } = useAuth()
 
-    const { note } = useGetNotesQuery("notesList", {
+    const { forum } = useGetForumsQuery("forumsList", {
         selectFromResult: ({ data }) => ({
-            note: data?.entities[id]
+            forum: data?.entities[id]
         }),
     })
 
@@ -25,17 +25,17 @@ const EditNote = () => {
         }),
     })
 
-    if (!note || !users?.length) return <PulseLoader color={"#FFF"} />
+    if (!forum || !users?.length) return <PulseLoader color={"#FFF"} />
 
 
     if ( !isAdmin ) {
-        if (note.username !== username) {
+        if (forum.username !== username) {
             return <p className="errmsg">No access</p>
         }
     }
 
-    const content = <EditNoteForm note={note} users={users} />
+    const content = <EditForumForm forum={forum} users={users} />
 
     return content
 }
-export default EditNote
+export default EditForum

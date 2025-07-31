@@ -1,29 +1,29 @@
-import { useGetLikedNotesQuery, useGetLikedRepliesQuery } from '../users/usersApiSlice';
+import { useGetLikedForumsQuery, useGetLikedRepliesQuery } from '../users/usersApiSlice';
 import Like from './Like';
 import { useNavigate } from 'react-router-dom';
 
 const LikeActivity = ({ userId, show }) => {
     const navigate = useNavigate();
-    const { data: likedNotes = [], isLoading: likedNotesLoading, isError: likedNotesError } = useGetLikedNotesQuery(userId);
+    const { data: likedForums = [], isLoading: likedForumsLoading, isError: likedForumsError } = useGetLikedForumsQuery(userId);
     const { data: likedReplies = [], isLoading: likedRepliesLoading, isError: likedRepliesError } = useGetLikedRepliesQuery(userId);
 
     const handleLikeClick = (like) => {
-        if (like._likeType === 'note') {
-            navigate(`/dash/notes/${like._id}/expand`);
+        if (like._likeType === 'forum') {
+            navigate(`/dash/forums/${like._id}/expand`);
         } else if (like._likeType === 'reply') {
-            const noteId = like.note?._id || like.note;
-            if (noteId) {
-                navigate(`/dash/notes/${noteId}/expand`, { state: { replyId: like._id } });
+            const forumId = like.forum?._id || like.forum;
+            if (forumId) {
+                navigate(`/dash/forums/${forumId}/expand`, { state: { replyId: like._id } });
             }
         }
     };
 
     return (
         <>
-            {(likedNotesLoading || likedRepliesLoading) && <p>Loading likes...</p>}
-            {(likedNotesError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
-            {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
-            {!likedNotesLoading && !likedRepliesLoading && !likedNotesError && !likedRepliesError && (likedNotes.length > 0 || likedReplies.length > 0) && (
+            {(likedForumsLoading || likedRepliesLoading) && <p>Loading likes...</p>}
+            {(likedForumsError || likedRepliesError) && <p className="errmsg">Error loading likes</p>}
+            {!likedForumsLoading && !likedRepliesLoading && !likedForumsError && !likedRepliesError && (likedForums.length === 0 && likedReplies.length === 0) && <p>No likes found.</p>}
+            {!likedForumsLoading && !likedRepliesLoading && !likedForumsError && !likedRepliesError && (likedForums.length > 0 || likedReplies.length > 0) && (
                 <>
                     <div className="all-notifications__header">
                         <h1>My Likes</h1>
@@ -31,7 +31,7 @@ const LikeActivity = ({ userId, show }) => {
                     <div className="all-notifications__content">
                         <ul>
                             {[
-                                ...likedNotes.map(note => ({ ...note, _likeType: 'note' })),
+                                ...likedForums.map(forum => ({ ...forum, _likeType: 'forum' })),
                                 ...likedReplies.map(reply => ({ ...reply, _likeType: 'reply' }))
                             ]
                             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

@@ -1,4 +1,3 @@
-import React from 'react';
 import moment from 'moment';
 
 const NotificationItem = ({ notification }) => (
@@ -6,28 +5,28 @@ const NotificationItem = ({ notification }) => (
     {notification.type === 'reply' && (
       <>
         <p>
-          <span className="username">{notification.username}</span> replied to your note: <span className="note-title">{notification.noteTitle}</span>
+          <span className="username">{notification.username}</span> replied to your forum: <span className="forum-title">{notification.forumTitle}</span>
         </p>
         <p>
           <span className="reply-text">"{notification.replyText}"</span>
         </p>
       </>
     )}
-    {notification.type === 'like-note' && (
+    {notification.type === 'like-forum' && (
       <p>
-        <span className="username">{notification.username}</span> liked your note: <span className="note-title">{notification.noteTitle}</span>
+        <span className="username">{notification.username}</span> liked your forum: <span className="forum-title">{notification.forumTitle}</span>
       </p>
     )}
     {notification.type === 'like-reply' && (
       <p>
         <span className="username">{notification.username}</span> liked your reply: <span className="reply-text">"{notification.replyText}"</span>
-        {notification.noteTitle && <span> on <span className="note-title">{notification.noteTitle}</span></span>}
+        {notification.forumTitle && <span> on <span className="forum-title">{notification.forumTitle}</span></span>}
       </p>
     )}
     {notification.type === 'tag' && (
       <>
         <p>
-          <span className="username">{notification.username}</span> mentioned you in a reply on <span className="note-title">{notification.noteTitle}</span>
+          <span className="username">{notification.username}</span> mentioned you in a reply on <span className="forum-title">{notification.forumTitle}</span>
         </p>
         <p>
           <span className="reply-text">"{notification.replyText}"</span>

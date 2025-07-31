@@ -5,7 +5,7 @@ import moment from 'moment';
 import useSort from '../../hooks/useSort';
 import filterAndSort from '../../hooks/useSearch';
 import MenuButton from '../../components/MenuButton';
-import { useGetRepliesByUserQuery, useDeleteReplyMutation } from '../notes/notesApiSlice';
+import { useGetRepliesByUserQuery, useDeleteReplyMutation } from '../forums/forumsApiSlice';
 
 const ReplyActivity = ({ userId, show }) => {
     const {
@@ -28,7 +28,7 @@ const ReplyActivity = ({ userId, show }) => {
     );
 
     const repliesColumns = [
-        { key: 'noteTitle', label: 'Note Title', sortable: true },
+        { key: 'forumTitle', label: 'Forum Title', sortable: true },
         { key: 'text', label: 'Reply', sortable: true },
         { key: 'createdAt', label: 'Date', sortable: true },
         { key: 'settings', label: 'Settings' }
@@ -42,7 +42,7 @@ const ReplyActivity = ({ userId, show }) => {
     };
 
     const handleEdit = (reply) => {
-        navigate(`/dash/notes/${reply.note._id}/expand`, {
+        navigate(`/dash/forums/${reply.forum._id}/expand`, {
             state: { replyId: reply._id, editReply: true }
         });
     };
@@ -52,10 +52,10 @@ const ReplyActivity = ({ userId, show }) => {
             <div className="all-notifications__header">
                 <h1>My Replies</h1>
             </div>
-            <div className="notes-filter-bar">
+            <div className="forums-filter-bar">
                 <input
                     type="text"
-                    placeholder="Search by note title or reply text..."
+                    placeholder="Search by forum title or reply text..."
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
@@ -74,9 +74,9 @@ const ReplyActivity = ({ userId, show }) => {
                                 <tr
                                     key={reply._id}
                                     className="table__row"
-                                    onClick={() => navigate(`/dash/notes/${reply.note._id}/expand`, { state: { replyId: reply._id } })}
+                                    onClick={() => navigate(`/dash/forums/${reply.forum._id}/expand`, { state: { replyId: reply._id } })}
                                 >
-                                    <td className="table__cell">{reply.noteTitle}</td>
+                                    <td className="table__cell">{reply.forumTitle}</td>
                                     <td className="table__cell">{reply.text}</td>
                                     <td className="table__cell">{moment(reply.createdAt).format('MMMM D, YYYY h:mm A')}</td>
                                     <td

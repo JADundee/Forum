@@ -1,4 +1,4 @@
-import { useGetNotificationsQuery, useGetNotesQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation, useDeleteNotificationMutation } from '../notes/notesApiSlice';
+import { useGetNotificationsQuery, useGetForumsQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation, useDeleteNotificationMutation } from '../forums/forumsApiSlice';
 import { useNavigate } from 'react-router-dom';
 import  { useCallback } from 'react';
 import NotificationItem from './NotificationItem';
@@ -7,14 +7,14 @@ const NotificationsList = () => {
   const navigate = useNavigate();
 
   const { data: notificationsData, isLoading, isError } = useGetNotificationsQuery();
-  const { isLoading: notesLoading, isError: notesError } = useGetNotesQuery();
+  const { isLoading: forumsLoading, isError: forumsError } = useGetForumsQuery();
   const [markNotificationRead] = useMarkNotificationReadMutation();
   const [markAllNotificationsRead, { isLoading: isMarkingAll }] = useMarkAllNotificationsReadMutation();
   const [deleteNotification, { isLoading: isDeleting }] = useDeleteNotificationMutation();
 
   const handleNotificationClicked = useCallback(async (notification) => {
     await markNotificationRead(notification.id);
-    navigate(`/dash/notes/${notification.noteId}/expand`, { state: { replyId: notification.replyId } });
+    navigate(`/dash/forums/${notification.forumId}/expand`, { state: { replyId: notification.replyId } });
   }, [markNotificationRead, navigate]);
 
   const handleDeleteNotification = useCallback(async (e, notificationId) => {
@@ -22,12 +22,12 @@ const NotificationsList = () => {
     await deleteNotification(notificationId);
   }, [deleteNotification]);
 
-  if (isLoading || notesLoading) {
+  if (isLoading || forumsLoading) {
     return <p>Loading...</p>;
   }
 
-  if (isError || notesError) {
-    return <p>Error fetching notifications or notes</p>;
+  if (isError || forumsError) {
+    return <p>Error fetching notifications or forums</p>;
   }
 
   const notifications = notificationsData || [];

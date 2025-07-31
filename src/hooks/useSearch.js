@@ -6,28 +6,28 @@ const filterAndSort = {
         }
         const searchLower = search.toLowerCase();
         filtered = filtered.filter(id => {
-            const note = entities[id];
+            const forum = entities[id];
             return (
-                note.title.toLowerCase().includes(searchLower) ||
-                note.username.toLowerCase().includes(searchLower)
+                forum.title.toLowerCase().includes(searchLower) ||
+                forum.username.toLowerCase().includes(searchLower)
             );
         });
         filtered.sort((a, b) => {
-            const noteA = entities[a];
-            const noteB = entities[b];
+            const forumA = entities[a];
+            const forumB = entities[b];
             let valA, valB;
             if (sortConfig.key === 'createdAt') {
-                valA = new Date(noteA.createdAt);
-                valB = new Date(noteB.createdAt);
+                valA = new Date(forumA.createdAt);
+                valB = new Date(forumB.createdAt);
             } else if (sortConfig.key === 'updatedAt') {
-                valA = new Date(noteA.updatedAt);
-                valB = new Date(noteB.updatedAt);
+                valA = new Date(forumA.updatedAt);
+                valB = new Date(forumB.updatedAt);
             } else if (sortConfig.key === 'title') {
-                valA = noteA.title.toLowerCase();
-                valB = noteB.title.toLowerCase();
+                valA = forumA.title.toLowerCase();
+                valB = forumB.title.toLowerCase();
             } else if (sortConfig.key === 'username') {
-                valA = noteA.username.toLowerCase();
-                valB = noteB.username.toLowerCase();
+                valA = forumA.username.toLowerCase();
+                valB = forumB.username.toLowerCase();
             }
             if (sortConfig.key === 'createdAt' || sortConfig.key === 'updatedAt') {
                 return sortConfig.direction === 'desc' ? valB - valA : valA - valB;
@@ -44,7 +44,7 @@ const filterAndSort = {
         let filtered = ids.filter(id => {
             const reply = entities[id];
             return (
-                reply.noteTitle.toLowerCase().includes(searchLower) ||
+                reply.forumTitle.toLowerCase().includes(searchLower) ||
                 reply.text.toLowerCase().includes(searchLower)
             );
         });
@@ -55,9 +55,9 @@ const filterAndSort = {
             if (sortConfig.key === 'createdAt') {
                 valA = new Date(replyA.createdAt);
                 valB = new Date(replyB.createdAt);
-            } else if (sortConfig.key === 'noteTitle') {
-                valA = replyA.noteTitle.toLowerCase();
-                valB = replyB.noteTitle.toLowerCase();
+            } else if (sortConfig.key === 'forumTitle') {
+                valA = replyA.forumTitle.toLowerCase();
+                valB = replyB.forumTitle.toLowerCase();
             } else if (sortConfig.key === 'text') {
                 valA = replyA.text.toLowerCase();
                 valB = replyB.text.toLowerCase();

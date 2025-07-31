@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useUpdateNoteMutation, useDeleteNoteMutation } from "./notesApiSlice"
+import { useUpdateForumMutation, useDeleteForumMutation } from "./forumsApiSlice"
 import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faTrashCan } from "@fortawesome/free-solid-svg-icons"
@@ -20,23 +20,23 @@ const ActionButton = ({ onClick, disabled, title, icon, className }) => (
     </button>
 )
 
-const EditNoteForm = ({ note }) => {
+const EditForumForm = ({ forum }) => {
     const { isAdmin, userId: currentUserId } = useAuth()
-    const [updateNote, {
+    const [updateForum, {
         isLoading,
         isSuccess,
         isError,
         error
-    }] = useUpdateNoteMutation()
-    const [deleteNote, {
+    }] = useUpdateForumMutation()
+    const [deleteForum, {
         isSuccess: isDelSuccess,
         isError: isDelError,
         error: delerror
-    }] = useDeleteNoteMutation()
+    }] = useDeleteForumMutation()
     const navigate = useNavigate()
-    const [title, setTitle] = useState(note.title)
-    const [text, setText] = useState(note.text)
-    const [ownerId, setOwnerId] = useState(note.user)
+    const [title, setTitle] = useState(forum.title)
+    const [text, setText] = useState(forum.text)
+    const [ownerId, setOwnerId] = useState(forum.user)
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
@@ -44,26 +44,26 @@ const EditNoteForm = ({ note }) => {
             setTitle('')
             setText('')
             setOwnerId('')
-            navigate('/dash/notes')
+            navigate('/dash/forums')
         }
     }, [isSuccess, isDelSuccess, navigate])
 
     const onTitleChanged = e => setTitle(e.target.value)
     const onTextChanged = e => setText(e.target.value)
     const canSave = [title, text, ownerId].every(Boolean) && !isLoading
-    const canEdit = isAdmin || currentUserId === String(note.user)
+    const canEdit = isAdmin || currentUserId === String(forum.user)
 
-    const onSaveNoteClicked = async (e) => {
+    const onSaveForumClicked = async (e) => {
         if (canSave) {
-            await updateNote({ id: note.id, user: ownerId, title, text})
+            await updateForum({ id: forum.id, user: ownerId, title, text})
         }
     }
-    const onDeleteNoteClicked = async () => {
-        await deleteNote({ id: note.id })
+    const onDeleteForumClicked = async () => {
+        await deleteForum({ id: forum.id })
     }
 
-    const created = new Date(note.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
-    const updated = new Date(note.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
+    const created = new Date(forum.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
+    const updated = new Date(forum.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
 
     // Inline error logic
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
@@ -74,26 +74,26 @@ const EditNoteForm = ({ note }) => {
             <p className={errClass}>{errContent}</p>
             <form className="form" onSubmit={e => e.preventDefault()}>
                 <div className="form__title-row">
-                    <h2>Edit Thread: {note.title}</h2>
+                    <h2>Edit Thread: {forum.title}</h2>
                 </div>
-                <label className="form__label" htmlFor="note-title">
+                <label className="form__label" htmlFor="forum-title">
                     Title:
                 </label>
                 <input
                     className={`form__input ${getInputClass(title)}`}
-                    id="note-title"
+                    id="forum-title"
                     name="title"
                     type="text"
                     autoComplete="off"
                     value={title}
                     onChange={onTitleChanged}
                 />
-                <label className="form__label" htmlFor="note-text">
+                <label className="form__label" htmlFor="forum-text">
                     Text:
                 </label>
                 <textarea
                     className={`form__input form__input--text ${getInputClass(text)}`}
-                    id="note-text"
+                    id="forum-text"
                     name="text"
                     value={text}
                     onChange={onTextChanged}
@@ -109,7 +109,7 @@ const EditNoteForm = ({ note }) => {
                                 {!showDeleteConfirm && (
                                     <>
                                         <ActionButton
-                                            onClick={onSaveNoteClicked}
+                                            onClick={onSaveForumClicked}
                                             disabled={!canSave}
                                             title="Save"
                                         />
@@ -132,7 +132,7 @@ const EditNoteForm = ({ note }) => {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end', marginTop: '0.5em' }}>
                                     <span style={{ padding: '0.5rem 0', color: 'var(--ERROR)', fontWeight: 'bold', textAlign: 'center' }}>Are you sure?</span>
                                     <ActionButton
-                                        onClick={onDeleteNoteClicked}
+                                        onClick={onDeleteForumClicked}
                                         title="Yes, Delete"
                                         icon={faTrashCan}
                                         className="delete-button"
@@ -152,4 +152,4 @@ const EditNoteForm = ({ note }) => {
     return content
 }
 
-export default EditNoteForm
+export default EditForumForm

@@ -1,23 +1,23 @@
-import { useGetNotesQuery } from "./notesApiSlice"
-import Note from "./Note"
+import { useGetForumsQuery } from "./forumsApiSlice"
+import Forum from "./Forum"
 import { useState } from "react"
 import useAuth from '../../hooks/useAuth'
 import DataTable from '../../components/DataTable'
 import useSort from '../../hooks/useSort'
 
-const NotesList = () => {
+const ForumsList = () => {
     const [search, setSearch] = useState("");
     const [showMine, setShowMine] = useState(false);
     const { username } = useAuth();
     const { sortConfig, handleSort, sortData } = useSort('updatedAt', 'desc');
 
     const {
-        data: notes,
+        data: forums,
         isLoading,
         isSuccess,
         isError,
         error
-    } = useGetNotesQuery('notesList', {
+    } = useGetForumsQuery('forumsList', {
         pollingInterval: 15000,
         refetchOnFocus: true,
         refetchOnMountOrArgChange: true
@@ -32,13 +32,13 @@ const NotesList = () => {
     }
 
     if (isSuccess) {
-        const { ids, entities } = notes
+        const { ids, entities } = forums
         // Filter first, then sort
         let filteredIds = ids.filter(id => {
-            const note = entities[id];
-            const matchesSearch = note.title.toLowerCase().includes(search.toLowerCase()) ||
-                                  note.username.toLowerCase().includes(search.toLowerCase());
-            const matchesMine = !showMine || (username && note.username === username);
+            const forum = entities[id];
+            const matchesSearch = forum.title.toLowerCase().includes(search.toLowerCase()) ||
+                                  forum.username.toLowerCase().includes(search.toLowerCase());
+            const matchesMine = !showMine || (username && forum.username === username);
             return matchesSearch && matchesMine;
         });
         filteredIds = sortData(filteredIds, entities);
@@ -50,11 +50,11 @@ const NotesList = () => {
             { key: 'updatedAt', label: 'Updated', sortable: true },
         ];
 
-        const renderRow = (noteId) => <Note key={noteId} noteId={noteId} />
+        const renderRow = (forumId) => <Forum key={forumId} forumId={forumId} />
 
         content = (
             <>
-                <div className="notes-filter-bar">
+                <div className="forums-filter-bar">
                     <input
                         type="text"
                         placeholder="Search by title or owner..."
@@ -67,7 +67,7 @@ const NotesList = () => {
                         style={{ backgroundColor: showMine ? '#236323' : undefined }}
                         onClick={() => setShowMine(m => !m)}
                     >
-                        {showMine ? 'Show All Notes' : 'Show My Notes'}
+                        {showMine ? 'Show All Forums' : 'Show My Forums'}
                     </button>
                 </div>
                 <div className="table-scroll-wrapper">
@@ -87,4 +87,4 @@ const NotesList = () => {
 
     return content
 }
-export default NotesList
+export default ForumsList

@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAddNewNoteMutation } from "./notesApiSlice"
+import { useAddNewForumMutation } from "./forumsApiSlice"
 
-const NewNoteForm = ({ users }) => {
+const NewForumForm = ({ users }) => {
     
 
-    const [addNewNote, {
+    const [addNewForum, {
         isLoading,
         isSuccess,
         isError,
         error
-    }] = useAddNewNoteMutation()
+    }] = useAddNewForumMutation()
 
     const navigate = useNavigate()
 
@@ -24,7 +24,7 @@ const NewNoteForm = ({ users }) => {
             setTitle('')
             setText('')
             setUserId('')
-            navigate('/dash/notes')
+            navigate('/dash/forums')
         }
     }, [isSuccess, navigate])
 
@@ -33,10 +33,10 @@ const NewNoteForm = ({ users }) => {
 
     const canSave = [title, text, userId].every(Boolean) && !isLoading
 
-    const onSaveNoteClicked = async (e) => {
+    const onSaveForumClicked = async (e) => {
         e.preventDefault()
         if (canSave) {
-            await addNewNote({ user: userId, title: title.trim(), text: text.trim() })
+            await addNewForum({ user: userId, title: title.trim(), text: text.trim() })
         }
     }
 
@@ -48,9 +48,9 @@ const NewNoteForm = ({ users }) => {
         <>
             <p className={errClass}>{error?.data?.message}</p>
 
-            <form className="form" onSubmit={onSaveNoteClicked}>
+            <form className="form" onSubmit={onSaveForumClicked}>
                 <div className="form__title-row">
-                    <h2>New Note</h2>
+                    <h2>New Forum</h2>
                 </div>
                 <label className="form__label" htmlFor="title">
                     Title:
@@ -94,4 +94,4 @@ const NewNoteForm = ({ users }) => {
     return content
 }
 
-export default NewNoteForm
+export default NewForumForm

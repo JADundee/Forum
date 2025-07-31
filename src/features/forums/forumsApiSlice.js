@@ -4,85 +4,85 @@ import {
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/api/apiSlice"
 
-const notesAdapter = createEntityAdapter({
+const forumsAdapter = createEntityAdapter({
     sortComparer: (a, b) => (a.completed === b.completed) ? 0 : a.completed ? 1 : -1
 })
 
-const initialState = notesAdapter.getInitialState()
+const initialState = forumsAdapter.getInitialState()
 
-export const notesApiSlice = apiSlice.injectEndpoints({
+export const forumsApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getNotes: builder.query({
+        getForums: builder.query({
             query: () => ({
-                url: '/notes',
+                url: '/forums',
                 validateStatus: (response, result) => {
                     return response.status === 200 && !result.isError
                 },
             }),
             transformResponse: responseData => {
-                const loadedNotes = responseData.map(note => {
-                    note.id = note._id
-                    return note
+                const loadedForums = responseData.map(forum => {
+                    forum.id = forum._id
+                    return forum
                 });
-                return notesAdapter.setAll(initialState, loadedNotes)
+                return forumsAdapter.setAll(initialState, loadedForums)
             },
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [
-                        { type: 'Note', id: 'LIST' },
-                        ...result.ids.map(id => ({ type: 'Note', id }))
+                        { type: 'Forum', id: 'LIST' },
+                        ...result.ids.map(id => ({ type: 'Forum', id }))
                     ]
-                } else return [{ type: 'Note', id: 'LIST' }]
+                } else return [{ type: 'Forum', id: 'LIST' }]
             }
         }),
-        addNewNote: builder.mutation({
-            query: initialNote => ({
-                url: '/notes',
+        addNewForum: builder.mutation({
+            query: initialForum => ({
+                url: '/forums',
                 method: 'POST',
                 body: {
-                    ...initialNote,
+                    ...initialForum,
                 }
             }),
             invalidatesTags: [
-                { type: 'Note', id: "LIST" }
+                { type: 'Forum', id: "LIST" }
             ]
         }),
-        updateNote: builder.mutation({
-            query: initialNote => ({
-                url: '/notes',
+        updateForum: builder.mutation({
+            query: initialForum => ({
+                url: '/forums',
                 method: 'PATCH',
                 body: {
-                    ...initialNote,
+                    ...initialForum,
                 }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Note', id: arg.id }
+                { type: 'Forum', id: arg.id }
             ]
         }),
-        deleteNote: builder.mutation({
+        deleteForum: builder.mutation({
             query: ({ id }) => ({
-                url: `/notes`,
+                url: `/forums`,
                 method: 'DELETE',
                 body: { id }
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Note', id: arg.id },
+                { type: 'Forum', id: arg.id },
                 { type: 'Notification', id: 'LIST' }
             ]
         }),
         getReplies: builder.query({
-            query: (noteId) => ({
-                url: `/notes/${noteId}/replies`,
+            query: (forumId) => ({
+                url: `/forums/${forumId}/replies`,
                 method: 'GET',
             }),
-            providesTags: (result, error, noteId) => [
-                { type: 'Replies', id: noteId }
+            providesTags: (result, error, forumId) => [
+                { type: 'Replies', id: forumId }
             ]
         }),
         addReply: builder.mutation({
-            query: ({ noteId, userId, replyText, username }) => {
+            query: ({ forumId, userId, replyText, username }) => {
                 return {
-                url: `/notes/${noteId}/replies`,
+                url: `/forums/${forumId}/replies`,
                 method: 'POST',
                 body: { userId, replyText, username },
                 };
@@ -90,13 +90,13 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         }),
         deleteReply: builder.mutation({
             query: ({ replyId }) => ({
-                url: `/notes/replies/${replyId}`,
+                url: `/forums/replies/${replyId}`,
                 method: 'DELETE',
             }),
         }),
         editReply: builder.mutation({
             query: ({ replyId, replyText }) => ({
-                url: `/notes/replies/${replyId}`,
+                url: `/forums/replies/${replyId}`,
                 method: 'PATCH',
                 body: { replyText },
             }),
@@ -117,10 +117,10 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
         }),
         createNotification: builder.mutation({
-            query: ({ userId, noteId, replyText, username }) => ({
+            query: ({ userId, forumId, replyText, username }) => ({
                 url: '/notifications',
                 method: 'POST',
-                body: { userId, noteId, replyText, username },
+                body: { userId, forumId, replyText, username },
             }),
             invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
         }),
@@ -138,22 +138,22 @@ export const notesApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'Notification', id: 'LIST' }],
         }),
-        toggleLikeNote: builder.mutation({
-            query: (noteId) => ({
-                url: `/notes/${noteId}/like`,
+        toggleLikeForum: builder.mutation({
+            query: (forumId) => ({
+                url: `/forums/${forumId}/like`,
                 method: 'POST',
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Note', id: arg }
+                { type: 'Forum', id: arg }
             ]
         }),
         toggleLikeReply: builder.mutation({
             query: ({ replyId }) => ({
-                url: `/notes/replies/${replyId}/like`,
+                url: `/forums/replies/${replyId}/like`,
                 method: 'POST',
             }),
             invalidatesTags: (result, error, arg) => [
-                { type: 'Replies', id: arg.noteId }
+                { type: 'Replies', id: arg.forumId }
             ]
         }),
         toggleLike: builder.mutation({
@@ -177,7 +177,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         }),
         getRepliesByUser: builder.query({
             query: (userId) => ({
-                url: `/notes/replies-by-user?userId=${userId}`,
+                url: `/forums/replies-by-user?userId=${userId}`,
                 method: 'GET',
             }),
             transformResponse: (response) => {
@@ -195,7 +195,7 @@ export const notesApiSlice = apiSlice.injectEndpoints({
         }),
         getRepliesCountByUser: builder.query({
             query: (userId) => ({
-                url: `/notes/replies-by-user?userId=${userId}`,
+                url: `/forums/replies-by-user?userId=${userId}`,
                 method: 'GET',
             }),
             transformResponse: (response) => Array.isArray(response) ? response.length : 0,
@@ -207,10 +207,10 @@ export const notesApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetNotesQuery,
-    useAddNewNoteMutation,
-    useUpdateNoteMutation,
-    useDeleteNoteMutation,
+    useGetForumsQuery,
+    useAddNewForumMutation,
+    useUpdateForumMutation,
+    useDeleteForumMutation,
     useAddReplyMutation,
     useGetRepliesQuery,
     useDeleteReplyMutation,
@@ -220,28 +220,28 @@ export const {
     useCreateNotificationMutation,
     useMarkAllNotificationsReadMutation,
     useDeleteNotificationMutation,
-    useToggleLikeNoteMutation,
+    useToggleLikeForumMutation,
     useToggleLikeReplyMutation,
     useToggleLikeMutation,
     useGetLikeCountQuery,
     useGetUserLikeQuery,
     useGetRepliesByUserQuery,
     useGetRepliesCountByUserQuery
-} = notesApiSlice
+} = forumsApiSlice
 
 // returns the query result object
-export const selectNotesResult = notesApiSlice.endpoints.getNotes.select()
+export const selectForumsResult = forumsApiSlice.endpoints.getForums.select()
 
 // creates memoized selector
-const selectNotesData = createSelector(
-    selectNotesResult,
-    notesResult => notesResult.data // normalized state object with ids & entities
+const selectForumsData = createSelector(
+    selectForumsResult,
+    forumsResult => forumsResult.data // normalized state object with ids & entities
 )
 
 //getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
-    selectAll: selectAllNotes,
-    selectById: selectNoteById,
-    selectIds: selectNoteIds
-    // Pass in a selector that returns the notes slice of state
-} = notesAdapter.getSelectors(state => selectNotesData(state) ?? initialState)
+    selectAll: selectAllForums,
+    selectById: selectForumById,
+    selectIds: selectForumIds
+    // Pass in a selector that returns the forums slice of state
+} = forumsAdapter.getSelectors(state => selectForumsData(state) ?? initialState)

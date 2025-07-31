@@ -1,12 +1,11 @@
-import React from 'react';
 import moment from 'moment';
 
 const LikeItem = ({ like, type, onClick }) => {
-  if (type === 'note') {
+  if (type === 'forum') {
     return (
       <div className="like-item-clickable" onClick={onClick} style={{ cursor: 'pointer' }}>
         <p className="all-notifications__text">
-          You liked the note: <span className="note-title">{like.title}</span>
+          You liked the forum: <span className="forum-title">{like.title}</span>
           {like.user?.username && (
             <span> by <span className="username">{like.user.username}</span></span>
           )}
@@ -25,8 +24,8 @@ const LikeItem = ({ like, type, onClick }) => {
           {like.user?.username && (
             <span> by <span className="username">{like.user.username}</span></span>
           )}
-          {like.note?.title && (
-            <span> on <span className="note-title">{like.note.title}</span></span>
+          {like.forum?.title && (
+            <span> on <span className="forum-title">{like.forum.title}</span></span>
           )}
         </p>
         <p className="all-notifications__timestamp">

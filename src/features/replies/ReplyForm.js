@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { useAddReplyMutation } from '../notes/notesApiSlice';
+import { useAddReplyMutation } from '../forums/forumsApiSlice';
 import useAuth from '../../hooks/useAuth';
 import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useRef } from 'react';
 
-const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitted }) => {
+const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmitted }) => {
     const [replyText, setReplyText] = useState('');
     const [addReply] = useAddReplyMutation();
     
@@ -86,7 +86,7 @@ const ReplyForm = ({ noteId, userId: noteOwnerId, refetchReplies, onReplySubmitt
     const handleSubmit = async (e) => {
         e.preventDefault();
         const trimmedReplyText = replyText.trim();
-        const result = await addReply({ noteId, userId: senderUserId, replyText: trimmedReplyText, username: senderUsername });
+        const result = await addReply({ forumId, userId: senderUserId, replyText: trimmedReplyText, username: senderUsername });
         refetchReplies();
         setReplyText('');
         if (onReplySubmitted && result?.data?._id) onReplySubmitted(result.data._id);
