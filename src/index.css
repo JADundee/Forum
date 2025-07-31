@@ -481,7 +481,7 @@ a:any-link:focus-visible {
   position: relative;
 }
 
-.forums-filter-bar {
+.search-filter {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -495,7 +495,7 @@ a:any-link:focus-visible {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.forums-filter-bar input[type="text"] {
+.search-filter input[type="text"] {
   padding: 0.5rem;
   width: 100%;
   max-width: 400px;
@@ -505,7 +505,7 @@ a:any-link:focus-visible {
   border-radius: 8px;
 }
 
-.forums-filter-bar .button {
+.search-filter .button {
   height: 40px;
   font-size: 1rem;
   padding: 0 20px;

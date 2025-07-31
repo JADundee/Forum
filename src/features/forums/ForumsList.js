@@ -54,7 +54,7 @@ const ForumsList = () => {
 
         content = (
             <>
-                <div className="forums-filter-bar">
+                <div className="search-filter">
                     <input
                         type="text"
                         placeholder="Search by title or owner..."

@@ -52,7 +52,7 @@ const ReplyActivity = ({ userId, show }) => {
             <div className="all-notifications__header">
                 <h1>My Replies</h1>
             </div>
-            <div className="forums-filter-bar">
+            <div className="search-filter">
                 <input
                     type="text"
                     placeholder="Search by forum title or reply text..."
