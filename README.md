@@ -7,5 +7,6 @@
 # TODO
 ## show likes activity of on own replies/forums in user's activity
 ## fix reply styles to be consistent
+## Style persistent check
 ## change styling of multiple areas
 ## prep for deployment
