@@ -244,10 +244,10 @@ const DashHeader = () => {
             <header className="dash-header">
                 <div className={`dash-header__container ${isDash ? '' : 'dash-header__container--small'}`}>
                     {isDash ? (
-                        <h1 className="dash-header__title dash-header__title--disabled">theForum</h1>
+                        <h1 className="dash-header__title dash-header__title--disabled">Forum</h1>
                     ) : (
                         <Link to="/dash">
-                            <h1 className="dash-header__title">theForum</h1>
+                            <h1 className="dash-header__title">Forum</h1>
                         </Link>
                     )}
                     <nav className="dash-header__nav">

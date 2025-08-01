@@ -312,6 +312,10 @@ a:hover, a:focus-visible {
   z-index: 10;
 }
 
+.dash-header__title {
+  color: var(--LINK-COLOR);
+}
+
 .dash-header__container {
   display: flex;
   flex-flow: row nowrap;
