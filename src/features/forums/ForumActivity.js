@@ -4,7 +4,6 @@ import DataTable from '../../components/DataTable';
 import Forum from './Forum';
 import useSort from '../../hooks/useSort';
 import filterAndSort from '../../hooks/useSearch';
-import MenuButton from '../../components/MenuButton';
 
 const ForumActivity = ({ username, show }) => {
     const {

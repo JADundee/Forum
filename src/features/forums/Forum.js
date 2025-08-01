@@ -1,6 +1,5 @@
-import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useGetForumsQuery, useDeleteForumMutation, useDeleteReplyMutation } from './forumsApiSlice'
+import { useGetForumsQuery, useDeleteForumMutation } from './forumsApiSlice'
 import { memo } from 'react'
 import moment from 'moment'
 import MenuButton from '../../components/MenuButton';
@@ -9,7 +8,6 @@ const Forum = ({ forumId, showSettingsMenu }) => {
 
     const navigate = useNavigate()
     const [deleteForum] = useDeleteForumMutation();
-    const [deleteReply] = useDeleteReplyMutation();
 
     const { forum } = useGetForumsQuery("forumsList", {
         selectFromResult: ({ data }) => ({
@@ -24,7 +22,7 @@ const Forum = ({ forumId, showSettingsMenu }) => {
       
 
         const handleRowClick = () => navigate(`/dash/forums/${forumId}/expand`)
-        const handleEdit = () => navigate(`/dash/forums/${forumId}/edit`); // <-- Edit page
+        const handleEdit = () => navigate(`/dash/forums/${forumId}/edit`); 
 
         // Delete handler
         const handleDelete = async () => {
@@ -41,11 +39,11 @@ const Forum = ({ forumId, showSettingsMenu }) => {
                   <td
                     className="table__cell"
                     style={{ position: 'relative' }}
-                    onClick={e => e.stopPropagation()} // <-- Prevents row click when clicking menu
+                    onClick={e => e.stopPropagation()} 
                   >
                     <MenuButton
-                      onEdit={handleEdit} // <-- Navigates to edit page
-                      onDelete={handleDelete} // <-- Use the same logic as edit page
+                      onEdit={handleEdit} 
+                      onDelete={handleDelete} 
                       variant="profile-activity-menu-button"
                     />
                   </td>

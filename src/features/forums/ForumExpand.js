@@ -35,12 +35,10 @@ const ForumExpand = () => {
         return <p>Loading forum...</p>;
     }
 
-    // Combined access checks
     if (!forum || !forum.id || (!isAdmin && forum.username !== username && window.location.pathname.includes('edit'))) {
         return <p className="errmsg">No access</p>
     }
 
-    // Grouped reply loading/error/empty checks
     if (isLoading) {
         return <p>Loading replies...</p>;
     }

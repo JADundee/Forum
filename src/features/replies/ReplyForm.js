@@ -4,7 +4,7 @@ import useAuth from '../../hooks/useAuth';
 import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useRef } from 'react';
 
-const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmitted }) => {
+const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
     const [replyText, setReplyText] = useState('');
     const [addReply] = useAddReplyMutation();
     
@@ -12,16 +12,14 @@ const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmi
     const { data: usersData } = useGetUsersQuery();
     const textareaRef = useRef(null);
 
-    // Tagging state
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownUsers, setDropdownUsers] = useState([]);
+    // eslint-disable-next-line no-unused-vars
     const [tagQuery, setTagQuery] = useState('');
     const [dropdownIndex, setDropdownIndex] = useState(0);
 
-    // Extract all usernames
     const allUsernames = usersData ? Object.values(usersData.entities || {}).map(u => u.username) : [];
 
-    // Handle textarea change
     const handleChange = (e) => {
         const value = e.target.value;
         setReplyText(value);
@@ -41,7 +39,6 @@ const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmi
         }
     };
 
-    // Handle dropdown selection
     const handleSelect = (username) => {
         if (!textareaRef.current) return;
         const textarea = textareaRef.current;
@@ -55,7 +52,6 @@ const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmi
             setReplyText(newText);
             setShowDropdown(false);
             setTagQuery('');
-            // Move cursor after inserted username
             setTimeout(() => {
                 textarea.focus();
                 textarea.setSelectionRange(beforeTag.length + username.length + 2, beforeTag.length + username.length + 2);
@@ -63,7 +59,6 @@ const ReplyForm = ({ forumId, userId: forumOwnerId, refetchReplies, onReplySubmi
         }
     };
 
-    // Keyboard navigation for dropdown
     const handleKeyDown = (e) => {
         if (showDropdown) {
             if (e.key === 'ArrowDown') {

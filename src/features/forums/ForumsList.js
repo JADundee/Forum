@@ -33,7 +33,6 @@ const ForumsList = () => {
 
     if (isSuccess) {
         const { ids, entities } = forums
-        // Filter first, then sort
         let filteredIds = ids.filter(id => {
             const forum = entities[id];
             const matchesSearch = forum.title.toLowerCase().includes(search.toLowerCase()) ||

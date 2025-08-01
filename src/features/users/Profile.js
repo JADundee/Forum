@@ -41,19 +41,16 @@ const Profile = () => {
   const dispatch = useDispatch();
   const token = useSelector(selectCurrentToken);
 
-  // Fetch forums count for this user
   const { data: forumsData } = useGetForumsQuery("forumsList");
   const forumsCount = forumsData
     ? forumsData.ids.filter((id) => forumsData.entities[id].username === username)
         .length
     : 0;
 
-  // Fetch replies count for this user
   const { data: repliesCount = 0 } = useGetRepliesCountByUserQuery(userId, {
     skip: !userId,
   });
 
-  // Centralized handlers for toggling UI states
   const handleActivitySelect = (activity) => {
     setShowActivity(true);
     setSelectedActivity(activity);
@@ -72,7 +69,6 @@ const Profile = () => {
     setSelectedActivity(null);
   };
 
-  // Fetch user data to get email
   const { user } = useGetUsersQuery("usersList", {
     selectFromResult: ({ data }) => ({
       user: data?.entities[userId],
@@ -80,7 +76,6 @@ const Profile = () => {
   });
   const email = user?.email;
 
-  // Guard: if user is not loaded, show loading message
   if (!user) return <p>Loading profile...</p>;
 
   const handlePwdChange = (e) => {
@@ -132,14 +127,12 @@ const Profile = () => {
     }
   };
 
-  // Update activities array to use real counts
   const activities = [
     { key: "forums", label: "Forums", count: forumsCount },
     { key: "replies", label: "Replies", count: repliesCount },
     { key: "likes", label: "Likes" },
   ];
 
-  // DRY helper for activity label with badge
   const renderActivityLabel = (label, count) => (
     <>
       {label}
@@ -147,7 +140,6 @@ const Profile = () => {
     </>
   );
 
-  // DRY helpers for password error messages
   const getPwdError = () => {
     if (!pwdValid && pwdTouched)
       return "Password must be 4-12 characters and only contain letters, numbers, and !@#$%";

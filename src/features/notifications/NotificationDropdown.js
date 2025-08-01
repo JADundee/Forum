@@ -51,7 +51,6 @@ const NotificationDropdown = forwardRef(({
         </div>
     );
 
-    // Use portal to render dropdown directly to document body
     return createPortal(dropdownContent, document.body);
 });
 

@@ -229,19 +229,15 @@ export const {
     useGetRepliesCountByUserQuery
 } = forumsApiSlice
 
-// returns the query result object
 export const selectForumsResult = forumsApiSlice.endpoints.getForums.select()
 
-// creates memoized selector
 const selectForumsData = createSelector(
     selectForumsResult,
-    forumsResult => forumsResult.data // normalized state object with ids & entities
+    forumsResult => forumsResult.data
 )
 
-//getSelectors creates these selectors and we rename them with aliases using destructuring
 export const {
     selectAll: selectAllForums,
     selectById: selectForumById,
     selectIds: selectForumIds
-    // Pass in a selector that returns the forums slice of state
 } = forumsAdapter.getSelectors(state => selectForumsData(state) ?? initialState)

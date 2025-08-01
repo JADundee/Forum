@@ -78,7 +78,6 @@ const RepliesList = ({ replies, refetchReplies, highlightReplyId, editReplyId })
   );
 };
 
-// Helper to highlight @username tags
 function highlightTags(text) {
   return text.split(/(@\w+)/g).map((part, i) => {
     if (/^@\w+$/.test(part)) {
@@ -88,7 +87,6 @@ function highlightTags(text) {
   });
 }
 
-// Helper to format timestamps
 function formatTimestamp(timestamp) {
   return moment(timestamp).format('MMMM D, YYYY h:mm A');
 }

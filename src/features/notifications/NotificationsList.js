@@ -18,7 +18,7 @@ const NotificationsList = () => {
   }, [markNotificationRead, navigate]);
 
   const handleDeleteNotification = useCallback(async (e, notificationId) => {
-    e.stopPropagation(); // Prevent navigation when deleting
+    e.stopPropagation(); 
     await deleteNotification(notificationId);
   }, [deleteNotification]);
 

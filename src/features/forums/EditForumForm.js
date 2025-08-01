@@ -5,10 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import useAuth from "../../hooks/useAuth"
 
-// Helper for input validation class
 const getInputClass = (value) => value ? '' : 'form__input--incomplete'
 
-// Reusable action button
 const ActionButton = ({ onClick, disabled, title, icon, className }) => (
     <button
         className={`button${className ? ' ' + className : ''}`}
@@ -65,7 +63,6 @@ const EditForumForm = ({ forum }) => {
     const created = new Date(forum.createdAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
     const updated = new Date(forum.updatedAt).toLocaleString('en-US', { day: 'numeric', month: 'long', year: 'numeric', hour: 'numeric', minute: 'numeric' })
 
-    // Inline error logic
     const errClass = (isError || isDelError) ? "errmsg" : "offscreen"
     const errContent = (error?.data?.message || delerror?.data?.message) ?? ''
 

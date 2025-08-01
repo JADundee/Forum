@@ -1,10 +1,8 @@
 import { useState, useCallback } from 'react';
 
-// Generic sorting function for arrays of objects or ids/entities
 function sortArray(data, config, entities) {
     if (!config?.key) return data;
 
-    // If entities are provided, data is an array of ids, otherwise array of objects
     const getValue = (item) => {
         const obj = entities ? entities[item] : item;
         return obj?.[config.key];
@@ -26,7 +24,6 @@ function sortArray(data, config, entities) {
 export default function useSort(initialKey = 'createdAt', initialDirection = 'desc') {
     const [sortConfig, setSortConfig] = useState({ key: initialKey, direction: initialDirection });
 
-    // For table headers
     const handleSort = useCallback((key) => {
         setSortConfig(prev => {
             if (prev.key === key) {
@@ -37,7 +34,6 @@ export default function useSort(initialKey = 'createdAt', initialDirection = 'de
         });
     }, []);
 
-    // For sorting data
     const sortData = useCallback((data, entities) => {
         return sortArray(data, sortConfig, entities);
     }, [sortConfig]);

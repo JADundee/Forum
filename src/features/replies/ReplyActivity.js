@@ -82,7 +82,7 @@ const ReplyActivity = ({ userId, show }) => {
                                     <td
                                         className="table__cell"
                                         style={{ position: 'relative' }}
-                                        onClick={e => e.stopPropagation()} // <-- Prevents row click when clicking menu
+                                        onClick={e => e.stopPropagation()}
                                     >
                                         <MenuButton
                                           onEdit={() => handleEdit(reply)}
