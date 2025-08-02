@@ -1,13 +1,21 @@
-import moment from 'moment';
+import moment from "moment";
 
+/**
+ * Component to display a like item for a forum or reply.
+ * Handles click events and displays like details.
+ */
 const LikeItem = ({ like, type, onClick }) => {
-  if (type === 'forum') {
+  // Render like item for a forum
+  if (type === "forum") {
     return (
       <div className="like-item-clickable" onClick={onClick}>
         <p className="all-notifications__text">
           You liked the forum: <span className="forum-title">{like.title}</span>
           {like.user?.username && (
-            <span> by <span className="username">{like.user.username}</span></span>
+            <span>
+              {" "}
+              by <span className="username">{like.user.username}</span>
+            </span>
           )}
         </p>
         <p className="all-notifications__timestamp">
@@ -16,16 +24,26 @@ const LikeItem = ({ like, type, onClick }) => {
       </div>
     );
   }
-  if (type === 'reply') {
+  // Render like item for a reply
+  if (type === "reply") {
     return (
-      <div className="like-item-clickable" onClick={onClick} style={{ cursor: 'pointer' }}>
+      <div
+        className="like-item-clickable"
+        onClick={onClick}
+        style={{ cursor: "pointer" }}>
         <p className="all-notifications__text">
           You liked a reply: <span className="reply-text">"{like.text}"</span>
           {like.user?.username && (
-            <span> by <span className="username">{like.user.username}</span></span>
+            <span>
+              {" "}
+              by <span className="username">{like.user.username}</span>
+            </span>
           )}
           {like.forum?.title && (
-            <span> on <span className="forum-title">{like.forum.title}</span></span>
+            <span>
+              {" "}
+              on <span className="forum-title">{like.forum.title}</span>
+            </span>
           )}
         </p>
         <p className="all-notifications__timestamp">
@@ -34,7 +52,8 @@ const LikeItem = ({ like, type, onClick }) => {
       </div>
     );
   }
+  // Return null if type is not recognized
   return null;
 };
 
-export default LikeItem; 
+export default LikeItem;

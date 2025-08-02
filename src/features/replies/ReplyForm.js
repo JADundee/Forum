@@ -1,10 +1,22 @@
+/**
+ * Component for submitting a new reply to a forum post.
+ * Handles form state, user tagging, submission, and validation.
+ */
 import { useState } from 'react';
 import { useAddReplyMutation } from '../forums/forumsApiSlice';
 import useAuth from '../../hooks/useAuth';
 import { useGetUsersQuery } from '../users/usersApiSlice';
 import { useRef } from 'react';
 
+/**
+ * ReplyForm component
+ * @param {Object} props
+ * @param {string} props.forumId - The forum ID to reply to
+ * @param {Function} props.refetchReplies - Callback to refetch replies after submit
+ * @param {Function} [props.onReplySubmitted] - Optional callback after reply is submitted
+ */
 const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
+    // State for reply text
     const [replyText, setReplyText] = useState('');
     const [addReply] = useAddReplyMutation();
     
@@ -12,14 +24,17 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
     const { data: usersData } = useGetUsersQuery();
     const textareaRef = useRef(null);
 
+    // State for user tag dropdown
     const [showDropdown, setShowDropdown] = useState(false);
     const [dropdownUsers, setDropdownUsers] = useState([]);
     // eslint-disable-next-line no-unused-vars
     const [tagQuery, setTagQuery] = useState('');
+    // State for dropdown selection index
     const [dropdownIndex, setDropdownIndex] = useState(0);
 
     const allUsernames = usersData ? Object.values(usersData.entities || {}).map(u => u.username) : [];
-
+    
+     // Handles changes to the reply textarea, including tag detection.
     const handleChange = (e) => {
         const value = e.target.value;
         setReplyText(value);
@@ -38,7 +53,8 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
             setTagQuery('');
         }
     };
-
+    
+     // Handles selecting a username from the tag dropdown.
     const handleSelect = (username) => {
         if (!textareaRef.current) return;
         const textarea = textareaRef.current;
@@ -58,7 +74,8 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
             }, 0);
         }
     };
-
+    
+     // Handles keyboard navigation in the tag dropdown.
     const handleKeyDown = (e) => {
         if (showDropdown) {
             if (e.key === 'ArrowDown') {
@@ -78,6 +95,7 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
         }
     };
 
+     // Handles form submission for adding a new reply.
     const handleSubmit = async (e) => {
         e.preventDefault();
         const trimmedReplyText = replyText.trim();
@@ -87,8 +105,10 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
         if (onReplySubmitted && result?.data?._id) onReplySubmitted(result.data._id);
     };
 
+    // Whether the reply can be submitted
     const canReply = replyText.trim() !== ''
     
+    // Render the reply form
     return (
         <form onSubmit={handleSubmit} className='forum-post__replies' style={{ position: 'relative' }}>
             <textarea 
@@ -99,6 +119,8 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
                 placeholder='Enter your reply' 
                 autoComplete='off'
             />
+
+            {/* Dropdown for user tagging */}
             {showDropdown && (
                 <ul className="tag-dropdown">
                     {dropdownUsers.map((u, i) => (
@@ -112,6 +134,8 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
                     ))}
                 </ul>
             )}
+
+            {/* Submit reply button */}
             <button type="submit" disabled={!canReply} className='button'>
                 Reply
             </button>

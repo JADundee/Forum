@@ -1,57 +1,68 @@
-import { useGetUsersQuery } from "./usersApiSlice"
-import User from './User'
-import DataTable from '../../components/DataTable'
-import useSort from '../../hooks/useSort'
+import { useGetUsersQuery } from "./usersApiSlice";
+import User from "./User";
+import DataTable from "../../components/DataTable";
+import useSort from "../../hooks/useSort";
 
+// UsersList component for displaying a sortable table of all users
 const UsersList = () => {
-    const {
-        data: users,
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    } = useGetUsersQuery('usersList', {
-        pollingInterval: 60000,
-        refetchOnFocus: true,
-        refetchOnMountOrArgChange: true
-    })
+  // Fetch users data and status flags from the API
+  const {
+    data: users,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetUsersQuery("usersList", {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
 
-    const { sortConfig, handleSort, sortData } = useSort('username', 'asc');
+  // Custom hook for sorting table data
+  const { sortConfig, handleSort, sortData } = useSort("username", "asc");
 
-    let content
+  let content; // Will hold the rendered content
 
-    if (isLoading) content = <p>Loading...</p>
+  // Show loading message while fetching users
+  if (isLoading) content = <p>Loading...</p>;
 
-    if (isError) {
-        content = <p className="errmsg">{error?.data?.message}</p>
-    }
+  // Show error message if fetching users failed
+  if (isError) {
+    content = <p className="errmsg">{error?.data?.message}</p>;
+  }
 
-    if (isSuccess) {
-        const { ids, entities } = users
+  // Render the users table if data fetch was successful
+  if (isSuccess) {
+    const { ids, entities } = users;
 
-        const columns = [
-            { key: 'username', label: 'Username', sortable: true },
-            { key: 'roles', label: 'Roles' },
-            { key: 'edit', label: 'Edit' },
-        ]
+    // Define columns for the DataTable
+    const columns = [
+      { key: "username", label: "Username", sortable: true },
+      { key: "roles", label: "Roles" },
+      { key: "edit", label: "Edit" },
+    ];
 
-        const data = sortData(ids, entities);
+    // Sort the user data for display
+    const data = sortData(ids, entities);
 
-        const renderRow = (userId) => <User key={userId} userId={userId} />
+    // Render a row for each user
+    const renderRow = (userId) => <User key={userId} userId={userId} />;
 
-        content = (
-            <DataTable
-                columns={columns}
-                data={data}
-                emptyMsg="No users found."
-                renderRow={renderRow}
-                sortConfig={sortConfig}
-                onSort={handleSort}
-                tableClassName="table table--users"
-            />
-        )
-    }
+    // Render the DataTable component with user data
+    content = (
+      <DataTable
+        columns={columns}
+        data={data}
+        emptyMsg="No users found."
+        renderRow={renderRow}
+        sortConfig={sortConfig}
+        onSort={handleSort}
+        tableClassName="table table--users"
+      />
+    );
+  }
 
-    return content
-}
-export default UsersList
+  // Return the rendered content
+  return content;
+};
+export default UsersList;

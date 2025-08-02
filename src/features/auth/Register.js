@@ -1,140 +1,153 @@
-import { useState, useEffect } from "react"
-import { useAddNewUserMutation } from "../users/usersApiSlice"
-import { useNavigate } from "react-router-dom"
-import PublicHeader from '../../components/PublicHeader'
+import { useState, useEffect } from "react";
+import { useAddNewUserMutation } from "../users/usersApiSlice";
+import { useNavigate } from "react-router-dom";
+import PublicHeader from "../../components/PublicHeader";
 
-const USER_REGEX = /^[A-z]{3,20}$/
-const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/
+const USER_REGEX = /^[A-z]{3,20}$/;
+const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const INITIAL_STATE = {
-    username: '',
-    password: '',
-    email: '',
-    roles: ["Member"]
-}
+  username: "",
+  password: "",
+  email: "",
+  roles: ["Member"],
+};
 
+/**
+ * Registration page for new users.
+ * Handles form validation, submission, and navigation on success.
+ */
 const Register = () => {
-    const [addNewUser, {
-        isLoading,
-        isSuccess,
-        isError,
-        error
-    }] = useAddNewUserMutation()
+  const [addNewUser, { isLoading, isSuccess, isError, error }] =
+    useAddNewUserMutation();
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const [form, setForm] = useState(INITIAL_STATE)
-    const [valid, setValid] = useState({
-        username: false,
-        password: false,
-        email: false
-    })
+  const [form, setForm] = useState(INITIAL_STATE);
+  const [valid, setValid] = useState({
+    username: false,
+    password: false,
+    email: false,
+  });
 
-    useEffect(() => {
-        setValid({
-            username: USER_REGEX.test(form.username),
-            password: PWD_REGEX.test(form.password),
-            email: EMAIL_REGEX.test(form.email)
-        })
-    }, [form.username, form.password, form.email])
+  /**
+   * Effect to validate form fields on change.
+   */
+  useEffect(() => {
+    setValid({
+      username: USER_REGEX.test(form.username),
+      password: PWD_REGEX.test(form.password),
+      email: EMAIL_REGEX.test(form.email),
+    });
+  }, [form.username, form.password, form.email]);
 
-    useEffect(() => {
-        if (isSuccess) {
-            setForm(INITIAL_STATE)
-            navigate('/')
-            alert("Registration completed. Please login with your credentials.")
-        }
-    }, [isSuccess, navigate])
-
-    const onInputChange = e => {
-        const { name, value } = e.target
-        setForm(prev => ({ ...prev, [name]: value }))
+  /**
+   * Effect to reset form and navigate on successful registration.
+   */
+  useEffect(() => {
+    if (isSuccess) {
+      setForm(INITIAL_STATE);
+      navigate("/");
+      alert("Registration completed. Please login with your credentials.");
     }
+  }, [isSuccess, navigate]);
 
-    const canSave = [form.roles.length, valid.username, valid.password, valid.email].every(Boolean) && !isLoading
+  /**
+   * Handles input changes for form fields.
+   */
+  const onInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    const onSaveUserClicked = async (e) => {
-        e.preventDefault()
-        if (canSave) {
-            await addNewUser({
-                username: form.username,
-                email: form.email,
-                password: form.password,
-                roles: form.roles
-            })
-        }
+  // Check if form can be saved
+  const canSave =
+    [form.roles.length, valid.username, valid.password, valid.email].every(
+      Boolean
+    ) && !isLoading;
+
+  /**
+   * Handles form submission to register a new user.
+   */
+  const onSaveUserClicked = async (e) => {
+    e.preventDefault();
+    if (canSave) {
+      await addNewUser({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        roles: form.roles,
+      });
     }
+  };
 
-    const navigateHome = () => navigate('/')
+  const navigateHome = () => navigate("/");
 
-    const errClass = isError ? "errmsg" : "offscreen"
-    const getInputClass = (field) => !valid[field] ? 'form__input--incomplete' : ''
+  const errClass = isError ? "errmsg" : "offscreen";
+  const getInputClass = (field) =>
+    !valid[field] ? "form__input--incomplete" : "";
 
-    const content = (
-        <section className="public">
-            <PublicHeader />
-            <main className="login">
-                <p className={errClass}>{error?.data?.message}</p>
-                <form className="form" onSubmit={onSaveUserClicked}>
-                    <div className="form__title-row">
-                        <h2>Create New Account</h2>
-                    </div>
-                    <label className="form__label" htmlFor="username">
-                        Username: <span className="nowrap">[3-20 letters]</span></label>
-                    <input
-                        className={`form__input ${getInputClass('username')}`}
-                        id="username"
-                        name="username"
-                        type="text"
-                        autoComplete="off"
-                        value={form.username}
-                        onChange={onInputChange}
-                    />
+  const content = (
+    <section className="public">
+      <PublicHeader />
+      <main className="login">
+        <p className={errClass}>{error?.data?.message}</p>
+        <form className="form" onSubmit={onSaveUserClicked}>
+          <div className="form__title-row">
+            <h2>Create New Account</h2>
+          </div>
+          <label className="form__label" htmlFor="username">
+            Username: <span className="nowrap">[3-20 letters]</span>
+          </label>
+          <input
+            className={`form__input ${getInputClass("username")}`}
+            id="username"
+            name="username"
+            type="text"
+            autoComplete="off"
+            value={form.username}
+            onChange={onInputChange}
+          />
 
-                    <label className="form__label" htmlFor="password">
-                        Password: <span className="nowrap">[4-12 characters. Include a symbol]</span></label>
-                    <input
-                        className={`form__input ${getInputClass('password')}`}
-                        id="password"
-                        name="password"
-                        type="password"
-                        value={form.password}
-                        onChange={onInputChange}
-                    />
+          <label className="form__label" htmlFor="password">
+            Password:{" "}
+            <span className="nowrap">[4-12 characters. Include a symbol]</span>
+          </label>
+          <input
+            className={`form__input ${getInputClass("password")}`}
+            id="password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={onInputChange}
+          />
 
-                    <label className="form__label" htmlFor="email">
-                        Email:
-                    </label>
-                    <input
-                        className={`form__input ${getInputClass('email')}`}
-                        id="email"
-                        name="email"
-                        type="email"
-                        autoComplete="off"
-                        value={form.email}
-                        onChange={onInputChange}
-                    />
+          <label className="form__label" htmlFor="email">
+            Email:
+          </label>
+          <input
+            className={`form__input ${getInputClass("email")}`}
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="off"
+            value={form.email}
+            onChange={onInputChange}
+          />
 
-                    <div className="form__action-buttons">
-                        <button
-                            className="button"
-                            title="Save"
-                            disabled={!canSave}>
-                                Create Account
-                        </button>
-                        <button
-                            className="button"
-                            type="button"
-                            onClick={navigateHome}
-                        >
-                                Back to Login
-                        </button>
-                    </div>
-                </form>
-            </main>
-        </section>
-    )
+          <div className="form__action-buttons">
+            <button className="button" title="Save" disabled={!canSave}>
+              Create Account
+            </button>
+            <button className="button" type="button" onClick={navigateHome}>
+              Back to Login
+            </button>
+          </div>
+        </form>
+      </main>
+    </section>
+  );
 
-    return content
-}
-export default Register
+  return content;
+};
+export default Register;

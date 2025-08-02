@@ -1,12 +1,18 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from "react";
 
+// Custom hook to manage persistent login state using localStorage
 const usePersist = () => {
-    const [persist, setPersist] = useState(JSON.parse(localStorage.getItem("persist")) || false);
+  // State for whether persistence is enabled, initialized from localStorage
+  const [persist, setPersist] = useState(
+    JSON.parse(localStorage.getItem("persist")) || false
+  );
 
-    useEffect(() => {
-        localStorage.setItem("persist", JSON.stringify(persist))
-    }, [persist])
+  // Update localStorage whenever persist state changes
+  useEffect(() => {
+    localStorage.setItem("persist", JSON.stringify(persist));
+  }, [persist]);
 
-    return [persist, setPersist]
-}
-export default usePersist
+  // Return the persist state and setter for use in components
+  return [persist, setPersist];
+};
+export default usePersist;
