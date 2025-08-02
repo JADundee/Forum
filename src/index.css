@@ -103,6 +103,11 @@
 .menu-button { background: transparent; border: none; color: var(--COLOR); font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
 .menu-button:hover, .menu-button:focus-visible { color: var(--LINK-COLOR); background: var(--TABLE-HEADER); }
 
+.reply-menubutton-container {
+  position: relative;
+  display: inline-block;
+}
+
 /* || GENERAL STYLES */
 
 
@@ -461,8 +466,6 @@ a:hover, a:focus-visible {
 
 .table__row:hover .table__cell, .table tr:hover td {
   background: var(--TABLE-ROW-HOVER);
-  transform: translateY(-2px);
-  z-index: 1;
   cursor: pointer;
   outline: 2px solid var(--BOX-SHADOW);
   background-color: rgba(0, 0, 0, 0.5)
@@ -1058,10 +1061,6 @@ a:hover, a:focus-visible {
  width: 13rem;
 }
 
-.profile-activity-container .button {
-  width: 13rem;
- margin-bottom: 8px;
- }
 
 .activity-counter-badge {
   padding: 1px;

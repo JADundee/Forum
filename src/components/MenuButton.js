@@ -9,6 +9,7 @@ const MenuButton = ({ onEdit, onDelete, variant = "" }) => {
   const [open, setOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const menuRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   // Effect to close menu when clicking outside
   useEffect(() => {
@@ -28,11 +29,18 @@ const MenuButton = ({ onEdit, onDelete, variant = "" }) => {
     };
   }, [open]);
 
+  // Focus dropdown when opened
+  useEffect(() => {
+    if (open && dropdownRef.current) {
+      dropdownRef.current.focus();
+    }
+  }, [open]);
+
   // Renders the menu button and dropdown with edit/delete actions.
   return (
     <div
       ref={menuRef}
-    >
+      style={{ position: "relative", display: "inline-block" }}>
       {/* Button to open/close the menu */}
       <button
         className={`button menu-button${variant ? ` ${variant}` : ""}`}
@@ -47,9 +55,13 @@ const MenuButton = ({ onEdit, onDelete, variant = "" }) => {
       </button>
       {/* Dropdown menu for edit and delete actions */}
       <div
+        ref={dropdownRef}
         className={`reply-dropdown${open ? " show" : ""}${
           variant ? ` ${variant}-dropdown` : ""
-        }`}>
+        }`}
+        tabIndex={-1}
+        aria-hidden={!open}
+      >
         {!confirmDelete ? (
           <>
             {/* Edit action button */}
