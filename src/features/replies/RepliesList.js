@@ -12,33 +12,33 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import EditReplyForm from "./EditReplyForm";
 import MenuButton from "../../components/MenuButton";
 
+/**
+ * Component to display a list of replies for a forum post.
+ * Handles rendering, editing, and deleting replies.
+ */
 const RepliesList = ({
   replies,
   refetchReplies,
   highlightReplyId,
   editReplyId,
 }) => {
+  // Fetch all users for username lookup
   const { data: users } = useGetUsersQuery("usersList");
+  // RTK Query mutation for deleting a reply
   const [deleteReply] = useDeleteReplyMutation();
+  // RTK Query mutation for editing a reply
   const [editReply, { isLoading: editLoading }] = useEditReplyMutation();
+  // Get current user's ID
   const { userId } = useAuth();
+  // State for which reply is being edited
   const [editingReplyId, setEditingReplyId] = useState(null);
+  // State for the text of the reply being edited
   const [editText, setEditText] = useState("");
 
+  // Ref for scrolling to the last reply
   const lastReplyRef = useRef(null);
-  /**
-   * Component to display a list of replies for a forum post.
-   * Handles rendering, editing, and deleting replies.
-   */
 
-  /**
-   * RepliesList component
-   * @param {Object} props
-   * @param {Array} props.replies - Array of reply objects
-   * @param {Function} props.onEdit - Callback for editing a reply
-   * @param {Function} props.onDelete - Callback for deleting a reply
-   * @param {string} props.currentUserId - ID of the current user
-   */
+  // Handler: delete a reply and refetch replies
   const handleDeleteReply = useCallback(
     async (replyId) => {
       await deleteReply({ replyId });
@@ -47,16 +47,19 @@ const RepliesList = ({
     [deleteReply, refetchReplies]
   );
 
+  // Handler: start editing a reply
   const handleEditClick = (reply) => {
     setEditingReplyId(reply._id);
     setEditText(reply.text);
   };
 
+  // Handler: cancel editing a reply
   const handleEditCancel = () => {
     setEditingReplyId(null);
     setEditText("");
   };
 
+  // Handler: save the edited reply
   const handleEditSave = async (replyId, newText) => {
     await editReply({ replyId, replyText: newText });
     setEditingReplyId(null);
@@ -83,6 +86,7 @@ const RepliesList = ({
     return <p>No replies found</p>;
   }
 
+  // Main content for the replies list, rendering each reply with highlight and edit mode support
   return (
     <div className="replies-list">
       {replies.map((reply) => (

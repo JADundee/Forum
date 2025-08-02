@@ -10,21 +10,27 @@ const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
  * Handles password validation, confirmation, and submission.
  */
 const ResetPassword = () => {
+  // Get the reset token from the URL params
   const { token } = useParams();
+  // State for new password and its validation
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(false);
+  // State for confirm password and its validation
   const [confirmPassword, setConfirmPassword] = useState("");
   const [validConfirm, setValidConfirm] = useState(false);
+  // State to check if passwords match
   const [passwordsMatch, setPasswordsMatch] = useState(true);
+  // State for user feedback messages
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  // State for loading indicator
   const [loading, setLoading] = useState(false);
+  // Navigation hook
   const navigate = useNavigate();
+  // RTK Query mutation hook for resetting password
   const [resetPassword] = useResetPasswordMutation();
 
-  /**
-   * Handles password input change and validation.
-   */
+  // Handler: update password state and validation on input change
   const handlePasswordChange = (e) => {
     const value = e.target.value;
     setPassword(value);
@@ -32,9 +38,7 @@ const ResetPassword = () => {
     setPasswordsMatch(value === confirmPassword);
   };
 
-  /**
-   * Handles confirm password input change and validation.
-   */
+  // Handler: update confirm password state and validation on input change
   const handleConfirmPasswordChange = (e) => {
     const value = e.target.value;
     setConfirmPassword(value);
@@ -42,9 +46,7 @@ const ResetPassword = () => {
     setPasswordsMatch(password === value);
   };
 
-  /**
-   * Handles form submission to reset the password.
-   */
+  // Handler: submit the form to reset the password
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

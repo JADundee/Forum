@@ -17,25 +17,33 @@ import { useState, useEffect } from "react";
  * Handles fetching forum, replies, likes, and reply submission.
  */
 const ForumExpand = () => {
+  // Get forum ID from URL params
   const { id } = useParams();
+  // Get location and navigation hooks
   const location = useLocation();
   const navigate = useNavigate();
+  // Get current user's username and admin status
   const { username, isAdmin } = useAuth();
+  // State for highlighting a specific reply
   const [highlightReplyId, setHighlightReplyId] = useState(null);
+  // RTK Query mutation for toggling forum like
   const [toggleLike] = useToggleLikeMutation();
-  const { data: likeCountData, refetch: refetchLikeCount } =
-    useGetLikeCountQuery({ targetId: id, targetType: "forum" });
+  // Query for like count and user like status
+  const { data: likeCountData, refetch: refetchLikeCount } = useGetLikeCountQuery({ targetId: id, targetType: "forum" });
   const { data: userLikeData, refetch: refetchUserLike } = useGetUserLikeQuery({
     targetId: id,
     targetType: "forum",
   });
+  // State for like button loading
   const [likeLoading, setLikeLoading] = useState(false);
 
+  // Get the forum object from the normalized forums list
   const { forum } = useGetForumsQuery("forumsList", {
     selectFromResult: ({ data }) => ({
       forum: data?.entities[id],
     }),
   });
+  // Query for replies to this forum
   const {
     data: replies,
     isLoading,
@@ -43,7 +51,7 @@ const ForumExpand = () => {
     refetch,
   } = useGetRepliesQuery(forum?.id);
 
-  // Effect to highlight a reply if replyId is present in location state.
+  // Effect: highlight a reply if replyId is present in location state
   useEffect(() => {
     if (location.state?.replyId && replies && replies.length > 0) {
       setHighlightReplyId(location.state.replyId);
@@ -51,6 +59,7 @@ const ForumExpand = () => {
     }
   }, [location.state, replies, navigate, location.pathname]);
 
+  // Show loading message if forum is not yet loaded
   if (!forum) {
     return <p>Loading forum...</p>;
   }
@@ -100,33 +109,49 @@ const ForumExpand = () => {
 
   const editReplyId = location.state?.editReply ? location.state.replyId : null;
 
+  // Main content for the expanded forum post, including forum details, like button, reply form, and replies list
   const content = (
     <article className="forum-post">
+      {/* Forum original post section */}
       <div className="forum-post__op">
+        {/* Forum title header */}
         <header className="forum-post__header">
           <h1>{forum.title}</h1>
         </header>
 
+        {/* Forum main text content */}
         <section className="forum-post__content">
           <p>{forum.text}</p>
         </section>
 
+        {/* Forum author display */}
         <p className="forum-post__author">
           Author:
           <span className="username">{forum.username}</span>
         </p>
 
+        {/* If the forum was edited, show who edited it */}
         {forum.editedBy && (
           <p className="forum-post__edited-by">
             Edited by: <span className="username">{forum.editedBy}</span>
           </p>
         )}
 
+        {/* Forum creation and last update timestamps */}
         <p className="forum-post__meta">
           <span className="forum-post__created">Published: {created}</span> |
           <span className="forum-post__updated">Updated: {updated}</span>
         </p>
+
+        {/* Like button and like count display */}
         <div className="like-button-container">
+          {/*
+            Like button:
+            - Shows filled heart if user has liked, outline otherwise
+            - Disabled while like mutation is loading
+            - aria-pressed for accessibility
+            - Title shows like count
+          */}
           <button
             className={`like-button${hasLiked ? " liked" : ""}`}
             onClick={handleLike}
@@ -135,12 +160,14 @@ const ForumExpand = () => {
             title={`${likeCount} like${likeCount !== 1 ? "s" : ""}`}>
             {hasLiked ? "♥" : "♡"}
           </button>
+          {/* Like count text */}
           <span className="like-count">
             {likeCount} like{likeCount !== 1 ? "s" : ""}
           </span>
         </div>
       </div>
 
+      {/* Reply form for submitting a new reply to this forum */}
       <section className="forum-post__form">
         <ReplyForm
           forumId={forum.id}
@@ -150,6 +177,7 @@ const ForumExpand = () => {
         />
       </section>
 
+      {/* Replies list section, shows all replies to this forum */}
       <section className="forum-post__replies">
         <h2>Replies</h2>
         <RepliesList

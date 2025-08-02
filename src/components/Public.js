@@ -81,15 +81,20 @@ const Public = () => {
 
   if (isLoading) return <p>Loading...</p>;
 
+  // Main content for the public login/landing page, including login form, error display, and navigation actions
   const content = (
     <section className="public">
+      {/* Public page header component */}
       <PublicHeader />
       <main className="login">
+        {/* Error message display for login failures, uses aria-live for accessibility */}
         <p ref={errRef} className={errClass} aria-live="assertive">
           {errMsg}
         </p>
 
+        {/* Login form for username/email and password */}
         <form className="form" onSubmit={handleSubmit}>
+          {/* Username or email input field */}
           <label htmlFor="username">Username or Email:</label>
           <input
             className="form__input"
@@ -103,6 +108,7 @@ const Public = () => {
             required
           />
 
+          {/* Password input field */}
           <label htmlFor="password">Password:</label>
           <input
             className="form__input"
@@ -113,6 +119,8 @@ const Public = () => {
             placeholder="Enter your password"
             required
           />
+
+          {/* Persist login (remember me) checkbox */}
           <label htmlFor="persist" className="form__persist">
             <input
               type="checkbox"
@@ -123,21 +131,28 @@ const Public = () => {
             />
             Trust This Device
           </label>
+
+          {/* Sign In button, disabled if form is incomplete */}
           <button className="button" disabled={!canLogin}>
             Sign In
           </button>
+
+          {/* Forgot Password button, navigates to reset page */}
           <button
             className="button delete-button"
             type="button"
             onClick={onForgotPasswordClicked}>
             Forgot Password?
           </button>
+
+          {/* Registration prompt and button for new users */}
           <p>New to the Forum?</p>
           <button className="button alt-button" onClick={onNewUserClicked}>
             Register
           </button>
         </form>
       </main>
+      {/* Footer section (currently empty, can be used for copyright/info) */}
       <footer></footer>
     </section>
   );

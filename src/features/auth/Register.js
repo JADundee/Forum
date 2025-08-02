@@ -18,21 +18,22 @@ const INITIAL_STATE = {
  * Handles form validation, submission, and navigation on success.
  */
 const Register = () => {
-  const [addNewUser, { isLoading, isSuccess, isError, error }] =
-    useAddNewUserMutation();
+  // RTK Query mutation hook for registering a new user
+  const [addNewUser, { isLoading, isSuccess, isError, error }] = useAddNewUserMutation();
 
+  // Navigation hook for redirecting after registration
   const navigate = useNavigate();
 
+  // State for form fields (username, password, email, roles)
   const [form, setForm] = useState(INITIAL_STATE);
+  // State for field validation status
   const [valid, setValid] = useState({
     username: false,
     password: false,
     email: false,
   });
 
-  /**
-   * Effect to validate form fields on change.
-   */
+  // Effect: validate form fields whenever they change
   useEffect(() => {
     setValid({
       username: USER_REGEX.test(form.username),
@@ -41,9 +42,7 @@ const Register = () => {
     });
   }, [form.username, form.password, form.email]);
 
-  /**
-   * Effect to reset form and navigate on successful registration.
-   */
+  // Effect: reset form and navigate to login on successful registration
   useEffect(() => {
     if (isSuccess) {
       setForm(INITIAL_STATE);
@@ -52,9 +51,7 @@ const Register = () => {
     }
   }, [isSuccess, navigate]);
 
-  /**
-   * Handles input changes for form fields.
-   */
+  // Handler: update form state on input change
   const onInputChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -148,6 +145,7 @@ const Register = () => {
     </section>
   );
 
-  return content;
+    return content;
 };
+
 export default Register;

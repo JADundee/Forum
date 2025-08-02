@@ -25,20 +25,22 @@ const ActionButton = ({ onClick, disabled, title, icon, className }) => (
  * Handles form state, validation, update, and delete actions.
  */
 const EditForumForm = ({ forum }) => {
+  // Get current user's admin status and ID
   const { isAdmin, userId: currentUserId } = useAuth();
-  const [updateForum, { isLoading, isSuccess, isError, error }] =
-    useUpdateForumMutation();
-  const [
-    deleteForum,
-    { isSuccess: isDelSuccess, isError: isDelError, error: delerror },
-  ] = useDeleteForumMutation();
+  // RTK Query mutation hook for updating a forum
+  const [updateForum, { isLoading, isSuccess, isError, error }] = useUpdateForumMutation();
+  // RTK Query mutation hook for deleting a forum
+  const [deleteForum, { isSuccess: isDelSuccess, isError: isDelError, error: delerror }] = useDeleteForumMutation();
+  // Navigation hook
   const navigate = useNavigate();
+  // State for form fields
   const [title, setTitle] = useState(forum.title);
   const [text, setText] = useState(forum.text);
   const [ownerId, setOwnerId] = useState(forum.user);
+  // State for showing delete confirmation dialog
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  // Effect to reset form and navigate on successful update or delete.
+  // Effect: reset form and navigate on successful update or delete
   useEffect(() => {
     if (isSuccess || isDelSuccess) {
       setTitle("");
