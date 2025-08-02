@@ -30,7 +30,7 @@ const LikeItem = ({ like, type, onClick }) => {
       <div
         className="like-item-clickable"
         onClick={onClick}
-        style={{ cursor: "pointer" }}>
+      >
         <p className="all-notifications__text">
           You liked a reply: <span className="reply-text">"{like.text}"</span>
           {like.user?.username && (

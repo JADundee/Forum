@@ -116,6 +116,23 @@ body {
   background-size: cover;
 }
 
+/* Confirm Delete Dialog */
+.confirm-delete {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+  margin-top: 0.5em;
+}
+
+.confirm-delete__text {
+  padding: 0.5rem 0;
+  color: var(--ERROR);
+  font-weight: bold;
+  text-align: center;
+}
+
+
 input,
 button,
 textarea,
@@ -803,7 +820,7 @@ a:hover, a:focus-visible {
   border: 1px solid var(--BORDER-COLOR);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 1000;
+  z-index: 9999;
   margin-top: 0.25rem; 
   opacity: 0;
   pointer-events: none;

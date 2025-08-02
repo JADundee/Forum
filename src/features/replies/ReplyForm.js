@@ -110,7 +110,7 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
     
     // Render the reply form
     return (
-        <form onSubmit={handleSubmit} className='forum-post__replies' style={{ position: 'relative' }}>
+        <form onSubmit={handleSubmit} className='forum-post__replies'>
             <textarea 
                 ref={textareaRef}
                 value={replyText} 

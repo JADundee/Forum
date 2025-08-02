@@ -27,7 +27,6 @@ const DataTable = ({
             <th
               key={col.key}
               className={col.className}
-              style={col.sortable ? { cursor: "pointer" } : undefined}
               onClick={col.sortable ? () => onSort(col.key) : undefined}>
               {/* Column label and sort indicator */}
               <span className="header-text">{col.label}</span>
@@ -44,7 +43,7 @@ const DataTable = ({
         {/* Render empty message or data rows */}
         {data.length === 0 ? (
           <tr>
-            <td colSpan={columns.length} style={{ textAlign: "center" }}>
+            <td colSpan={columns.length}>
               {emptyMsg}
             </td>
           </tr>

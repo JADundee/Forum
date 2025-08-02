@@ -129,7 +129,7 @@ const EditForumForm = ({ forum }) => {
         </div>
         <div
           className="form__action-buttons"
-          style={{ flexDirection: "column", alignItems: "flex-end" }}>
+        >
           {canEdit && (
             <>
               <div
@@ -156,21 +156,8 @@ const EditForumForm = ({ forum }) => {
                 )}
               </div>
               {showDeleteConfirm && (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.5rem",
-                    alignItems: "flex-end",
-                    marginTop: "0.5em",
-                  }}>
-                  <span
-                    style={{
-                      padding: "0.5rem 0",
-                      color: "var(--ERROR)",
-                      fontWeight: "bold",
-                      textAlign: "center",
-                    }}>
+                <div className="confirm-delete">
+                  <span className="confirm-delete__text">
                     Are you sure?
                   </span>
                   <ActionButton

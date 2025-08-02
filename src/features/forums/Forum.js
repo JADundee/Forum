@@ -42,7 +42,6 @@ const Forum = ({ forumId, showSettingsMenu }) => {
         {showSettingsMenu && (
           <td
             className="table__cell"
-            style={{ position: "relative" }}
             onClick={(e) => e.stopPropagation()}>
             <MenuButton
               onEdit={handleEdit}

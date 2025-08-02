@@ -32,7 +32,7 @@ const MenuButton = ({ onEdit, onDelete, variant = "" }) => {
   return (
     <div
       ref={menuRef}
-      style={{ position: "relative", display: "inline-block" }}>
+    >
       {/* Button to open/close the menu */}
       <button
         className={`button menu-button${variant ? ` ${variant}` : ""}`}

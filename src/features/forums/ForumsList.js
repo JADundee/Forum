@@ -73,7 +73,6 @@ const ForumsList = () => {
           />
           <button
             className="button"
-            style={{ backgroundColor: showMine ? "#236323" : undefined }}
             onClick={() => setShowMine((m) => !m)}>
             {showMine ? "Show All Forums" : "Show My Forums"}
           </button>
