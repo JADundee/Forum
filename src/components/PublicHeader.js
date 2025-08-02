@@ -7,7 +7,7 @@ const PublicHeader = () => {
     return (
         <header className="public__header">
             {isLoginPage ? (
-                <h1 className="public__header-link public__header-link--disabled">theForum</h1>
+                <h1 className="public__header-link public__header-link--disabled">Forum</h1>
             ) : (
                 <span
                     className="public__header-link"
@@ -15,8 +15,8 @@ const PublicHeader = () => {
                     tabIndex={0}
                     role="button"
                     onKeyPress={e => { if (e.key === 'Enter') navigate('/') }}
-                >
-                    theForum
+                >       
+                    Forum
                 </span>
             )}
         </header>
