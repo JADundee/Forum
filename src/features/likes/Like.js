@@ -3,7 +3,7 @@ import moment from 'moment';
 const LikeItem = ({ like, type, onClick }) => {
   if (type === 'forum') {
     return (
-      <div className="like-item-clickable" onClick={onClick} style={{ cursor: 'pointer' }}>
+      <div className="like-item-clickable" onClick={onClick}>
         <p className="all-notifications__text">
           You liked the forum: <span className="forum-title">{like.title}</span>
           {like.user?.username && (

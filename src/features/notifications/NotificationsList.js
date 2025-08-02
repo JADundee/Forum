@@ -1,6 +1,6 @@
 import { useGetNotificationsQuery, useGetForumsQuery, useMarkNotificationReadMutation, useMarkAllNotificationsReadMutation, useDeleteNotificationMutation } from '../forums/forumsApiSlice';
 import { useNavigate } from 'react-router-dom';
-import  { useCallback } from 'react';
+import { useCallback } from 'react';
 import NotificationItem from './NotificationItem';
 
 const NotificationsList = () => {
@@ -14,7 +14,7 @@ const NotificationsList = () => {
 
   const handleNotificationClicked = useCallback(async (notification) => {
     await markNotificationRead(notification.id);
-    navigate(`/dash/forums/${notification.forumId}/expand`, { state: { replyId: notification.replyId } });
+    navigate(`/dash/forums/${notification.forumId}/expand`);
   }, [markNotificationRead, navigate]);
 
   const handleDeleteNotification = useCallback(async (e, notificationId) => {

@@ -13,7 +13,7 @@ const LikeActivity = ({ userId, show }) => {
         } else if (like._likeType === 'reply') {
             const forumId = like.forum?._id || like.forum;
             if (forumId) {
-                navigate(`/dash/forums/${forumId}/expand`, { state: { replyId: like._id } });
+                navigate(`/dash/forums/${forumId}/expand`);
             }
         }
     };
