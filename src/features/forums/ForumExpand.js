@@ -121,7 +121,7 @@ const ForumExpand = () => {
 
         {/* Forum main text content */}
         <section className="forum-post__content">
-          <p>{forum.text}</p>
+          <p>"{forum.text}"</p>
         </section>
 
         {/* Forum author display */}

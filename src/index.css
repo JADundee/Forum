@@ -107,6 +107,10 @@
 .nowrap { white-space: nowrap; }
 .timestamp { color: #888; font-size: 0.95em; }
 .username { color: var(--LINK-COLOR); font-weight: 600; }
+.menu-button-container {
+  position: relative;
+  display: inline-block;
+}
 .menu-button { background: transparent; border: none; color: var(--COLOR); font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
 .menu-button:hover, .menu-button:focus-visible { color: var(--LINK-COLOR); background: var(--TABLE-HEADER); }
 
@@ -742,12 +746,13 @@ a:hover, a:focus-visible {
   font-weight: 700;
   color: var(--LINK-COLOR);
   margin-bottom: 1rem;
+  text-decoration: underline;
 }
 
 .forum-post__content {
   font-size: 1.15rem;
   color: var(--COLOR);
-  background: var(--TABLE-HEADER);
+  background: var(--BGCOLOR);
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1rem;
