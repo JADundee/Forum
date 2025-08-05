@@ -34,6 +34,13 @@
   --TABLE-ROW-HOVER: #f2f8f2;
   --SCROLLBAR: #2e7d32;
   --SCROLLBAR-TRACK: #e0e0e0;
+  --BUTTON-GRADIENT: linear-gradient(90deg, #388e3c 25%, #7ee787 100%);
+  --BUTTON-GRADIENT-HOVER: linear-gradient(90deg, var(--BUTTON-HOVER) 25%, var(--LINK-HOVER) 100%);
+  --ALTBUTTON-GRADIENT: linear-gradient(90deg, var(--ALTBUTTON) 25%, #2196f3 100%);
+  --ALTBUTTON-GRADIENT-HOVER: linear-gradient(90deg, var(--ALTBUTTON-HOVER) 25%, #1976d2 100%);
+  --DELETE-BUTTON-GRADIENT: linear-gradient(90deg, var(--DELETE-BUTTON) 40%, #ff5252 100%);
+  --DELETE-BUTTON-GRADIENT-HOVER: linear-gradient(90deg, var(--DELETE-BUTTON-HOVER) 40%, #ff5252 100%);
+  --HEADER-GRADIENT: linear-gradient(90deg, #388e3c 40%, #7ee787 100%);
 }
 
 /* Dark mode styles */
@@ -54,7 +61,7 @@
     --INPUT-BORDER: #232b3a;
     --INPUT-BG: #151c2c;
     --INPUT-INVALID: #ffb4b4;
-    --TABLE-HEADER: #232b3a;
+    --TABLE-HEADER: #f5f5f5;
     --TABLE-ROW-HOVER: #1a2336;
     --SCROLLBAR: #7ee787;
     --SCROLLBAR-TRACK: #232b3a;
@@ -180,17 +187,15 @@ a:hover, a:focus-visible {
 }
 
 .icon-button {
-  background: var(--CARD-BGCOLOR);
   border: none;
-  border-radius: 50%;
   width: 44px;
   height: 44px;
   display: grid;
   place-content: center;
   color: var(--LINK-COLOR);
   font-size: 2rem;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: var(--SHADOW);
+  transition: background 0.2s, color 0.2s;
+  background: transparent;
 }
 
 .icon-button:hover,
@@ -204,7 +209,7 @@ a:hover, a:focus-visible {
 }
 
 .button {
-  background: linear-gradient(90deg, var(--BUTTON), var(--LINK-COLOR) 80%);
+  background: var(--BUTTON-GRADIENT);
   color: var(--BUTTON-TEXT);
   border: none;
   border-radius: var(--RADIUS);
@@ -222,8 +227,8 @@ a:hover, a:focus-visible {
 }
 
 .button:hover {
-  background: linear-gradient(90deg, var(--BUTTON-HOVER), var(--LINK-HOVER) 80%);
-  transform: translateY(-2px) scale(1.03);
+  background: var(--BUTTON-GRADIENT-HOVER);
+  transform: translateY(-2px);
 }
 
 .button:disabled {
@@ -233,7 +238,7 @@ a:hover, a:focus-visible {
 }
 
 .delete-button {
-  background: linear-gradient(90deg, var(--DELETE-BUTTON), #ff5252  80%);
+  background: var(--DELETE-BUTTON-GRADIENT);
   color: var(--BUTTON-TEXT);
   border: 2px solid var(--DELETE-BUTTON-BORDER, var(--DELETE-BUTTON-HOVER));
   border-radius: var(--RADIUS);
@@ -245,13 +250,13 @@ a:hover, a:focus-visible {
 
 .delete-button:hover,
 .delete-button:focus-visible {
-  background: linear-gradient(90deg, var(--DELETE-BUTTON-HOVER), #ff5252 80%);
+  background: var(--DELETE-BUTTON-GRADIENT-HOVER);
   border-color: var(--DELETE-BUTTON-HOVER);
-  transform: translateY(-2px) scale(1.04);
+  transform: translateY(-2px);
 }
 
 .alt-button {
-  background: linear-gradient(90deg, var(--ALTBUTTON), #2196f3 80%);
+  background: var(--ALTBUTTON-GRADIENT);
   color: #fff;
   border: none;
   border-radius: var(--RADIUS);
@@ -262,7 +267,7 @@ a:hover, a:focus-visible {
 }
 
 .alt-button:hover {
-  background: linear-gradient(90deg, var(--ALTBUTTON-HOVER), #1976d2 80%);
+  background: var(--ALTBUTTON-GRADIENT-HOVER);
   transform: translateY(-2px) scale(1.03);
 }
 
@@ -441,15 +446,29 @@ a:hover, a:focus-visible {
 
 /* || TABLES - GENERAL */
 
+.table-scroll-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.table-scroll-wrapper th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--HEADER-GRADIENT);
+  color: var(--TABLE-HEADER);
+}
+
 .table {
   background: var(--CARD-BGCOLOR);
   border-radius: var(--RADIUS);
   box-shadow: var(--SHADOW);
-  overflow: hidden;
   font-size: 1.05rem;
   width: 100%;
   border-collapse: collapse;
-  margin: 2rem 0;
 }
 
 .table th, .table td {
@@ -459,9 +478,12 @@ a:hover, a:focus-visible {
 }
 
 .table th {
-  color: var(--LINK-COLOR);
+  color: var(--TABLE-HEADER);
   font-weight: 700;
   letter-spacing: 0.03em;
+  position: sticky;
+  top: 0;
+  z-index: 2;
 }
 
 .table__row:hover .table__cell, .table tr:hover td {
@@ -479,23 +501,11 @@ a:hover, a:focus-visible {
   font-size: 1.5rem;
   width: 2.5em;
   height: 2.5em;
+  color: var(--BUTTON-TEXT);
 }
 
 .header-text {
   text-decoration: underline;
-}
-
-.table-scroll-wrapper th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: linear-gradient(90deg, var(--BUTTON), var(--LINK-COLOR) 80%);
-  color: white;
-}
-
-.table-scroll-wrapper table {
-  width: 100%;
-  border-collapse: separate;
 }
 
 .table__cell {
@@ -508,15 +518,6 @@ a:hover, a:focus-visible {
   max-width: 300px;
 }
 
-.table-scroll-wrapper {
-  max-height: 60vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  width: 100%;
-  border-radius: 8px;
-  position: relative;
-}
-
 .search-filter {
   position: sticky;
   top: 0;
@@ -525,7 +526,7 @@ a:hover, a:focus-visible {
   display: flex;
   gap: 1rem;
   align-items: center;
-  padding: 1rem 0;
+  padding: 6px;
   border-bottom: 2px solid var(--BORDER-COLOR);
   border-radius: 8px;
 }
@@ -853,7 +854,6 @@ a:hover, a:focus-visible {
 .edit-reply-textarea {
   width: 100%;
   min-height: 60px;
-  resize: vertical;
   font-size: 1rem;
   padding: 0.5rem;
   box-sizing: border-box;
@@ -923,12 +923,10 @@ a:hover, a:focus-visible {
 
 .all-notifications__header {
   font-weight: bold;
-  margin-bottom: 5px;
   color: var(--COLOR);
   text-align: center;
   text-decoration: underline;
   border-radius: 12px 12px 0 0;
-  padding: 1.2rem 0.5rem 0.5rem 0.5rem;
   font-size: 1.5rem;
 }
 
@@ -1183,7 +1181,6 @@ a:hover, a:focus-visible {
     padding: 1em;
     width: 100%;
     overflow-y: auto;
-    overflow-x: hidden;
   }
 
   .table {
@@ -1206,6 +1203,10 @@ a:hover, a:focus-visible {
 
 @media screen and (max-width: 500px) {
   .dash-footer-permissions {
+    display: none;
+  }
+
+  .table th:nth-child(4), .table td:nth-child(4){
     display: none;
   }
 }
