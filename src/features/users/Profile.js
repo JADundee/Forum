@@ -293,6 +293,17 @@ const Profile = () => {
                       {error?.data?.message || "Error updating password"}
                     </p>
                   )}
+                  {/* Read-only username input for accessibility */}
+                  <input
+                    type="text"
+                    name="username"
+                    autoComplete="username"
+                    value={username || ""}
+                    readOnly
+                    tabIndex={-1}
+                    aria-hidden="true"
+                    className="offscreen"
+                  />
                   {/* New password input */}
                   <label htmlFor="new-password">
                     New Password:{" "}
@@ -309,6 +320,7 @@ const Profile = () => {
                     placeholder="Enter your new password"
                     required
                     className="form__input"
+                    autoComplete="new-password"
                   />
                   {/* Password validation error */}
                   {getPwdError() && <p className="errmsg">{getPwdError()}</p>}
@@ -325,6 +337,7 @@ const Profile = () => {
                     placeholder="Re-enter your new password"
                     required
                     className="form__input"
+                    autoComplete="new-password"
                   />
                   {/* Confirm password validation error */}
                   {getConfirmError() && (
