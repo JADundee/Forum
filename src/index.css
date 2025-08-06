@@ -29,7 +29,6 @@
   --RADIUS: 14px;
   --INPUT-BORDER: #e0e0e0;
   --INPUT-BG: #fafbfc;
-  --INPUT-INVALID: #ffb4b4;
   --TABLE-HEADER: #f7faf7;
   --TABLE-ROW-HOVER: #f2f8f2;
   --SCROLLBAR: #2e7d32;
@@ -51,8 +50,8 @@
     --COLOR: #f5f5f5;
     --LINK-COLOR: #7ee787;
     --LINK-HOVER: #4caf50;
-    --BUTTON: #388e3c;
-    --BUTTON-HOVER: #236323;
+    --BUTTON: #7ee787;
+    --BUTTON-HOVER: #4caf50;
     --BUTTON-TEXT: #fff;
     --ALTBUTTON: #1565c0;
     --ALTBUTTON-HOVER: #0d47a1;
@@ -60,7 +59,6 @@
     --SHADOW: 0 4px 24px rgba(46,125,50,0.18), 0 1.5px 8px rgba(0,0,0,0.14);
     --INPUT-BORDER: #232b3a;
     --INPUT-BG: #151c2c;
-    --INPUT-INVALID: #ffb4b4;
     --TABLE-HEADER: #f5f5f5;
     --TABLE-ROW-HOVER: #1a2336;
     --SCROLLBAR: #7ee787;
@@ -72,12 +70,6 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cpolygon fill='%237ee787' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%23236323' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%2370d578' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%231f5d3c' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%2362c369' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%231a5855' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%2354b25a' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%2316526f' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%2346a04b' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%23114d88' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%23388e3c' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%230d47a1' points='943 900 1210 900 971 687'/%3E%3C/svg%3E");
     background-attachment: fixed;
     background-size: cover;
-  }
-
-  .errmsg {
-    background: #2a1a1a;
-    color: #ffb4b4;
-    border-color: #ffb4b4;
   }
 }
 
@@ -105,16 +97,8 @@
 }
 
 .nowrap { white-space: nowrap; }
-.timestamp { color: #888; font-size: 0.95em; }
-.username { color: var(--LINK-COLOR); font-weight: 600; }
+.username { color: var(--LINK-COLOR); }
 .menu-button-container {
-  position: relative;
-  display: inline-block;
-}
-.menu-button { background: transparent; border: none; color: var(--COLOR); font-size: 1.5rem; border-radius: 50%; cursor: pointer; transition: background 0.2s; }
-.menu-button:hover, .menu-button:focus-visible { color: var(--LINK-COLOR); background: var(--TABLE-HEADER); }
-
-.reply-menubutton-container {
   position: relative;
   display: inline-block;
 }
@@ -132,33 +116,10 @@
 
 /* || GENERAL STYLES */
 
-
-
 body {
-  font-family: 'Inter', 'Nunito', Arial, sans-serif;
+  font-family: 'Nunito', Arial, sans-serif;
   color: var(--COLOR);
-  min-height: 100vh;
-  transition: background 0.3s, color 0.3s;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
-
-/* Confirm Delete Dialog */
-.confirm-delete {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  align-items: flex-end;
-  margin-top: 0.5em;
-}
-
-.confirm-delete__text {
-  padding: 0.5rem 0;
-  color: var(--ERROR);
-  font-weight: bold;
-  text-align: center;
-}
-
 
 input,
 button,
@@ -170,7 +131,6 @@ select {
 
 #root {
   min-height: 100vh;
-  height: 100vh;
   display: flex;
   flex-flow: column nowrap;
 }
@@ -178,8 +138,8 @@ select {
 a:any-link {
   color: var(--LINK-COLOR);
   text-decoration: none;
-  transition: color 0.2s;
 }
+
 a:hover, a:focus-visible {
   color: var(--LINK-HOVER);
   text-decoration: underline;
@@ -191,9 +151,7 @@ a:hover, a:focus-visible {
   border-radius: 8px;
   padding: 0.75rem 1.25rem;
   font-weight: 600;
-  margin-bottom: 1rem;
   border: 1.5px solid var(--ERROR);
-  box-shadow: 0 1px 4px rgba(211,47,47,0.08);
 }
 
 .errmsg a:any-link {
@@ -207,15 +165,15 @@ a:hover, a:focus-visible {
   height: 44px;
   display: grid;
   place-content: center;
-  color: var(--LINK-COLOR);
+  color: var(--BUTTON);
   font-size: 2rem;
-  transition: background 0.2s, color 0.2s;
   background: transparent;
+  padding: 0.5rem 1rem;
 }
 
 .icon-button:hover,
 .icon-button:focus-visible {
-  color: var(--LINK-HOVER);
+  color: var(--BUTTON-HOVER);
   cursor: pointer;
 }
 
@@ -231,14 +189,11 @@ a:hover, a:focus-visible {
   padding: 0.75rem 2rem;
   font-weight: 600;
   font-size: 1.1rem;
-  box-shadow: var(--SHADOW);
-  transition: background 0.2s, transform 0.1s;
   cursor: pointer;
-  outline: none;
   margin: 0.5rem 0;
   display: inline-flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .button:hover {
@@ -254,42 +209,26 @@ a:hover, a:focus-visible {
 
 .delete-button {
   background: var(--DELETE-BUTTON-GRADIENT);
-  color: var(--BUTTON-TEXT);
-  border: 2px solid var(--DELETE-BUTTON-BORDER, var(--DELETE-BUTTON-HOVER));
-  border-radius: var(--RADIUS);
-  font-weight: 700;
-  box-shadow: 0 2px 8px rgba(211,47,47,0.12);
-  padding: 0.75rem 2rem;
-  transition: background 0.2s, border 0.2s, transform 0.1s;
+  border: 2px solid var(--DELETE-BUTTON-HOVER);
+  position: relative
 }
 
 .delete-button:hover,
 .delete-button:focus-visible {
   background: var(--DELETE-BUTTON-GRADIENT-HOVER);
   border-color: var(--DELETE-BUTTON-HOVER);
-  transform: translateY(-2px);
 }
 
 .alt-button {
   background: var(--ALTBUTTON-GRADIENT);
-  color: #fff;
-  border: none;
-  border-radius: var(--RADIUS);
-  font-weight: 600;
-  box-shadow: var(--SHADOW);
-  padding: 0.75rem 2rem;
-  transition: background 0.2s, transform 0.1s;
 }
 
 .alt-button:hover {
   background: var(--ALTBUTTON-GRADIENT-HOVER);
-  transform: translateY(-2px) scale(1.03);
 }
 
 .alt-button:disabled{
   background: var(--INACTIVE);
-  color: #666;
-  cursor: not-allowed;
 }
 
 .username-text {
@@ -298,25 +237,6 @@ a:hover, a:focus-visible {
 
 /* || PUBLIC PAGES */
 
-.public__header-link {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--COLOR);
-  cursor: pointer;
-  user-select: none;
-  text-decoration: none;
-  transition: color 0.2s;
-  
-}
-.public__header-link:hover {
-  color: var(--LINK-HOVER);
-}
-
-.public__header-link--disabled {
-  pointer-events: none;
-  cursor: default;
-}
-
 .public,
 .welcome {
   display: flex;
@@ -324,15 +244,8 @@ a:hover, a:focus-visible {
   gap: 1rem;
 }
 
-.public {
-  padding: 1em;
-  flex-grow: 1;
-}
-
 .login {
   flex-grow: 1;
-  border-top: 2px solid var(--BORDER-COLOR);
-  border-bottom: 2px solid var(--BORDER-COLOR);
   padding: 1em 0;
 }
 
@@ -343,43 +256,31 @@ a:hover, a:focus-visible {
 
 /* || DASH HEADER, CONTAINER & FOOTER */
 
-.dash-header, .public__header {
+.dash-header {
   background: var(--CARD-BGCOLOR);
   border-bottom: 2px solid var(--BORDER-COLOR);
-  box-shadow: var(--SHADOW);
-  padding: 1rem 2rem;
-  border-radius: 0 0 var(--RADIUS) var(--RADIUS);
   position: sticky;
   top: 0;
   z-index: 10;
 }
 
-.dash-header__title {
-  color: var(--LINK-COLOR);
-}
-
 .dash-header__container {
   display: flex;
-  flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
+  padding: 0.5rem 1rem;
 }
 
 .dash-header__nav {
   display: flex;
-  flex-flow: row nowrap;
-  justify-content: flex-end;
   gap: 0.5em;
 }
 
 .notification-counter {
-  margin-left: 8px;
-  background: #236323;
-  color: #fff;
+  background: var(--LINK-COLOR);
   border-radius: 12px;
   padding: 2px 8px;
   font-size: 0.9em;
-  display: inline-block;
 }
 
 .notification-dropdown {
@@ -394,14 +295,13 @@ a:hover, a:focus-visible {
   padding: 10px;
   top: 0;
   right: 0;
-  bottom: 5px;
+  bottom: 10px;
   width: 250px;
   overflow-y: auto;
   max-height: 100vh;
   position: fixed;
-  z-index: 2147483647;
+  z-index: 9999999;
   border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
 }
 
 .notification-dropdown.show {
@@ -413,11 +313,7 @@ a:hover, a:focus-visible {
 .notification-item {
   padding: 10px;
   border-bottom: 1px solid var(--BORDER-COLOR);
-  color: var(--COLOR);
-  width: 100%;
-  box-sizing: border-box;
   border-radius: 8px;
-  box-shadow: 5px 5px 0px var(--BOX-SHADOW);
 }
 
 .notification-item p {
@@ -426,37 +322,27 @@ a:hover, a:focus-visible {
 
 .notification-item:hover {
   background-color: var(--LINK-HOVER);
-  width: 100%;
   cursor: pointer;
-}
-
-.notification-dropdown .button {
-  width: 100%;
 }
 
 .dash-container {
   padding: 0.25em 0.5em 0.5em;
   flex-grow: 1;
+  max-width: 90%;
+  margin:  auto;
+  padding: 25px;
+
 }
 
 .dash-footer {
   background: var(--CARD-BGCOLOR);
   border-top: 2px solid var(--BORDER-COLOR);
-  box-shadow: var(--SHADOW);
-  padding: 1rem 2rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--RADIUS) var(--RADIUS) 0 0;
   font-size: 1rem;
-  color: var(--COLOR);
   position: sticky;
-  bottom: 0;
   z-index: 10;
-}
-
-.dash-footer-date {
-  margin-left: auto;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  bottom: 0;
 }
 
 /* || TABLES - GENERAL */
@@ -465,7 +351,6 @@ a:hover, a:focus-visible {
   max-height: 60vh;
   overflow-y: auto;
   overflow-x: auto;
-  width: 100%;
   border-radius: 8px;
 }
 
@@ -479,8 +364,6 @@ a:hover, a:focus-visible {
 
 .table {
   background: var(--CARD-BGCOLOR);
-  border-radius: var(--RADIUS);
-  box-shadow: var(--SHADOW);
   font-size: 1.05rem;
   width: 100%;
   border-collapse: collapse;
@@ -488,23 +371,19 @@ a:hover, a:focus-visible {
 
 .table th, .table td {
   padding: 1rem;
-  border-bottom: 1px solid var(--BORDER-COLOR);
   text-align: left;
 }
 
 .table th {
-  color: var(--TABLE-HEADER);
   font-weight: 700;
   letter-spacing: 0.03em;
   position: sticky;
-  top: 0;
   z-index: 2;
 }
 
 .table__row:hover .table__cell, .table tr:hover td {
   background: var(--TABLE-ROW-HOVER);
   cursor: pointer;
-  outline: 2px solid var(--BOX-SHADOW);
   background-color: rgba(0, 0, 0, 0.5)
 }
 
@@ -512,11 +391,7 @@ a:hover, a:focus-visible {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.25em;
   font-size: 1.5rem;
-  width: 2.5em;
-  height: 2.5em;
-  color: var(--BUTTON-TEXT);
 }
 
 .header-text {
@@ -535,15 +410,12 @@ a:hover, a:focus-visible {
 
 .search-filter {
   position: sticky;
-  top: 0;
-  z-index: 10;
   margin-bottom: 1rem;
   display: flex;
   gap: 1rem;
   align-items: center;
   padding: 6px;
   border-bottom: 2px solid var(--BORDER-COLOR);
-  border-radius: 8px;
 }
 
 .search-filter input[type="text"] {
@@ -552,8 +424,7 @@ a:hover, a:focus-visible {
   max-width: 400px;
   height: 40px;
   font-size: 1rem;
-  box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .search-filter .button {
@@ -561,8 +432,6 @@ a:hover, a:focus-visible {
   font-size: 1rem;
   padding: 0 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* || LIKE BUTTON */
@@ -576,42 +445,37 @@ a:hover, a:focus-visible {
 
 .like-button {
   background: transparent;
-  border: 2px solid var(--LINK-COLOR);
+  border: 2px solid var(--BUTTON);
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
   font-size: 1.5rem;
-  color: var(--LINK-COLOR);
-  position: relative;
+  color: var(--BUTTON);
 }
 
 .like-button:hover {
-  background-color: var(--LINK-COLOR);
+  background-color: var(--BUTTON-HOVER);
   color: white;
   transform: scale(1.1);
 }
 
 .like-button.liked {
-  background-color: var(--LINK-COLOR);
+  background-color: var(--BUTTON);
   color: white;
-  border-color: var(--LINK-COLOR);
+  border-color: var(--BUTTON);
 }
 
 .like-button.liked:hover {
-  background-color: var(--LINK-HOVER);
-  border-color: var(--LINK-HOVER);
+  background-color: var(--BUTTON-HOVER);
+  border-color: var(--BUTTON-HOVER);
 }
 
 .like-count {
   font-size: 1rem;
-  color: var(--COLOR);
-  font-weight: 500;
-  user-select: none;
 }
 
 /* || FORM - GENERAL */
@@ -639,14 +503,7 @@ a:hover, a:focus-visible {
   display: flex;
   align-items: center;
   gap: 0.75em;
-  background: var(--FORUM-BGCOLOR);
-  border-radius: 12px;
   padding: 0.75em 1em;
-  margin: 0.5em 0 1em 0;
-  box-shadow: 0 2px 12px rgba(48,146,48,0.08), 2px 2px 0px var(--BOX-SHADOW);
-  transition: box-shadow 0.2s, background 0.2s;
-  cursor: pointer;
-  border: 1.5px solid transparent;
 }
 
 .form__checkbox {
@@ -655,24 +512,17 @@ a:hover, a:focus-visible {
   height: 1.25em;
   border: 2px solid var(--LINK-COLOR);
   border-radius: 6px;
-  background: #fff;
-  transition: background 0.2s, border-color 0.2s;
-  position: relative;
   cursor: pointer;
-  outline: none;
-  margin-right: 0.5em;
   display: grid;
   place-content: center;
 }
 
 .form__checkbox:checked::after {
   content: '';
-  display: block;
   width: 0.6em;
   height: 0.6em;
   background: var(--LINK-COLOR);
-  border-radius: 2px;
-  margin: auto;
+  border-radius: 8px;
 }
 
 .form__input, textarea, select {
@@ -681,7 +531,6 @@ a:hover, a:focus-visible {
   padding: 0.75rem 1rem;
   font-size: 1.1rem;
   background: var(--INPUT-BG);
-  transition: border 0.2s, box-shadow 0.2s;
   box-shadow: none;
   color: var(--COLOR);
 }
@@ -693,19 +542,12 @@ a:hover, a:focus-visible {
 }
 
 .form__input--incomplete {
-  border-color: var(--INPUT-INVALID);
-  background: #fff6f6;
+  border-color: var(--ERROR);
 }
 
 .form__check {
   border-radius: 10px;
-  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
-  max-width: 350px;
   text-align: center;
-}
-
-.form__check:hover {
-  background-color: var(--LINK-COLOR)
 }
 
 .form__action-buttons {
@@ -714,8 +556,19 @@ a:hover, a:focus-visible {
   justify-content: flex-end;
 }
 
-.form__action-buttons .button {
-  margin: 4px;
+.confirm-delete {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-end;
+  margin-top: 0.5em;
+}
+
+.confirm-delete__text {
+  padding: 0.5rem 0;
+  color: var(--ERROR);
+  font-weight: bold;
+  text-align: center;
 }
 
 /* || EXPANDED FORUM */
@@ -726,11 +579,6 @@ a:hover, a:focus-visible {
   box-shadow: var(--SHADOW);
   padding: 2rem;
   margin-bottom: 2rem;
-  transition: box-shadow 0.2s;
-}
-
-.forum-post:hover, .reply:hover, .card:hover {
-  box-shadow: 0 6px 24px rgba(46,125,50,0.16);
 }
 
 .forum-post__op {
@@ -738,7 +586,6 @@ a:hover, a:focus-visible {
   padding: 20px;
   border-bottom: 1px solid var(--BORDER-COLOR);
   border-radius: 10px;
-  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
 }
 
 .forum-post__header {
@@ -751,61 +598,35 @@ a:hover, a:focus-visible {
 
 .forum-post__content {
   font-size: 1.15rem;
-  color: var(--COLOR);
   background: var(--BGCOLOR);
   border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1rem;
 }
 
-.forum-post__author {
-  margin-top: 10px;
-}
-
 .forum-post__author span {
   margin-left: 5px;
 }
-
-.forum-post__meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  color: var(--COLOR);
-  font-size: 14px;
-}
-
-.forum-post__meta span:last-child {
-  margin-right: 0;
-}
-
+ 
 .forum-post__form {
   padding: 20px;
   background-color: var(--BGCOLOR);
   font-size: 1.2rem;
   color: #333;
   margin-bottom: 40px;
-  box-shadow: 10px 10px 0px var(--BOX-SHADOW);
   border-bottom: 1px solid var(--BORDER-COLOR);
-  border-radius: 8px;
+ 
 }
 
 .forum-post__form textarea {
   width: 100%;
   height: 100px;
-  padding: 10px;
   font-size: 1.2rem;
-  border: 1px solid var(--BORDER-COLOR);
-  border-radius: 8px;
 }
 
 .forum-post__replies h2 {
   font-size: 1.8rem;
-  font-weight: 600;
-  color: var(--COLOR);
   text-align: center;
-  letter-spacing: -0.5px;
   margin-bottom: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--BORDER-COLOR);
@@ -816,41 +637,33 @@ a:hover, a:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .reply-content {
   padding: 10px;
-  color: var(--TABLE-COLOR);
   background-color: var(--BGCOLOR);
   border: 1px solid #ddd;
   border-radius: 10px; 
 }
 
 .reply-dropdown {
-  position: absolute;
-  top: 100%;      
+  position: absolute;   
   right: 0;        
   min-width: 120px;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding: 1rem 0.5rem;
+  padding: 0.5rem;
   background: var(--BGCOLOR);
   border: 1px solid var(--BORDER-COLOR);
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 9999;
-  margin-top: 0.25rem; 
   opacity: 0;
-  pointer-events: none;
   transform: translateY(-20px);
   transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
 .reply-dropdown.show {
   opacity: 1;
-  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -858,7 +671,6 @@ a:hover, a:focus-visible {
   width: 100%;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  box-sizing: border-box;
 }
 
 .edit-reply-form {
@@ -870,9 +682,6 @@ a:hover, a:focus-visible {
 .edit-reply-textarea {
   width: 100%;
   min-height: 60px;
-  font-size: 1rem;
-  padding: 0.5rem;
-  box-sizing: border-box;
   border-radius: 8px;
 }
 
@@ -882,7 +691,6 @@ a:hover, a:focus-visible {
   gap: 0.75rem;
   align-items: center;
   height: 36px;
-  padding-bottom: 0.5rem;
   padding-top: 1rem;
   margin-bottom: 0.5rem;
 }
@@ -891,42 +699,31 @@ a:hover, a:focus-visible {
   animation: reply-flash 1.2s ease; 
 }
 
-
 .tagged-username {
   color: var(--LINK-COLOR);
   font-weight: bold;
-  background: var(--FORUM-BGCOLOR);
-  border-radius: 4px;
-  padding: 0 2px;
-  cursor: pointer;
 }
+
 .tagged-username:hover {
-  text-decoration: underline;
   background: var(--LINK-HOVER);
-  color: #fff;
 }
 
 .tag-dropdown {
-  position: absolute;
-  left: 0;
-  top: 2.5em;
-  background: var(--BGCOLOR);
+  position: relative;
   border: 1px solid var(--BORDER-COLOR);
   border-radius: 8px;
-  z-index: 1000;
-  list-style: none;
   max-height: 150px;
   overflow-y: auto;
   width: 220px;
-  box-shadow: 0 4px 12px var(--BOX-SHADOW-ALT);
 }
 
 .tag-dropdown-item {
-  padding: 0.5em;
+  padding: 0.3em;
   cursor: pointer;
   color: var(--COLOR);
   background: var(--BGCOLOR);
   transition: background 0.2s;
+  border-radius: 8px;
 }
 
 .tag-dropdown-item.selected,
@@ -942,7 +739,6 @@ a:hover, a:focus-visible {
   color: var(--COLOR);
   text-align: center;
   text-decoration: underline;
-  border-radius: 12px 12px 0 0;
   font-size: 1.5rem;
 }
 
@@ -958,24 +754,18 @@ a:hover, a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-
-.all-notifications__item p {
   font-size: 14px;
 }
 
 .all-notifications__item:hover {
   background-color: var(--LINK-HOVER);
-  width: 100%;
   cursor: pointer;
 }
 
 .notification-read {
   background-color: #595959;
   color: var(--INACTIVE);
-  font-weight: normal;
   opacity: 0.7;
-  cursor: pointer;
 }
 
 .notification-badge {
@@ -984,9 +774,9 @@ a:hover, a:focus-visible {
   right: 2px;
   background: #dc3545;
   color: #fff;
+  padding: 2px;
   border-radius: 50%;
-  padding: 2px 7px;
-  font-size: 0.75rem;
+  font-size: 0.80rem;
   font-weight: bold;
   z-index: 2;
 }
@@ -994,27 +784,20 @@ a:hover, a:focus-visible {
 .all-notifications__content {
   display: flex;
   flex-direction: column;
-  align-items: center; 
   max-height: 60vh;
   overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
   padding: 1.2rem 0.5rem 0.5rem 0.5rem;
-  margin-bottom: 2rem;
   max-width: 600px;
   margin: 2rem auto;
   background: var(--CARD-BGCOLOR);
   border-radius: 12px;
   padding: 2rem 1.5rem 1.5rem 1.5rem;
   min-height: 200px;
-  width: 100%;
 }
 
 .all-notifications__item .delete-button {
   padding: 0.3rem 0.6rem;
   font-size: 0.95rem;
-  margin-left: 10px;
-  flex-shrink: 0;
 }
 
 .mark-all-read-btn {
@@ -1033,11 +816,7 @@ a:hover, a:focus-visible {
 .profile-activity-menu-button-dropdown {
   position: absolute;
   top: 80%;
-  left: 50%;
-  width: 50%;
-  min-width: 120px;
-  z-index: 2000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1;
 }
 
 .profile {
@@ -1052,38 +831,33 @@ a:hover, a:focus-visible {
   flex-direction: column;
   opacity: 0;
   max-height: 0;
-  transition: opacity 0.5s, max-height 0.5s;
-  pointer-events: none;
+  
 }
 
 .profile-buttons-transition.show {
   opacity: 1;
   max-height: none;
-  pointer-events: auto;
+  transform: translateY(-2px);
+  transition: opacity 3s, transform 3s;
 }
+
 .profile-btn {
   min-width: 90px;
   max-width: 140px;
-  text-align: center;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
 }
 
 .change-password-btn {
  margin-bottom: 8px;
- width: 13rem;
+ width: 13.5rem;
+ position: relative;
 }
 
-
 .activity-counter-badge {
-  padding: 1px;
-  font-weight: bold;
-  color: #fff;
+  padding: 2px 8px;
+  margin-left: 5px;
   background: var(--LINK-HOVER);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  text-align: center;
+  border-radius: 4px;
+  font-size: 0.95rem;
 }
 
 @keyframes reply-flash {
@@ -1098,86 +872,16 @@ a:hover, a:focus-visible {
 }
 
 @media screen and (max-width: 400px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  .dash-header__nav {
-    gap: 0;
-  }
-
   .icon-button {
     font-size: 1.5rem;
   }
 
-  .profile .table-scroll-wrapper .table__cell {
-    padding: 0.5rem;
-    font-size: 0.9em;
-  }
-
-  .forum-post {
-    padding: 20px;
-  }
-    
   .forum-post__header h1 {
     font-size: 2.2rem;
   }
-    
-  .forum-post__content {
-    font-size: 1.3rem;
-  }
-
-  .edit-reply-form .edit-reply-buttons,
-  .reply-header > div {
-    flex-direction: column;
-    gap: 0.2rem;
-    align-items: stretch;
-  }
 }
 
-/* Medium screens - tablets and small laptops */
 @media screen and (min-width: 768px) and (max-width: 1000px) {
-  body {
-    font-size: 1.1rem;
-  }
-
-  .dash-header {
-    padding: 0 0.75em;
-  }
-
-  .dash-container {
-    padding: 0.75em;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
-
-  .table {
-    font-size: 1rem;
-  }
-
-  .forum-post {
-    max-width: 90%;
-    margin: 30px auto;
-    padding: 25px;
-  }
-
-  .forum-post__header h1 {
-    font-size: 1.6rem;
-  }
-
-  .forum-post__content {
-    font-size: 1.1rem;
-  }
-
-  .notification-dropdown {
-    width: 300px;
-    font-size: 15px;
-  }
-
-  .form__input {
-    font-size: 1.1rem;
-  }
-  
   .reply {
     padding: 15px;
   }
@@ -1188,32 +892,8 @@ a:hover, a:focus-visible {
     font-size: 1.25rem;
   }
 
-  .dash-header {
-    padding: 0 1em;
-  }
-
-
-  .dash-container {
-    padding: 1em;
-    width: 100%;
-    overflow-y: auto;
-  }
-
   .table {
     font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 700px) {
-  .form, .forum-post, .reply, .card {
-    padding: 1rem;
-  }
-  .dash-header, .dash-footer, .public__header {
-    padding: 0.5rem 1rem;
-  }
-  .table th, .table td {
-    padding: 0.5rem;
-    font-size: 0.95em;
   }
 }
 
@@ -1223,6 +903,16 @@ a:hover, a:focus-visible {
   }
 
   .table th:nth-child(4), .table td:nth-child(4){
+    display: none;
+  }
+
+  .edit-reply__cancel {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 550px) {
+  .cancel-button {
     display: none;
   }
 }
