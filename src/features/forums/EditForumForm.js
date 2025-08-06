@@ -4,21 +4,9 @@ import {
   useDeleteForumMutation,
 } from "./forumsApiSlice";
 import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
 
 const getInputClass = (value) => (value ? "" : "form__input--incomplete");
-
-const ActionButton = ({ onClick, disabled, title, icon, className }) => (
-  <button
-    className={`button${className ? " " + className : ""}`}
-    title={title}
-    onClick={onClick}
-    disabled={disabled}>
-    {title} <FontAwesomeIcon icon={icon} />
-  </button>
-);
 
 /**
  * Form component for editing an existing forum.
@@ -136,19 +124,26 @@ const EditForumForm = ({ forum }) => {
                 style={{ display: "flex", flexDirection: "row", gap: "0.5em" }}>
                 {!showDeleteConfirm && (
                   <>
-                    <ActionButton
+                    <button
+                      type="submit"
+                      className="button"
                       onClick={onSaveForumClicked}
                       disabled={!canSave}
                       title="Save"
-                    />
-                    <ActionButton
-                      onClick={() => setShowDeleteConfirm(true)}
-                      title="Delete"
-                      className="delete-button"
-                    />
+                    >
+                    Save 
+                    </button>
                     <button
                       type="button"
                       className="button delete-button"
+                      onClick={() => setShowDeleteConfirm(true)}
+                      title="Delete"
+                    >
+                      Delete
+                    </button>
+                    <button
+                      type="button"
+                      className="button delete-button cancel-button"
                       onClick={() => navigate(-1)}>
                       Cancel
                     </button>
@@ -160,16 +155,21 @@ const EditForumForm = ({ forum }) => {
                   <span className="confirm-delete__text">
                     Are you sure?
                   </span>
-                  <ActionButton
+                  <button
                     onClick={onDeleteForumClicked}
                     title="Yes, Delete"
-                    icon={faTrashCan}
-                    className="delete-button"
-                  />
-                  <ActionButton
+                    className="button delete-button"
+                  >
+                  Yes, Delete
+                  </button>
+                  <button
+                    type="button"
+                    className="button"
                     onClick={() => setShowDeleteConfirm(false)}
                     title="Cancel"
-                  />
+                  >
+                  Cancel
+                  </button>
                 </div>
               )}
             </>
