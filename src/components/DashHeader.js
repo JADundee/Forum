@@ -303,9 +303,7 @@ const DashHeader = () => {
 
       <header className="dash-header">
         <div
-          className={`dash-header__container ${
-            isDash ? "" : "dash-header__container--small"
-          }`}>
+          className="dash-header__container">
           {/* Branding: Forum title, links to dashboard if not on main dash */}
           {isDash ? (
             <h1 className="dash-header__title dash-header__title--disabled">
