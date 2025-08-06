@@ -1,32 +1,24 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 /**
  * Header component for public-facing pages.
  * Displays the Forum title and handles navigation to the login page.
  */
 const PublicHeader = () => {
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const isLoginPage = pathname === "/";
 
   // Render the header with title and navigation
   return (
-    <header className="public__header">
+    <header className="dash-header">
       {isLoginPage ? (
-        <h1 className="public__header-link public__header-link--disabled">
+        <h1 className="dash-header__title  dash-header__title--disabled">
           Forum
         </h1>
       ) : (
-        <span
-          className="public__header-link"
-          onClick={() => navigate("/")}
-          tabIndex={0}
-          role="button"
-          onKeyPress={(e) => {
-            if (e.key === "Enter") navigate("/");
-          }}>
-          Forum
-        </span>
+        <Link to="/">
+         <h1 className="dash-header__title">Forum</h1>
+        </Link>
       )}
     </header>
   );
