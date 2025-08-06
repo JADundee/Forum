@@ -74,7 +74,7 @@ const ForumsList = () => {
           <button
             className="button"
             onClick={() => setShowMine((m) => !m)}>
-            {showMine ? "Show All Forums" : "Show My Forums"}
+            {showMine ? "All Forums" : "My Forums"}
           </button>
         </div>
         <div className="table-scroll-wrapper">
