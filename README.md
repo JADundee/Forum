@@ -5,6 +5,5 @@
 ## Email: jadundee@icloud.com
 
 # TODO
-## audit css
 ## add auto complete to input elements 
 ## prep for deployment
