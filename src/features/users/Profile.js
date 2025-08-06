@@ -385,7 +385,7 @@ const Profile = () => {
                 </p>
                 <div>
                   <button
-                    className="delete-button form__action-buttons"
+                    className="button delete-button form__action-buttons"
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}>
                     {isDeleting ? "Deleting..." : "Yes, Delete My Account"}
