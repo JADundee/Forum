@@ -219,7 +219,7 @@ const Profile = () => {
             className={`profile-buttons-transition${
               showActivity && !selectedActivity ? " show" : ""
             }`}
-            aria-hidden={!showActivity || !!selectedActivity}>
+          >
             {activities.map((act) => (
               <button
                 key={act.key}

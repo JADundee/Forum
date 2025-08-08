@@ -117,6 +117,7 @@ const Public = () => {
             onChange={handlePwdInput}
             value={password}
             placeholder="Enter your password"
+            autoComplete="current-password"
             required
           />
 
