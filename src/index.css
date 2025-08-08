@@ -195,8 +195,9 @@ a:hover, a:focus-visible {
   justify-content: center;
   align-items: center;
   text-wrap: nowrap;
-  width: 220px;
 }
+
+
 
 .button:hover {
   background: var(--BUTTON-GRADIENT-HOVER);
@@ -291,6 +292,29 @@ a:hover, a:focus-visible {
   gap: 0.5em;
 }
 
+.dash-container {
+  flex-grow: 1;
+  padding: 25px;
+  align-items: center;
+}
+
+.dash-container .button {
+  width: 220px;
+}
+
+.dash-footer {
+  background: var(--CARD-BGCOLOR);
+  border-top: 2px solid var(--BORDER-COLOR);
+  padding: 0.5rem 1rem;
+  border-radius: var(--RADIUS) var(--RADIUS) 0 0;
+  font-size: 1rem;
+  position: sticky;
+  z-index: 10;
+  bottom: 0;
+}
+
+/* || NOTIFICATIONS DROPDOWN */
+
 .notification-counter {
   background: var(--LINK-COLOR);
   border-radius: 12px;
@@ -340,21 +364,8 @@ a:hover, a:focus-visible {
   cursor: pointer;
 }
 
-.dash-container {
-  flex-grow: 1;
-  padding: 25px;
-  align-items: center;
-}
-
-.dash-footer {
-  background: var(--CARD-BGCOLOR);
-  border-top: 2px solid var(--BORDER-COLOR);
-  padding: 0.5rem 1rem;
-  border-radius: var(--RADIUS) var(--RADIUS) 0 0;
-  font-size: 1rem;
-  position: sticky;
-  z-index: 10;
-  bottom: 0;
+.notification-dropdown .button {
+  width: 220px;
 }
 
 /* || TABLES - GENERAL */
