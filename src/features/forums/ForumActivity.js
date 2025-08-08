@@ -92,8 +92,6 @@ const ForumActivity = ({ username, show }) => {
             )}
             sortConfig={sortConfig}
             onSort={handleSort}
-            tableClassName="table"
-            theadClassName="table__thead"
           />
       )}
     </>

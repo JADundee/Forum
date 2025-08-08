@@ -114,8 +114,6 @@ const ReplyActivity = ({ userId, show }) => {
             }}
             sortConfig={sortConfig}
             onSort={handleSort}
-            tableClassName="table"
-            theadClassName="table__thead"
           />
       )}
     </>

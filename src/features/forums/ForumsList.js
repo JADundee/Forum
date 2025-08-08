@@ -77,7 +77,6 @@ const ForumsList = () => {
             {showMine ? "All Forums" : "My Forums"}
           </button>
         </div>
-        <div className="table-scroll-wrapper">
           <DataTable
             columns={columns}
             data={filteredIds}
@@ -85,9 +84,7 @@ const ForumsList = () => {
             renderRow={renderRow}
             sortConfig={sortConfig}
             onSort={handleSort}
-            tableClassName="table"
           />
-        </div>
       </>
     );
   }
