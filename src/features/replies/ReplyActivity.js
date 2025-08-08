@@ -71,7 +71,6 @@ const ReplyActivity = ({ userId, show }) => {
       {repliesLoading && <p>Loading...</p>}
       {repliesError && <p className="errmsg">{repliesError}</p>}
       {!repliesLoading && !repliesError && (
-        <div className="table-scroll-wrapper">
           <DataTable
             columns={repliesColumns}
             /**
@@ -118,7 +117,6 @@ const ReplyActivity = ({ userId, show }) => {
             tableClassName="table"
             theadClassName="table__thead"
           />
-        </div>
       )}
     </>
   );

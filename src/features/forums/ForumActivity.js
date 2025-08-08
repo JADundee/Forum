@@ -83,7 +83,6 @@ const ForumActivity = ({ username, show }) => {
         </p>
       )}
       {forumsSuccess && forumsData && (
-        <div className="table-scroll-wrapper">
           <DataTable
             columns={forumsColumns}
             data={sortedAndFilteredForumIds}
@@ -96,7 +95,6 @@ const ForumActivity = ({ username, show }) => {
             tableClassName="table"
             theadClassName="table__thead"
           />
-        </div>
       )}
     </>
   );
