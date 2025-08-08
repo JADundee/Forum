@@ -271,7 +271,7 @@ const Profile = () => {
           {!showActivity && (
             <div>
               <button
-                className="button change-password-btn"
+                className="button"
                 onClick={handleShowChangePwdToggle}>
                 {showChangePwd ? "Cancel" : "Change Password"}
               </button>
