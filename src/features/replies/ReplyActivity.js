@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useSort from "../../hooks/useSort";
 import filterAndSort from "../../hooks/useSearch";
-import MenuButton from "../../components/MenuButton";
 import {
   useGetRepliesByUserQuery,
   useDeleteReplyMutation,
@@ -22,6 +21,8 @@ const ReplyActivity = ({ userId, show }) => {
   const { sortConfig, handleSort } = useSort("createdAt", "desc");
   const navigate = useNavigate();
   const [deleteReply] = useDeleteReplyMutation();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [replyToDelete, setReplyToDelete] = useState(null);
 
   const sortedAndFilteredReplies = filterAndSort.runRepliesById(
     userReplies?.ids || [],
@@ -40,13 +41,18 @@ const ReplyActivity = ({ userId, show }) => {
   if (!show) return null;
 
   const handleDelete = async (replyId) => {
-    /**
-     * ReplyActivity component
-     * @param {Object} props
-     * @param {Array} props.replies - Array of reply objects
-     */
-    await deleteReply({ replyId });
+    setReplyToDelete(replyId);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    await deleteReply({ replyId: replyToDelete });
     refetch();
+    setShowDeleteConfirm(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
   };
 
   const handleEdit = (reply) => {
@@ -71,50 +77,66 @@ const ReplyActivity = ({ userId, show }) => {
       {repliesLoading && <p>Loading...</p>}
       {repliesError && <p className="errmsg">{repliesError}</p>}
       {!repliesLoading && !repliesError && (
-          <DataTable
-            columns={repliesColumns}
-            /**
-             * Handles the deletion of a reply.
-             * @param {string} replyId - The ID of the reply to delete.
-             */
-            data={sortedAndFilteredReplies}
-            emptyMsg="No replies found"
-            renderRow={(replyId) => {
-              const reply = userReplies.entities[replyId];
-              return (
-                /**
-                 * Handles the editing of a reply.
-                 * @param {Object} reply - The reply object to edit.
-                 */
-                <tr
-                  key={reply._id}
-                  className="table__row"
-                  onClick={() =>
-                    navigate(`/dash/forums/${reply.forum._id}/expand`, {
-                      state: { replyId: reply._id },
-                    })
-                  }>
-                  <td className="table__cell">{reply.forumTitle}</td>
-                  <td className="table__cell">{reply.text}</td>
-                  <td className="table__cell">
-                    {moment(reply.createdAt).format("MMMM D, YYYY h:mm A")}
-                  </td>
-                  <td
-                    className="table__cell"
-                    style={{ position: "relative" }}
-                    onClick={(e) => e.stopPropagation()}>
-                    <MenuButton
-                      onEdit={() => handleEdit(reply)}
-                      onDelete={() => handleDelete(reply._id)}
-                      variant="profile-activity-menu-button"
-                    />
-                  </td>
-                </tr>
-              );
-            }}
-            sortConfig={sortConfig}
-            onSort={handleSort}
-          />
+        <DataTable
+          columns={repliesColumns}
+          /* Handles the deletion of a reply */
+          data={sortedAndFilteredReplies}
+          emptyMsg="No replies found"
+          renderRow={(replyId) => {
+            const reply = userReplies.entities[replyId];
+            return (
+              /* Handles the editing of a reply. */
+              <tr
+                key={reply._id}
+                className="table__row"
+                onClick={() =>
+                  navigate(`/dash/forums/${reply.forum._id}/expand`, {
+                    state: { replyId: reply._id },
+                  })
+                }>
+                <td className="table__cell">{reply.forumTitle}</td>
+                <td className="table__cell">{reply.text}</td>
+                <td className="table__cell">
+                  {moment(reply.createdAt).format("MMMM D, YYYY h:mm A")}
+                </td>
+                <td
+                  className="table__cell"
+                  onClick={(e) => e.stopPropagation()}>
+                  <button
+                    className="button profile-activity-menu-button"
+                    onClick={() => handleEdit(reply)}>
+                    Edit
+                  </button>
+                  <button
+                    className="button delete-button profile-activity-menu-button"
+                    onClick={() => {
+                      handleDelete(reply._id);
+                    }}>
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            );
+          }}
+          sortConfig={sortConfig}
+          onSort={handleSort}
+        />
+      )}
+      {showDeleteConfirm && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h2>Confirm Delete</h2>
+            <p>Are you sure you want to delete this reply?</p>
+            <button
+              className="button delete-button"
+              onClick={handleConfirmDelete}>
+              Yes, delete
+            </button>
+            <button className="button" onClick={handleCancelDelete}>
+              Cancel
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
