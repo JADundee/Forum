@@ -6,4 +6,5 @@
 
 # TODO
 ## add auto complete to input elements 
+## Various CSS fixes
 ## prep for deployment
