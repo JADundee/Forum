@@ -99,8 +99,9 @@
 .nowrap { white-space: nowrap; }
 .username { color: var(--LINK-COLOR); }
 .menu-button-container {
-  position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .offscreen {
@@ -298,10 +299,6 @@ a:hover, a:focus-visible {
   align-items: center;
 }
 
-.dash-container .button {
-  width: 220px;
-}
-
 .dash-footer {
   background: var(--CARD-BGCOLOR);
   border-top: 2px solid var(--BORDER-COLOR);
@@ -401,21 +398,16 @@ a:hover, a:focus-visible {
 .table th {
   font-weight: 700;
   letter-spacing: 0.03em;
+  min-width: 5em;
   position: sticky;
   z-index: 2;
+  cursor: pointer;
 }
 
 .table__row:hover .table__cell, .table tr:hover td {
   background: var(--TABLE-ROW-HOVER);
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.5)
-}
-
-.table__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
 }
 
 .header-text {
@@ -833,15 +825,20 @@ a:hover, a:focus-visible {
 /* || PROFILE PAGE */
 
 .profile-activity-menu-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+ position: relative;
+  overflow: visible ;
+
 }
 
 .profile-activity-menu-button-dropdown {
-  position: absolute;
-  top: 0;
-  z-index: 1;
+ position: absolute;
+ display: none;
+
+}
+
+.profile-activity-menu-button-dropdown.show {
+ display:block;
+ 
 }
 
 .profile {
@@ -856,6 +853,7 @@ a:hover, a:focus-visible {
   flex-direction: column;
   opacity: 0;
   max-height: 0;
+  
 }
 
 .profile-buttons-transition.show {
@@ -865,10 +863,16 @@ a:hover, a:focus-visible {
   transition: opacity 3s, transform 3s;
 }
 
+
 .profile-btn {
   min-width: 90px;
   max-width: 140px;
 }
+
+.profile button{
+  width: 220px;
+}
+
 
 .activity-counter-badge {
   padding: 2px 8px;
@@ -876,6 +880,26 @@ a:hover, a:focus-visible {
   background: var(--LINK-HOVER);
   border-radius: 4px;
   font-size: 0.95rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: var(--CARD-BGCOLOR);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  width: 300px;
 }
 
 @keyframes reply-flash {
