@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetForumsQuery, useDeleteForumMutation } from "./forumsApiSlice";
 import { memo, useState } from "react";
 import moment from "moment";
+import Modal from "../../components/Modal";
 /**
  * Table row component for a single forum.
  * Handles navigation, edit, and delete actions.
@@ -66,20 +67,14 @@ const Forum = ({ forumId, showSettingsMenu }) => {
           </td>
         )}
         {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Confirm Delete</h2>
-            <p>Are you sure you want to delete this reply?</p>
-            <button
-              className="button delete-button"
-              onClick={handleConfirmDelete}>
-              Yes, delete
-            </button>
-            <button className="button" onClick={handleCancelDelete}>
-              Cancel
-            </button>
-          </div>
-        </div>
+         <Modal
+          isOpen={showDeleteConfirm}
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          message="Are you sure you want to delete this reply?"
+          confirmText="Yes, delete"
+          cancelText="Cancel"
+        />
       )}
       </tr>
       

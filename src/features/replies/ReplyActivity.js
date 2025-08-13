@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useSort from "../../hooks/useSort";
 import filterAndSort from "../../hooks/useSearch";
+import Modal from "../../components/Modal";
 import {
   useGetRepliesByUserQuery,
   useDeleteReplyMutation,
@@ -123,20 +124,14 @@ const ReplyActivity = ({ userId, show }) => {
         />
       )}
       {showDeleteConfirm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>Confirm Delete</h2>
-            <p>Are you sure you want to delete this reply?</p>
-            <button
-              className="button delete-button"
-              onClick={handleConfirmDelete}>
-              Yes, delete
-            </button>
-            <button className="button" onClick={handleCancelDelete}>
-              Cancel
-            </button>
-          </div>
-        </div>
+        <Modal
+          isOpen={showDeleteConfirm}
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          message="Are you sure you want to delete this reply?"
+          confirmText="Yes, delete"
+          cancelText="Cancel"
+        />
       )}
     </>
   );
