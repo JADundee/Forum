@@ -421,7 +421,14 @@ a:hover, a:focus-visible {
   overflow-wrap: break-word;
   word-break: break-word;
   white-space: normal;
-  max-width: 300px;
+  max-width: 250px;
+}
+
+.table__cell button {
+  width: 100%;
+  max-width: 80px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .search-filter {
@@ -570,7 +577,7 @@ a:hover, a:focus-visible {
 .form__action-buttons {
   display: flex;
   gap: 1rem;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .confirm-delete {
@@ -586,6 +593,11 @@ a:hover, a:focus-visible {
   color: var(--ERROR);
   font-weight: bold;
   text-align: center;
+}
+
+.form__action-buttons .button {
+  width: 100%;
+  max-width: 150px;
 }
 
 /* || EXPANDED FORUM */
@@ -682,6 +694,12 @@ a:hover, a:focus-visible {
 .reply-dropdown.show {
   opacity: 1;
   transform: translateY(0);
+}
+
+.reply button {
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
 }
 
 .reply-dropdown .button {
@@ -853,7 +871,6 @@ a:hover, a:focus-visible {
   flex-direction: column;
   opacity: 0;
   max-height: 0;
-  
 }
 
 .profile-buttons-transition.show {
@@ -892,6 +909,7 @@ a:hover, a:focus-visible {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 3000;
 }
 
 .modal {
@@ -899,7 +917,7 @@ a:hover, a:focus-visible {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 300px;
+  max-width: 500px;
 }
 
 @keyframes reply-flash {
@@ -948,18 +966,27 @@ a:hover, a:focus-visible {
     display: none;
   }
 
-  .table th:nth-child(4), .table td:nth-child(4){
+  .table th:nth-child(3), .table td:nth-child(3){
     display: none;
   }
 
   .edit-reply__cancel {
     display: none;
   }
+
+  .table__forum th:nth-child(4), .table__forum td:nth-child(4) {
+    display: none;
+  }
+  
 }
 
 @media screen and (max-width: 550px) {
   .cancel-button {
     display: none;
+  }
+
+  .modal {
+    max-width: 300px;
   }
 }
 

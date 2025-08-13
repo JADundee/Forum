@@ -47,8 +47,8 @@ const Forum = ({ forumId, showSettingsMenu }) => {
       <tr className="table__row" onClick={showDeleteConfirm ? (e) => e.preventDefault() : handleRowClick}>
         <td className="table__cell">{forum.title}</td>
         <td className="table__cell">{forum.username}</td>
-        <td className="table__cell">{created}</td>
-        <td className="table__cell">{updated}</td>
+        <td className="table__cell table__created">{created}</td>
+        <td className="table__cell table__updated">{updated}</td>
         {showSettingsMenu && (
           <td
             className="table__cell"

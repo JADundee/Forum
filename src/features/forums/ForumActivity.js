@@ -83,6 +83,7 @@ const ForumActivity = ({ username, show }) => {
         </p>
       )}
       {forumsSuccess && forumsData && (
+        <div className="table__forum">
           <DataTable
             columns={forumsColumns}
             data={sortedAndFilteredForumIds}
@@ -93,6 +94,7 @@ const ForumActivity = ({ username, show }) => {
             sortConfig={sortConfig}
             onSort={handleSort}
           />
+        </div>
       )}
     </>
   );
