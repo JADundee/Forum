@@ -1,38 +1,41 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DataTable from "../../components/DataTable";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import useSort from "../../hooks/useSort";
 import filterAndSort from "../../hooks/useSearch";
 import Modal from "../../components/Modal";
+import MenuButton from "../../components/MenuButton";
 import {
   useGetRepliesByUserQuery,
   useDeleteReplyMutation,
 } from "../forums/forumsApiSlice";
 
 const ReplyActivity = ({ userId, show }) => {
+  // Fetch replies for a specific user
   const {
     data: userReplies = { ids: [], entities: {} },
-    isLoading: repliesLoading,
-    isError: repliesError,
+    isLoading,
+    isError,
     refetch,
   } = useGetRepliesByUserQuery(userId, { skip: !userId });
 
-  const [search, setSearch] = useState("");
-  const { sortConfig, handleSort } = useSort("createdAt", "desc");
+  const [search, setSearch] = useState(""); // Search query string
+  const { sortConfig, handleSort } = useSort("createdAt", "desc"); // Sorting state
   const navigate = useNavigate();
+  const modalRef = useRef(); // Ref for modal control
   const [deleteReply] = useDeleteReplyMutation();
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [replyToDelete, setReplyToDelete] = useState(null);
 
+  // Apply search & sort to replies list
   const sortedAndFilteredReplies = filterAndSort.runRepliesById(
-    userReplies?.ids || [],
-    userReplies?.entities || {},
+    userReplies.ids || [],
+    userReplies.entities || {},
     search,
     sortConfig
   );
 
-  const repliesColumns = [
+  // Table column definitions
+  const columns = [
     { key: "forumTitle", label: "Forum Title", sortable: true },
     { key: "text", label: "Reply", sortable: true },
     { key: "createdAt", label: "Date", sortable: true },
@@ -41,21 +44,7 @@ const ReplyActivity = ({ userId, show }) => {
 
   if (!show) return null;
 
-  const handleDelete = async (replyId) => {
-    setReplyToDelete(replyId);
-    setShowDeleteConfirm(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    await deleteReply({ replyId: replyToDelete });
-    refetch();
-    setShowDeleteConfirm(false);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteConfirm(false);
-  };
-
+  // Navigate to forum/reply edit mode
   const handleEdit = (reply) => {
     navigate(`/dash/forums/${reply.forum._id}/expand`, {
       state: { replyId: reply._id, editReply: true },
@@ -67,6 +56,8 @@ const ReplyActivity = ({ userId, show }) => {
       <div className="all-notifications__header">
         <h1>My Replies</h1>
       </div>
+
+      {/* Search bar */}
       <div className="search-filter">
         <input
           type="text"
@@ -75,18 +66,20 @@ const ReplyActivity = ({ userId, show }) => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
-      {repliesLoading && <p>Loading...</p>}
-      {repliesError && <p className="errmsg">{repliesError}</p>}
-      {!repliesLoading && !repliesError && (
+
+      {/* Loading & error states */}
+      {isLoading && <p>Loading...</p>}
+      {isError && <p className="errmsg">{isError}</p>}
+
+      {/* Replies table */}
+      {!isLoading && !isError && (
         <DataTable
-          columns={repliesColumns}
-          /* Handles the deletion of a reply */
+          columns={columns}
           data={sortedAndFilteredReplies}
           emptyMsg="No replies found"
           renderRow={(replyId) => {
             const reply = userReplies.entities[replyId];
             return (
-              /* Handles the editing of a reply. */
               <tr
                 key={reply._id}
                 className="table__row"
@@ -100,21 +93,15 @@ const ReplyActivity = ({ userId, show }) => {
                 <td className="table__cell">
                   {moment(reply.createdAt).format("MMMM D, YYYY h:mm A")}
                 </td>
+
+                {/* Stop click from triggering row navigation for menu buttons */}
                 <td
                   className="table__cell"
                   onClick={(e) => e.stopPropagation()}>
-                  <button
-                    className="button profile-activity-menu-button"
-                    onClick={() => handleEdit(reply)}>
-                    Edit
-                  </button>
-                  <button
-                    className="button delete-button profile-activity-menu-button"
-                    onClick={() => {
-                      handleDelete(reply._id);
-                    }}>
-                    Delete
-                  </button>
+                  <MenuButton
+                    onEdit={() => handleEdit(reply)}
+                    onDeleteClick={() => modalRef.current.open(reply._id)}
+                  />
                 </td>
               </tr>
             );
@@ -123,16 +110,14 @@ const ReplyActivity = ({ userId, show }) => {
           onSort={handleSort}
         />
       )}
-      {showDeleteConfirm && (
-        <Modal
-          isOpen={showDeleteConfirm}
-          onCancel={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          message="Are you sure you want to delete this reply?"
-          confirmText="Yes, delete"
-          cancelText="Cancel"
-        />
-      )}
+
+      {/* Shared delete confirmation modal for all replies */}
+      <Modal
+        ref={modalRef}
+        message="Are you sure you want to delete this reply?"
+        deleteAction={(id) => deleteReply({ replyId: id })}
+        afterDelete={refetch}
+      />
     </>
   );
 };

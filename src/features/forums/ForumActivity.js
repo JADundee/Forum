@@ -1,101 +1,66 @@
-import { useState } from "react";
-import { useGetForumsQuery } from "./forumsApiSlice";
+import { useRef} from "react";
 import DataTable from "../../components/DataTable";
+import { useGetForumsQuery, useDeleteForumMutation } from "./forumsApiSlice";
 import Forum from "./Forum";
-import useSort from "../../hooks/useSort";
-import filterAndSort from "../../hooks/useSearch";
+import Modal from "../../components/Modal";
+import MenuButton from "../../components/MenuButton";
+import { useNavigate } from "react-router-dom";
 
-/**
- * Component to display a user's forum activity.
- * Handles searching, sorting, and rendering forums owned by the user.
- */
-const ForumActivity = ({ username, show }) => {
+const ForumActivity = () => {
+   // Fetch all forums data
   const {
-    data: forumsData,
-    isLoading: forumsLoading,
-    isError: forumsError,
-    error: forumsErrorObj,
-    isSuccess: forumsSuccess,
-  } = useGetForumsQuery("forumsList", {
-    pollingInterval: 15000,
-    refetchOnFocus: true,
-    refetchOnMountOrArgChange: true,
-  });
+    data: forums = { ids: [], entities: {} },
+    isLoading,
+    isError,
+    refetch,
+  } = useGetForumsQuery("forumsList");
 
-  const [forumsSearch, setForumsSearch] = useState("");
-  const { sortConfig, handleSort } = useSort("updatedAt", "desc");
+  const modalRef = useRef(); // Ref to control the confirmation modal
+  const [deleteForum] = useDeleteForumMutation(); // Mutation hook for deleting a forum
+  const navigate = useNavigate();
 
-  let sortedAndFilteredForumIds = [];
-  if (forumsSuccess && forumsData) {
-    sortedAndFilteredForumIds = filterAndSort.run(
-      forumsData.ids,
-      forumsData.entities,
-      forumsSearch,
-      sortConfig,
-      username
-    );
-  }
+  const handleEditForum = (forumId) => {
+    navigate(`/dash/forums/${forumId}/edit`);
+  };
 
-  const forumsColumns = [
-    { key: "title", label: "Title", className: "table__title", sortable: true },
-    {
-      key: "username",
-      label: "Owner",
-      className: "table__username",
-      sortable: true,
-    },
-    {
-      key: "createdAt",
-      label: "Created",
-      className: "forum__created",
-      sortable: true,
-    },
-    {
-      key: "updatedAt",
-      label: "Updated",
-      className: "forum__updated",
-      sortable: true,
-    },
+  // Table column definitions
+  const columns = [
+    { key: "title", label: "Title", sortable: true },
+    { key: "username", label: "Username", sortable: true },
+    { key: "createdAt", label: "Created", sortable: true },
+    { key: "updatedAt", label: "Updated", sortable: true },
     { key: "settings", label: "Settings" },
   ];
 
-  // Don't render if not shown
-  if (!show) return null;
-
-  // Render forum activity content
   return (
     <>
-      <div className="all-notifications__header">
-        <h1>My Forums</h1>
-      </div>
-      <div className="search-filter">
-        <input
-          type="text"
-          placeholder="Search by title or owner..."
-          value={forumsSearch}
-          onChange={(e) => setForumsSearch(e.target.value)}
+      <h1>Forums</h1>
+
+      {isLoading && <p>Loading...</p>}
+      {isError && <p className="errmsg">Error loading forums</p>}
+
+      {!isLoading && !isError && (
+        <DataTable
+          columns={columns}
+          data={forums.ids}
+          renderRow={(forumId) => (
+            <Forum key={forumId} forumId={forumId}>
+              <MenuButton
+                onEdit={() => handleEditForum(forumId)}
+                onDeleteClick={() => modalRef.current.open(forumId)}
+              />
+            </Forum>
+          )}
         />
-      </div>
-      {forumsLoading && <p>Loading...</p>}
-      {forumsError && (
-        <p className="errmsg">
-          {forumsErrorObj?.data?.message || "Error loading forums"}
-        </p>
       )}
-      {forumsSuccess && forumsData && (
-        <div className="table__forum">
-          <DataTable
-            columns={forumsColumns}
-            data={sortedAndFilteredForumIds}
-            emptyMsg="No forums found"
-            renderRow={(forumId) => (
-              <Forum key={forumId} forumId={forumId} showSettingsMenu />
-            )}
-            sortConfig={sortConfig}
-            onSort={handleSort}
-          />
-        </div>
-      )}
+
+      {/* Single reusable confirmation modal for deleting forums */}
+      <Modal
+        ref={modalRef}
+        message="Are you sure you want to delete this forum?"
+        deleteAction={(id) => deleteForum({ id })}
+        afterDelete={refetch}
+      />
     </>
   );
 };

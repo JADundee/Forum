@@ -181,7 +181,7 @@ const ForumExpand = () => {
       <section className="forum-post__replies">
         <h2>Replies</h2>
         <RepliesList
-          replies={replies}
+          replies={Array.isArray(replies) ? replies : replies?.replies || []}
           refetchReplies={refetch}
           highlightReplyId={highlightReplyId}
           editReplyId={editReplyId}

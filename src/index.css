@@ -99,9 +99,9 @@
 .nowrap { white-space: nowrap; }
 .username { color: var(--LINK-COLOR); }
 .menu-button-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  position: relative;
+  display: inline-block;
+  overflow: visible;
 }
 
 .offscreen {
@@ -244,6 +244,15 @@ a:hover, a:focus-visible {
   padding: 0.5rem;
   width: 44px;
   height: 44px;
+}
+
+.table__cell .menu-button {
+  width: 44px;       /* match original menu-button size */
+  max-width: none;   /* remove table__cell restriction */
+  padding: 0.5rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .username-text {
@@ -675,26 +684,57 @@ a:hover, a:focus-visible {
   border-radius: 10px; 
 }
 
-.reply-dropdown {
-  position: absolute;   
-  right: 0;        
-  min-width: 120px;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
-  background: var(--BGCOLOR);
-  border: 1px solid var(--BORDER-COLOR);
-  border-radius: 8px;
-  z-index: 9999;
+.reply-actions-popover {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--CARD-BGCOLOR);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  overflow: hidden;
+  min-width: 160px;
   opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  transform: scale(0.95);
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+  z-index: 9999;
 }
 
-.reply-dropdown.show {
+.reply-actions-popover.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: scale(1);
+  pointer-events: auto;
 }
+
+.reply-actions-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  color: var(--COLOR);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.reply-actions-item:hover {
+  background: var(--TABLE-ROW-HOVER);
+}
+
+.reply-actions-item svg {
+  font-size: 1.2rem;
+  color: var(--LINK-COLOR);
+}
+
+.reply-actions-item.delete {
+  color: var(--DELETE-BUTTON-HOVER);
+}
+
+.reply-actions-item.delete svg {
+  color: var(--DELETE-BUTTON-HOVER);
+}
+
 
 .reply button {
   font-size: 1.2rem;
@@ -899,25 +939,121 @@ a:hover, a:focus-visible {
   font-size: 0.95rem;
 }
 
+.action-buttons {
+  pointer-events: none;
+  position: relative;
+}
+
+.action-buttons .menu-button {
+  width: 44px;
+  max-width: none;
+  padding: 0.5rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  pointer-events: auto;
+  
+}
+
+.reply-actions-popover
+
+.table__row .action-buttons {
+  text-align: center;
+}
+
+/* MODAL */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 3000;
+  animation: fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal {
   background-color: var(--CARD-BGCOLOR);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  max-width: 420px;
+  width: 90%;
+  transform: scale(0.95);
+  opacity: 0;
+  animation: popIn 0.25s ease forwards;
+}
+
+@keyframes popIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.modal-header svg {
+  font-size: 1.5rem;
+  color: var(--DELETE-BUTTON-HOVER);
+}
+
+.modal p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Action buttons */
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-actions .confirm-btn {
+  background: var(--DELETE-BUTTON-GRADIENT);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--RADIUS);
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  flex: 1;
+}
+
+.modal-actions .confirm-btn:hover {
+  background: var(--DELETE-BUTTON-GRADIENT-HOVER);
+}
+
+.modal-actions .cancel-btn {
+  border: 2px solid var(--BORDER-COLOR);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--RADIUS);
+  font-weight: 600;
+  cursor: pointer;
+  flex: 1;
+}
+
+.modal-actions .cancel-btn:hover {
+  background: var(--TABLE-ROW-HOVER);
 }
 
 @keyframes reply-flash {
@@ -971,10 +1107,6 @@ a:hover, a:focus-visible {
   }
 
   .edit-reply__cancel {
-    display: none;
-  }
-
-  .table__forum th:nth-child(4), .table__forum td:nth-child(4) {
     display: none;
   }
   
