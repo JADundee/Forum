@@ -53,12 +53,12 @@ const ReplyActivity = ({ userId, show }) => {
 
   return (
     <>
-      <div className="all-notifications__header">
+      <div className="notifications-page__header">
         <h1>My Replies</h1>
       </div>
 
       {/* Search bar */}
-      <div className="search-filter">
+      <div className="table__search-filter">
         <input
           type="text"
           placeholder="Search by forum title or reply text..."
@@ -69,7 +69,7 @@ const ReplyActivity = ({ userId, show }) => {
 
       {/* Loading & error states */}
       {isLoading && <p>Loading...</p>}
-      {isError && <p className="errmsg">{isError}</p>}
+      {isError && <p className="error-message">{isError}</p>}
 
       {/* Replies table */}
       {!isLoading && !isError && (

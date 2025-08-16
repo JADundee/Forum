@@ -132,7 +132,7 @@ const Register = () => {
             onChange={onInputChange}
           />
 
-          <div className="form__action-buttons">
+          <div className="form__actions">
             <button className="button" title="Save" disabled={!canSave}>
               Create Account
             </button>

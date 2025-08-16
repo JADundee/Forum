@@ -10,9 +10,9 @@ const PublicHeader = () => {
 
   // Render the header with title and navigation
   return (
-    <header className="dash-header">
+    <header className="dashboard-header">
       {isLoginPage ? (
-        <h1 className="dash-header__title  dash-header__title--disabled">
+        <h1 className="dash-header__title dash-header__title--disabled">
           Forum
         </h1>
       ) : (

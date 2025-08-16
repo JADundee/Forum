@@ -28,7 +28,7 @@ const UsersList = () => {
 
   // Show error message if fetching users failed
   if (isError) {
-    content = <p className="errmsg">{error?.data?.message}</p>;
+    content = <p className="error-message">{error?.data?.message}</p>;
   }
 
   // Render the users table if data fetch was successful

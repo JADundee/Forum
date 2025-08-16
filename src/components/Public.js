@@ -140,7 +140,7 @@ const Public = () => {
 
           {/* Forgot Password button, navigates to reset page */}
           <button
-            className="button delete-button"
+            className="button button--delete"
             type="button"
             onClick={onForgotPasswordClicked}>
             Forgot Password?
@@ -148,7 +148,7 @@ const Public = () => {
 
           {/* Registration prompt and button for new users */}
           <p>New to the Forum?</p>
-          <button className="button alt-button" onClick={onNewUserClicked}>
+          <button className="button button--alt" onClick={onNewUserClicked}>
             Register
           </button>
         </form>

@@ -37,7 +37,7 @@ const ForgotPassword = () => {
       <h2>Forgot Password</h2>
       <main className="login">
         {message && <p className="msgmsg">{message}</p>}
-        {error && <p className="errmsg">{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         {!message && (
           <form className="form" onSubmit={handleSubmit}>
             <label htmlFor="email">Enter your email address:</label>
@@ -49,7 +49,7 @@ const ForgotPassword = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <div className="form__action-buttons">
+            <div className="form__actions">
               <button className="button" type="submit" disabled={loading}>
                 {loading ? "Sending..." : "Send Reset Link"}
               </button>

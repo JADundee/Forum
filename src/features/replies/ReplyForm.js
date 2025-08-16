@@ -126,7 +126,7 @@ const ReplyForm = ({ forumId, refetchReplies, onReplySubmitted }) => {
                     {dropdownUsers.map((u, i) => (
                         <li
                             key={u}
-                            className={`tag-dropdown-item${i === dropdownIndex ? ' selected' : ''}`}
+                            className={`tag-dropdown__item${i === dropdownIndex ? ' selected' : ''}`}
                             onMouseDown={e => { e.preventDefault(); handleSelect(u); }}
                         >
                             @{u}

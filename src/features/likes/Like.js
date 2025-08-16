@@ -9,7 +9,7 @@ const LikeItem = ({ like, type, onClick }) => {
   if (type === "forum") {
     return (
       <div className="like-item-clickable" onClick={onClick}>
-        <p className="all-notifications__text">
+        <p className="notifications__text">
           You liked the forum: <span className="forum-title">{like.title}</span>
           {like.user?.username && (
             <span>
@@ -18,7 +18,7 @@ const LikeItem = ({ like, type, onClick }) => {
             </span>
           )}
         </p>
-        <p className="all-notifications__timestamp">
+        <p className="notifications__timestamp">
           <span className="timestamp">{moment(like.createdAt).fromNow()}</span>
         </p>
       </div>
@@ -31,7 +31,7 @@ const LikeItem = ({ like, type, onClick }) => {
         className="like-item-clickable"
         onClick={onClick}
       >
-        <p className="all-notifications__text">
+        <p className="notifications__text">
           You liked a reply: <span className="reply-text">"{like.text}"</span>
           {like.user?.username && (
             <span>
@@ -46,7 +46,7 @@ const LikeItem = ({ like, type, onClick }) => {
             </span>
           )}
         </p>
-        <p className="all-notifications__timestamp">
+        <p className="notifications__timestamp">
           <span className="timestamp">{moment(like.createdAt).fromNow()}</span>
         </p>
       </div>

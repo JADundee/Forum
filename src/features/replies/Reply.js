@@ -13,7 +13,7 @@ function highlightTags(text) {
   return text.split(/(@\w+)/g).map((part, i) => {
     if (/^@\w+$/.test(part)) {
       return (
-        <span key={i} className="tagged-username">
+        <span key={i} className="reply__tagged-username">
           {part}
         </span>
       );
@@ -100,7 +100,7 @@ const Reply = ({
       tabIndex={-1} // allows programmatic focus
     >
       {/* Header with username and edit/delete menu */}
-      <div className="reply-header">
+      <div className="reply__header">
         <span className="username">
           {username}
           <span className="username-text"> Replied:</span>
@@ -114,7 +114,7 @@ const Reply = ({
       </div>
 
       {/* Reply content — either edit form or text with tagged mentions */}
-      <div className="reply-content">
+      <div className="reply__content">
         {isEditing ? (
           <EditReplyForm
             initialText={reply.text}

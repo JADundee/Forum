@@ -37,7 +37,7 @@ const ForumActivity = () => {
       <h1>Forums</h1>
 
       {isLoading && <p>Loading...</p>}
-      {isError && <p className="errmsg">Error loading forums</p>}
+      {isError && <p className="error-message">Error loading forums</p>}
 
       {!isLoading && !isError && (
         <DataTable

@@ -131,7 +131,7 @@ const EditUserForm = ({ user }) => {
   let deleteButton = null;
   deleteButton = !showDeleteConfirm ? (
     <button
-      className="button delete-button"
+      className="button button--delete"
       title="Delete"
       onClick={() => setShowDeleteConfirm(true)}>
       Delete
@@ -142,7 +142,7 @@ const EditUserForm = ({ user }) => {
       <span className="confirm-delete__text">
         Are you sure?
       </span>
-      <button className="button delete-button" onClick={onDeleteUserClicked}>
+      <button className="button button--delete" onClick={onDeleteUserClicked}>
         Yes, Delete
       </button>
       <button className="button" onClick={() => setShowDeleteConfirm(false)}>
@@ -156,7 +156,7 @@ const EditUserForm = ({ user }) => {
   cancelButton = !showDeleteConfirm && (
     <button
       type="button"
-      className="button delete-button"
+      className="button button--delete"
       onClick={() => navigate(-1)}>
       Cancel
     </button>
@@ -214,7 +214,7 @@ const EditUserForm = ({ user }) => {
           {options}
         </select>
         {/* Action buttons: Save, Delete, Cancel */}
-        <div className="form__action-buttons">
+        <div className="form__actions">
           {saveButton}
           {deleteButton}
           {cancelButton}

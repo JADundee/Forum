@@ -39,7 +39,7 @@ const LikeActivity = ({ userId, show }) => {
     <>
       {(likedForumsLoading || likedRepliesLoading) && <p>Loading likes...</p>}
       {(likedForumsError || likedRepliesError) && (
-        <p className="errmsg">Error loading likes</p>
+        <p className="error-message">Error loading likes</p>
       )}
       {!likedForumsLoading &&
         !likedRepliesLoading &&
@@ -53,10 +53,10 @@ const LikeActivity = ({ userId, show }) => {
         !likedRepliesError &&
         (likedForums.length > 0 || likedReplies.length > 0) && (
           <>
-            <div className="all-notifications__header">
+            <div className="notifications-page__header">
               <h1>My Likes</h1>
             </div>
-            <div className="all-notifications__content">
+            <div className="notifications-page__content">
               <ul>
                 {[
                   ...likedForums.map((forum) => ({
@@ -70,7 +70,7 @@ const LikeActivity = ({ userId, show }) => {
                 ]
                   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
                   .map((like) => (
-                    <li key={like._id} className="all-notifications__item">
+                    <li key={like._id} className="notifications-page__item">
                       <Like
                         like={like}
                         type={like._likeType}

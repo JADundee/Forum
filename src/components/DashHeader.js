@@ -182,7 +182,7 @@ const DashHeader = () => {
     notificationButton = (
       <div ref={notificationButtonRef} style={{ position: "relative" }}>
         <button
-          className="icon-button notification-button"
+          className="button--icon notification-button"
           title="Notifications"
           onClick={(e) => {
             e.stopPropagation();
@@ -190,7 +190,7 @@ const DashHeader = () => {
           }}>
           <FontAwesomeIcon icon={faBell} />
           {unreadCount > 0 && (
-            <span className="notification-badge">{unreadCount}</span>
+            <span className="notification__badge">{unreadCount}</span>
           )}
         </button>
         <NotificationDropdown
@@ -214,7 +214,7 @@ const DashHeader = () => {
    // Renders the Users button for navigation to the users page (admin only).
   const renderUsersButton = isWelcomePage && (
     <button
-      className="icon-button"
+      className="button--icon"
       title="Users"
       onClick={handleNavigate("/dash/users")}>
       <FontAwesomeIcon icon={faUserGear} />
@@ -224,7 +224,7 @@ const DashHeader = () => {
    // Renders the Profile button for navigation to the user's profile page.
   const profileButton = !isProfilePage && (
     <button
-      className="icon-button"
+      className="button--icon"
       title="Profile"
       onClick={handleNavigate("/dash/profile")}>
       <FontAwesomeIcon icon={faUser} />
@@ -233,7 +233,7 @@ const DashHeader = () => {
 
    // Renders the Logout button to trigger user logout.
   const logoutButton = (
-    <button className="icon-button" title="Logout" onClick={logoutHandler}>
+    <button className="button--icon" title="Logout" onClick={logoutHandler}>
       <FontAwesomeIcon icon={faRightFromBracket} />
     </button>
   );
@@ -243,7 +243,7 @@ const DashHeader = () => {
    // Renders the New Forum button for navigation to the new forum creation page.
   const renderNewForumButton = () => (
     <button
-      className="icon-button"
+      className="button--icon"
       title="New Forum"
       onClick={handleNavigate("/dash/forums/new")}>
       <FontAwesomeIcon icon={faFileCirclePlus} />
@@ -253,7 +253,7 @@ const DashHeader = () => {
    // Renders the Forums button for navigation to the forums list page.
   const renderForumsButton = () => (
     <button
-      className="icon-button"
+      className="button--icon"
       title="Forums"
       onClick={handleNavigate("/dash/forums")}>
       <FontAwesomeIcon icon={faFile} />
@@ -263,7 +263,7 @@ const DashHeader = () => {
    // Renders the Edit Forum button for navigation to the forum edit page.
   const renderEditForumButton = () => (
     <button
-      className="icon-button"
+      className="button--icon"
       title="Edit Forum"
       onClick={handleNavigate(`/dash/forums/${id}/edit`)}>
       <FontAwesomeIcon icon={faFilePen} />
@@ -301,9 +301,9 @@ const DashHeader = () => {
       {/* Display error message if present */}
       <p className={errClass}>{error?.data?.message}</p>
 
-      <header className="dash-header">
+      <header className="dashboard-header">
         <div
-          className="dash-header__container">
+          className="dashboard-header__container">
           {/* Branding: Forum title, links to dashboard if not on main dash */}
           {isDash ? (
             <h1 className="dash-header__title dash-header__title--disabled">
@@ -315,7 +315,7 @@ const DashHeader = () => {
             </Link>
           )}
           {/* Navigation buttons: forums, new forum, edit, users, notifications, profile, logout */}
-          <nav className="dash-header__nav">{buttonContent}</nav>
+          <nav className="dashboard-header__nav">{buttonContent}</nav>
         </div>
       </header>
     </>

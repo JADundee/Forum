@@ -74,7 +74,7 @@ const ResetPassword = () => {
         {message && (
           <>
             <p className="msgmsg">{message}</p>
-            <div className="form__action-buttons">
+            <div className="form__actions">
               <button
                 className="button"
                 type="button"
@@ -84,7 +84,7 @@ const ResetPassword = () => {
             </div>
           </>
         )}
-        {error && <p className="errmsg">{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         {!message && (
           <form className="form" onSubmit={handleSubmit}>
             <label htmlFor="password">
@@ -111,9 +111,9 @@ const ResetPassword = () => {
               required
             />
             {!passwordsMatch && (
-              <p className="errmsg">Passwords do not match</p>
+              <p className="error-message">Passwords do not match</p>
             )}
-            <div className="form__action-buttons">
+            <div className="form__actions">
               <button className={`button`} type="submit" disabled={!canSubmit}>
                 {loading ? "Resetting..." : "Reset Password"}
               </button>

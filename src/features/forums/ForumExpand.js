@@ -71,7 +71,7 @@ const ForumExpand = () => {
       forum.username !== username &&
       window.location.pathname.includes("edit"))
   ) {
-    return <p className="errmsg">No access</p>;
+    return <p className="error-message">No access</p>;
   }
 
   if (isLoading) {

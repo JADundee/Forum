@@ -29,7 +29,7 @@ const DataTable = ({
               className={col.className}
               onClick={col.sortable ? () => onSort(col.key) : undefined}>
               {/* Column label and sort indicator */}
-              <span className="header-text">{col.label}</span>
+              <span className="table__header-text">{col.label}</span>
               {col.sortable && sortConfig && sortConfig.key === col.key ? (
                 <span>{sortConfig.direction === "desc" ? "▼" : "▲"}</span>
               ) : (

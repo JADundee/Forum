@@ -45,11 +45,11 @@ const Modal = forwardRef(
     return (
       <div className="modal-overlay" onClick={() => setIsOpen(false)}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+        <div className="modal__header">
          Confirm Delete
         </div>
         <p>{message}</p>
-        <div className="modal-actions">
+        <div className="modal__actions">
           <button
             className="confirm-btn"
             onClick={handleConfirm}

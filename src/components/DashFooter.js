@@ -16,7 +16,7 @@ const DashFooter = () => {
 
   // Renders the footer content including user info, permissions, and date. 
   const content = (
-    <footer className="dash-footer">
+    <footer className="dashboard__footer">
       {/* Display current user */}
       <p>Current User: {username}</p>
       {/* Display user permissions */}

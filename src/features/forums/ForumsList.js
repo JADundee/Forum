@@ -34,7 +34,7 @@ const ForumsList = () => {
 
   // Show error message if fetching forums failed
   if (isError) {
-    content = <p className="errmsg">{error?.data?.message}</p>;
+    content = <p className="error-message">{error?.data?.message}</p>;
   }
 
   // Render forums table if fetch was successful
@@ -63,7 +63,7 @@ const ForumsList = () => {
 
     content = (
       <>
-        <div className="search-filter">
+        <div className="table__search-filter">
           <input
             type="text"
             placeholder="Search by title or owner..."

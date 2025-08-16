@@ -53,7 +53,7 @@ const NotificationItem = ({ notification }) => (
       </>
     )}
     {/* Render notification timestamp */}
-    <p className="all-notifications__timestamp">
+    <p className="notifications__timestamp">
       <span className="timestamp">
         {moment(notification.createdAt).fromNow()}
       </span>

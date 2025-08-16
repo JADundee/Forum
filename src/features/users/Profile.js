@@ -216,14 +216,14 @@ const Profile = () => {
           </button>
           {/* Activity type selection buttons, shown when activity section is open and no activity is selected */}
           <div
-            className={`profile-buttons-transition${
+            className={`profile__buttons-transition${
               showActivity && !selectedActivity ? " show" : ""
             }`}
           >
             {activities.map((act) => (
               <button
                 key={act.key}
-                className="button profile-btn"
+                className="button profile__button"
                 type="button"
                 tabIndex={showActivity ? 0 : -1}
                 onClick={() => handleActivitySelect(act.key)}>
@@ -234,7 +234,7 @@ const Profile = () => {
 
           {/* Forums activity section */}
           <div
-            className={`profile-buttons-transition${
+            className={`profile__buttons-transition${
               showActivity && selectedActivity === "forums" ? " show" : ""
             }`}>
             <ForumActivity
@@ -246,7 +246,7 @@ const Profile = () => {
 
           {/* Replies activity section */}
           <div
-            className={`profile-buttons-transition${
+            className={`profile__buttons-transition${
               showActivity && selectedActivity === "replies" ? " show" : ""
             }`}>
             <ReplyActivity
@@ -258,7 +258,7 @@ const Profile = () => {
 
           {/* Likes activity section */}
           <div
-            className={`profile-buttons-transition${
+            className={`profile__buttons-transition${
               showActivity && selectedActivity === "likes" ? " show" : ""
             }`}>
             <LikeActivity
@@ -276,7 +276,7 @@ const Profile = () => {
                 {showChangePwd ? "Cancel" : "Change Password"}
               </button>
               <div
-                className={`profile-buttons-transition${
+                className={`profile__buttons-transition${
                   showChangePwd ? " show" : ""
                 }`}>
                 <form
@@ -289,7 +289,7 @@ const Profile = () => {
                   </div>
                   {/* Error message for password update */}
                   {isError && (
-                    <p className="errmsg">
+                    <p className="error-message">
                       {error?.data?.message || "Error updating password"}
                     </p>
                   )}
@@ -323,7 +323,7 @@ const Profile = () => {
                     autoComplete="new-password"
                   />
                   {/* Password validation error */}
-                  {getPwdError() && <p className="errmsg">{getPwdError()}</p>}
+                  {getPwdError() && <p className="error-message">{getPwdError()}</p>}
                   {/* Confirm password input */}
                   <label htmlFor="confirm-password">
                     Confirm New Password:
@@ -341,9 +341,9 @@ const Profile = () => {
                   />
                   {/* Confirm password validation error */}
                   {getConfirmError() && (
-                    <p className="errmsg">{getConfirmError()}</p>
+                    <p className="error-message">{getConfirmError()}</p>
                   )}
-                  <div className="form__action-buttons">
+                  <div className="form__actions">
                     <button
                       className="button"
                       type="submit"
@@ -367,13 +367,13 @@ const Profile = () => {
       {!showActivity && (
         <div>
           <button
-            className="button delete-button"
+            className="button button--delete"
             onClick={() => setShowDeleteConfirm(true)}
             disabled={isDeleting}>
             Delete My Account
           </button>
           <div
-            className={`profile-buttons-transition${
+            className={`profile__buttons-transition${
               showDeleteConfirm ? " show" : ""
             }`}>
             {/* Delete confirmation dialog */}
@@ -385,13 +385,13 @@ const Profile = () => {
                 </p>
                 <div>
                   <button
-                    className="button delete-button form__action-buttons"
+                    className="button button--delete form__actions"
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}>
                     {isDeleting ? "Deleting..." : "Yes, Delete My Account"}
                   </button>
                   <button
-                    className="button form__action-buttons"
+                    className="button form__actions"
                     onClick={() => setShowDeleteConfirm(false)}
                     disabled={isDeleting}>
                     Cancel
@@ -399,7 +399,7 @@ const Profile = () => {
                 </div>
                 {/* Error message for account deletion */}
                 {isDeleteError && (
-                  <p className="errmsg">
+                  <p className="error-message">
                     {deleteError?.data?.message || "Error deleting account"}
                   </p>
                 )}

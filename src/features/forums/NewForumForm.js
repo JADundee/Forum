@@ -83,7 +83,7 @@ const NewForumForm = ({ users }) => {
           placeholder="Enter text for this post"
           onChange={onTextChanged}
         />
-        <div className="form__action-buttons">
+        <div className="form__actions">
           <button className="button" title="Save" disabled={!canSave}>
             <p className="icon-text">Create </p>
           </button>

@@ -67,12 +67,12 @@ const NotificationsList = () => {
 
   // Renders the notifications list content.
   const content = (
-    <div className="all-notifications">
+    <div className="notifications">
       {/* Header section for notifications list */}
-      <div className="all-notifications__header">
+      <div className="notifications-page__header">
         <h1>All Notifications</h1>
         <button
-          className="button mark-all-read-btn"
+          className="button notifications-page__mark-all-read"
           onClick={handleMarkAllAsRead}
           disabled={unreadCount === 0 || isMarkingAll}>
           Mark all as read
@@ -80,12 +80,12 @@ const NotificationsList = () => {
       </div>
 
       {/* List of notifications */}
-      <ul className="all-notifications__content">
+      <ul className="notifications-page__content">
         {notifications.map((notification) => (
           <li
             key={notification.id}
-            className={`all-notifications__item ${
-              notification.read ? "notification-read" : ""
+            className={`notifications-page__item ${
+              notification.read ? "notification__item--read" : ""
             }`}
             onClick={() => handleNotificationClicked(notification)}>
             <div>
@@ -95,7 +95,7 @@ const NotificationsList = () => {
 
             {/* Button to delete notification */}
             <button
-              className="button delete-button"
+              className="button button--delete"
               onClick={(e) => handleDeleteNotification(e, notification.id)}
               disabled={isDeleting}
               title="Delete notification">

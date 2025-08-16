@@ -116,7 +116,7 @@ const EditForumForm = ({ forum }) => {
           </p>
         </div>
         <div
-          className="form__action-buttons"
+          className="form__actions"
         >
           {canEdit && (
             <>
@@ -135,7 +135,7 @@ const EditForumForm = ({ forum }) => {
                     </button>
                     <button
                       type="button"
-                      className="button delete-button"
+                      className="button button--delete"
                       onClick={() => setShowDeleteConfirm(true)}
                       title="Delete"
                     >
@@ -143,7 +143,7 @@ const EditForumForm = ({ forum }) => {
                     </button>
                     <button
                       type="button"
-                      className="button delete-button cancel-button"
+                      className="button button--delete cancel-button"
                       onClick={() => navigate(-1)}>
                       Cancel
                     </button>
@@ -158,7 +158,7 @@ const EditForumForm = ({ forum }) => {
                   <button
                     onClick={onDeleteForumClicked}
                     title="Yes, Delete"
-                    className="button delete-button"
+                    className="button button--delete"
                   >
                   Yes, Delete
                   </button>

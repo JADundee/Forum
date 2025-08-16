@@ -34,9 +34,9 @@ const MenuButton = ({ onEdit, onDeleteClick }) => {
         &#x22EE;
       </button>
 
-      <div className={`reply-actions-popover${open ? " show" : ""}`}>
+      <div className={`reply__actions-popover${open ? " show" : ""}`}>
         <div
-          className="reply-actions-item"
+          className="reply__actions-item"
           onClick={(e) => {
             e.stopPropagation();
             setOpen(false);
@@ -46,7 +46,7 @@ const MenuButton = ({ onEdit, onDeleteClick }) => {
          Edit
         </div>
         <div
-          className="reply-actions-item delete"
+          className="reply__actions-item--delete"
           onClick={(e) => {
             e.stopPropagation();
             setOpen(false);

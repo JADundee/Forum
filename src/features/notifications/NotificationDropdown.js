@@ -30,23 +30,23 @@ const NotificationDropdown = forwardRef(
         className={`notification-dropdown${isOpen ? " show" : ""}`}
         onClick={onDropdownClick}>
         {notificationsLoading ? (
-          <p className="notification-item">Loading...</p>
+          <p className="notification__item">Loading...</p>
         ) : notificationsError ? (
-          <p className="notification-item">Error fetching notifications</p>
+          <p className="notification__item">Error fetching notifications</p>
         ) : (
           <>
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`notification-item${
-                  notification.read ? " notification-read" : ""
+                className={`notification__item${
+                  notification.read ? " notification__item--read" : ""
                 }`}
                 onClick={() => onNotificationClicked(notification)}>
                 <NotificationItem notification={notification} />
               </div>
             ))}
             <button
-              className="button alt-button"
+              className="button button--alt"
               onClick={onMarkAllAsRead}
               disabled={unreadCount === 0 || isMarkingAll}>
               Mark all as read

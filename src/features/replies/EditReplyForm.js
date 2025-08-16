@@ -20,14 +20,14 @@ const EditReplyForm = ({ initialText, onSave, onCancel, loading }) => {
 
   return (
     // Render the edit reply form
-    <form onSubmit={handleSubmit} className="edit-reply-form">
+    <form onSubmit={handleSubmit} className="reply__edit-form">
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="edit-reply-textarea"
+        className="reply__edit-textarea"
         disabled={loading}
       />
-      <div className="edit-reply-buttons">
+      <div className="reply__edit-buttons">
         <button
           type="submit"
           className="button edit-reply__submit"

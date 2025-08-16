@@ -35,7 +35,7 @@ const EditForum = () => {
   // Check access: only admin or forum owner can edit
   if (!isAdmin) {
     if (forum.username !== username) {
-      return <p className="errmsg">No access</p>;
+      return <p className="error-message">No access</p>;
     }
   }
 
