@@ -1051,7 +1051,7 @@ a:hover, a:focus-visible {
 }
 
 .modal__actions .cancel-btn:hover {
-  background: var(--TABLE-ROW-HOVER);
+  background: var(--INACTIVE);
 }
 
 @keyframes reply-flash {

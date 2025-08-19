@@ -15,7 +15,7 @@ import RequireAuth from './features/auth/RequireAuth'
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
 import ForumExpand from './features/forums/ForumExpand'
-import NotificationsList from './features/notifications/NotificationsList'
+import NotificationsPage from './features/notifications/NotificationsPage'
 import ForgotPassword from './features/auth/ForgotPassword'
 import ResetPassword from './features/auth/ResetPassword'
 import Profile from './features/users/Profile'
@@ -43,7 +43,7 @@ function App() {
                 <Route path="profile" element={<Profile />} />
 
                 {/* Make notifications accessible to all authenticated users */}
-                <Route path="users/notifications/all" element={<NotificationsList />} />
+                <Route path="users/notifications/all" element={<NotificationsPage />} />
 
                 <Route element={<RequireAuth allowedRoles={[ ROLES.Admin ]} />}>
                   <Route path="users">

@@ -1,113 +1,84 @@
-import {
-  useGetNotificationsQuery,
-  useGetForumsQuery,
-  useMarkNotificationReadMutation,
-  useMarkAllNotificationsReadMutation,
-  useDeleteNotificationMutation,
-} from "../forums/forumsApiSlice";
-import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+// NotificationsList.js
 import NotificationItem from "./NotificationItem";
 
 /**
- * Component to display a list of all notifications.
- * Handles marking notifications as read, deleting, and navigation.
+ * Shared notifications renderer for dropdown and full-page list.
  */
-const NotificationsList = () => {
-  const navigate = useNavigate();
+const NotificationsList = ({
+  notifications,
+  onNotificationClicked,
+  onDeleteNotification,
+  showDelete = false,
+  unreadCount = 0,
+  isMarkingAll = false,
+  onMarkAllAsRead,
+  onSeeAll,
+  isDropdown = false,
+}) => {
+  return (
+    <>
+      {/* Header (only for full page) */}
+      {!isDropdown && (
+        <div className="notifications-page__header">
+          <h1>All Notifications</h1>
+          <button
+            className="button notifications-page__mark-all-read"
+            onClick={onMarkAllAsRead}
+            disabled={unreadCount === 0 || isMarkingAll}
+          >
+            Mark all as read
+          </button>
+        </div>
+      )}
 
-  const {
-    data: notificationsData,
-    isLoading,
-    isError,
-  } = useGetNotificationsQuery();
-  const { isLoading: forumsLoading, isError: forumsError } =
-    useGetForumsQuery();
-  const [markNotificationRead] = useMarkNotificationReadMutation();
-  const [markAllNotificationsRead, { isLoading: isMarkingAll }] =
-    useMarkAllNotificationsReadMutation();
-  const [deleteNotification, { isLoading: isDeleting }] =
-    useDeleteNotificationMutation();
-
-  // Handles clicking a notification: marks as read and navigates to forum.
-  const handleNotificationClicked = useCallback(
-    async (notification) => {
-      await markNotificationRead(notification.id);
-      navigate(`/dash/forums/${notification.forumId}/expand`);
-    },
-    [markNotificationRead, navigate]
-  );
-
-  // Handles deleting a notification.
-  const handleDeleteNotification = useCallback(
-    async (e, notificationId) => {
-      e.stopPropagation();
-      await deleteNotification(notificationId);
-    },
-    [deleteNotification]
-  );
-
-  if (isLoading || forumsLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError || forumsError) {
-    return <p>Error fetching notifications or forums</p>;
-  }
-
-  const notifications = notificationsData || [];
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
-  // Handles marking all notifications as read.
-  const handleMarkAllAsRead = async () => {
-    if (unreadCount > 0) {
-      await markAllNotificationsRead();
-    }
-  };
-
-  // Renders the notifications list content.
-  const content = (
-    <div className="notifications">
-      {/* Header section for notifications list */}
-      <div className="notifications-page__header">
-        <h1>All Notifications</h1>
-        <button
-          className="button notifications-page__mark-all-read"
-          onClick={handleMarkAllAsRead}
-          disabled={unreadCount === 0 || isMarkingAll}>
-          Mark all as read
-        </button>
-      </div>
-
-      {/* List of notifications */}
-      <ul className="notifications-page__content">
-        {notifications.map((notification) => (
+      {/* Notifications list */}
+      <ul
+        className={
+          isDropdown ? "notification-dropdown__list" : "notifications-page__content"
+        }
+      >
+        {notifications.map((n) => (
           <li
-            key={notification.id}
-            className={`notifications-page__item ${
-              notification.read ? "notification__item--read" : ""
+            key={n.id}
+            className={`notification__item ${
+              n.read ? "notification__item--read" : ""
             }`}
-            onClick={() => handleNotificationClicked(notification)}>
-            <div>
-              {/* Render individual notification item */}
-              <NotificationItem notification={notification} />
-            </div>
+            onClick={() => onNotificationClicked(n)}
+          >
+            <NotificationItem notification={n} />
 
-            {/* Button to delete notification */}
-            <button
-              className="button button--delete"
-              onClick={(e) => handleDeleteNotification(e, notification.id)}
-              disabled={isDeleting}
-              title="Delete notification">
-              {isDeleting ? "Deleting..." : "Delete"}
-            </button>
+            {showDelete && (
+              <button
+                className="button button--delete"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDeleteNotification(n.id);
+                }}
+              >
+                Delete
+              </button>
+            )}
           </li>
         ))}
       </ul>
-    </div>
-  );
 
-  return content;
+      {/* Footer actions (only in dropdown) */}
+      {isDropdown && (
+        <>
+          <button
+            className="button button--alt"
+            onClick={onMarkAllAsRead}
+            disabled={unreadCount === 0 || isMarkingAll}
+          >
+            Mark all as read
+          </button>
+          <button className="button" onClick={onSeeAll}>
+            See All Notifications
+          </button>
+        </>
+      )}
+    </>
+  );
 };
 
 export default NotificationsList;
