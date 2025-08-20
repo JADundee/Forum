@@ -30,13 +30,13 @@ const EditReplyForm = ({ initialText, onSave, onCancel, loading }) => {
       <div className="reply__edit-buttons">
         <button
           type="submit"
-          className="button edit-reply__submit"
+          className="button button--confirm"
           disabled={!canSave}>
           Save
         </button>
         <button
           type="button"
-          className="button edit-reply__cancel"
+          className="button--cancel"
           onClick={onCancel}
           disabled={loading}>
           Cancel

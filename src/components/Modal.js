@@ -51,14 +51,14 @@ const Modal = forwardRef(
         <p>{message}</p>
         <div className="modal__actions">
           <button
-            className="confirm-btn"
+            className="button--confirm"
             onClick={handleConfirm}
             disabled={loading}
           >
             {loading ? "Deleting..." : confirmText || "Yes, delete"}
           </button>
           <button
-            className="cancel-btn"
+            className="button--cancel"
             onClick={() => setIsOpen(false)}
             disabled={loading}
           >

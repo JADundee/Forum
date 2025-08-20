@@ -98,11 +98,6 @@
 
 .nowrap { white-space: nowrap; }
 .username { color: var(--LINK-COLOR); }
-.menu-button-container {
-  position: relative;
-  display: inline-block;
-  overflow: visible;
-}
 
 .offscreen {
   position: absolute;
@@ -198,8 +193,6 @@ a:hover, a:focus-visible {
   text-wrap: nowrap;
 }
 
-
-
 .button:hover {
   background: var(--BUTTON-GRADIENT-HOVER);
   transform: translateY(-2px);
@@ -235,6 +228,36 @@ a:hover, a:focus-visible {
   background: var(--INACTIVE);
 }
 
+.button--cancel {
+  border: 2px solid var(--BORDER-COLOR);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--RADIUS);
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  background-color: #f0f0f0;
+}
+
+.button--cancel:hover {
+  background: var(--INACTIVE);
+  transform: translateY(-2px);
+}
+
+.button--confirm {
+  background: var(--BUTTON-GRADIENT);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--RADIUS);
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+}
+
+.button--confirm:hover {
+  background: var(--BUTTON-GRADIENT-HOVER);
+  transform: translateY(-2px);
+}
+
 .menu-button {
   background: transparent;
   background-color: hsla(0, 0%, 0%, 0.157);
@@ -244,15 +267,6 @@ a:hover, a:focus-visible {
   padding: 0.5rem;
   width: 44px;
   height: 44px;
-}
-
-.table__cell .menu-button {
-  width: 44px;       /* match original menu-button size */
-  max-width: none;   /* remove table__cell restriction */
-  padding: 0.5rem;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .username-text {
@@ -431,13 +445,30 @@ a:hover, a:focus-visible {
   word-break: break-word;
   white-space: normal;
   max-width: 250px;
+  vertical-align: middle;
 }
 
 .table__cell button {
-  width: 100%;
-  max-width: 80px;
   padding: 0.5rem;
   font-size: 0.9rem;
+}
+
+.menu-button-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible;
+  height: 100%;   
+}
+
+.table__cell .menu-button {
+  width: 44px;       
+  max-width: none;   
+  padding: 0.5rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .table__search-filter {
@@ -951,13 +982,6 @@ a:hover, a:focus-visible {
   align-items: center;
   cursor: pointer;
   pointer-events: auto;
-  
-}
-
-.reply__actions-popover
-
-.table__row .action-buttons {
-  text-align: center;
 }
 
 /* MODAL */
@@ -1026,7 +1050,7 @@ a:hover, a:focus-visible {
   gap: 1rem;
 }
 
-.modal__actions .confirm-btn {
+.modal__actions .button--confirm {
   background: var(--DELETE-BUTTON-GRADIENT);
   border: none;
   padding: 0.75rem 1.5rem;
@@ -1037,21 +1061,17 @@ a:hover, a:focus-visible {
   flex: 1;
 }
 
-.modal__actions .confirm-btn:hover {
+.modal__actions .button--confirm:hover {
   background: var(--DELETE-BUTTON-GRADIENT-HOVER);
 }
 
-.modal__actions .cancel-btn {
+.modal__actions .button--cancel {
   border: 2px solid var(--BORDER-COLOR);
   padding: 0.75rem 1.5rem;
   border-radius: var(--RADIUS);
   font-weight: 600;
   cursor: pointer;
   flex: 1;
-}
-
-.modal__actions .cancel-btn:hover {
-  background: var(--INACTIVE);
 }
 
 @keyframes reply-flash {

@@ -34,8 +34,9 @@ const ForumActivity = () => {
 
   return (
     <>
-      <h1>Forums</h1>
-
+      <div className="notifications-page__header">
+        <h1>My Forums</h1>
+      </div>
       {isLoading && <p>Loading...</p>}
       {isError && <p className="error-message">Error loading forums</p>}
 
