@@ -55,7 +55,7 @@ const Profile = () => {
   const token = useSelector(selectCurrentToken);
 
   // Fetch all forums to count how many the user has created
-  const { data: forumsData } = useGetForumsQuery("forumsList");
+  const { data: forumsData } = useGetForumsQuery("forumsList", {refetchOnMountOrArgChange: true});
   // Calculate the number of forums created by the user
   const forumsCount = forumsData
     ? forumsData.ids.filter(
@@ -66,6 +66,7 @@ const Profile = () => {
   // Fetch the number of replies by the user
   const { data: repliesCount = 0 } = useGetRepliesCountByUserQuery(userId, {
     skip: !userId,
+    refetchOnMountOrArgChange: true,
   });
 
   // Handler for selecting a user activity type (forums, replies, likes)
