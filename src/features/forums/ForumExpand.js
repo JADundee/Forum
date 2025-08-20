@@ -172,6 +172,7 @@ const ForumExpand = () => {
         <ReplyForm
           forumId={forum.id}
           userId={forum.user}
+          username={username}
           refetchReplies={refetch}
           onReplySubmitted={handleReplySubmitted}
         />
