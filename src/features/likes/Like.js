@@ -8,7 +8,7 @@ const LikeItem = ({ like, type, onClick }) => {
   // Render like item for a forum
   if (type === "forum") {
     return (
-      <div className="like-item-clickable" onClick={onClick}>
+      <div onClick={onClick}>
         <p className="notifications__text">
           You liked the forum: <span className="forum-title">{like.title}</span>
           {like.user?.username && (
@@ -28,7 +28,6 @@ const LikeItem = ({ like, type, onClick }) => {
   if (type === "reply") {
     return (
       <div
-        className="like-item-clickable"
         onClick={onClick}
       >
         <p className="notifications__text">

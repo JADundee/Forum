@@ -97,7 +97,7 @@ const EditForumForm = ({ forum }) => {
           Text:
         </label>
         <textarea
-          className={`form__input form__input--text ${getInputClass(text)}`}
+          className={`form__input ${getInputClass(text)}`}
           id="forum-text"
           name="text"
           value={text}
@@ -143,7 +143,7 @@ const EditForumForm = ({ forum }) => {
                     </button>
                     <button
                       type="button"
-                      className="button button--delete cancel-button"
+                      className="button button--cancel"
                       onClick={() => navigate(-1)}>
                       Cancel
                     </button>
@@ -152,9 +152,9 @@ const EditForumForm = ({ forum }) => {
               </div>
               {showDeleteConfirm && (
                 <div className="confirm-delete">
-                  <span className="confirm-delete__text">
+                 
                     Are you sure?
-                  </span>
+                 
                   <button
                     onClick={onDeleteForumClicked}
                     title="Yes, Delete"
@@ -164,7 +164,7 @@ const EditForumForm = ({ forum }) => {
                   </button>
                   <button
                     type="button"
-                    className="button"
+                    className="button button--cancel"
                     onClick={() => setShowDeleteConfirm(false)}
                     title="Cancel"
                   >

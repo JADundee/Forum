@@ -358,7 +358,7 @@ const Profile = () => {
             </div>
           )}
           {/* Success message after password change */}
-          {successMsg && <p className="msgmsg">{successMsg}</p>}
+          {successMsg && <p className="success-message">{successMsg}</p>}
           {/* Divider below profile actions */}
           {!showActivity && <hr />}
         </div>

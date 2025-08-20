@@ -20,11 +20,11 @@ const DashFooter = () => {
       {/* Display current user */}
       <p>Current User: {username}</p>
       {/* Display user permissions */}
-      <span className="dash-footer-permissions">
+      <span className="dashboard__footer-permissions">
         <p>Permissions: {status}</p>
       </span>
       {/* Display today's date */}
-      <p className="dash-footer-date">{today}</p>
+      <p className="dashboard__footer-date">{today}</p>
     </footer>
   );
   return content;

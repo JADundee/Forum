@@ -73,7 +73,7 @@ const ResetPassword = () => {
       <main className="login">
         {message && (
           <>
-            <p className="msgmsg">{message}</p>
+            <p className="success-message">{message}</p>
             <div className="form__actions">
               <button
                 className="button"

@@ -182,7 +182,7 @@ const DashHeader = () => {
     notificationButton = (
       <div ref={notificationButtonRef} style={{ position: "relative" }}>
         <button
-          className="button--icon notification-button"
+          className="button--icon"
           title="Notifications"
           onClick={(e) => {
             e.stopPropagation();
@@ -238,7 +238,7 @@ const DashHeader = () => {
     </button>
   );
 
-  const errClass = isError ? "errmsg" : "offscreen";
+  const errClass = isError ? "error-message" : "offscreen";
 
    // Renders the New Forum button for navigation to the new forum creation page.
   const renderNewForumButton = () => (
@@ -306,12 +306,12 @@ const DashHeader = () => {
           className="dashboard-header__container">
           {/* Branding: Forum title, links to dashboard if not on main dash */}
           {isDash ? (
-            <h1 className="dash-header__title dash-header__title--disabled">
+            <h1 className="dashboard-header__title dashboard-header__title--disabled">
               Forum
             </h1>
           ) : (
             <Link to="/dash">
-              <h1 className="dash-header__title">Forum</h1>
+              <h1 className="dashboard-header__title">Forum</h1>
             </Link>
           )}
           {/* Navigation buttons: forums, new forum, edit, users, notifications, profile, logout */}

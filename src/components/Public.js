@@ -69,7 +69,7 @@ const Public = () => {
   };
 
   // Error message class for accessibility
-  const errClass = errMsg ? "errmsg" : "offscreen";
+  const errClass = errMsg ? "error-message" : "offscreen";
 
   // Handlers for input changes
   const handleUserInput = (e) => setUsername(e.target.value);

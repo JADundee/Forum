@@ -80,7 +80,7 @@ const Register = () => {
 
   const navigateHome = () => navigate("/");
 
-  const errClass = isError ? "errmsg" : "offscreen";
+  const errClass = isError ? "error-message" : "offscreen";
   const getInputClass = (field) =>
     !valid[field] ? "form__input--incomplete" : "";
 

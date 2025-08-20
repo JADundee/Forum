@@ -36,7 +36,7 @@ const ForgotPassword = () => {
       <PublicHeader />
       <h2>Forgot Password</h2>
       <main className="login">
-        {message && <p className="msgmsg">{message}</p>}
+        {message && <p className="success-message">{message}</p>}
         {error && <p className="error-message">{error}</p>}
         {!message && (
           <form className="form" onSubmit={handleSubmit}>
