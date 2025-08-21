@@ -21,7 +21,7 @@ import ResetPassword from './features/auth/ResetPassword'
 import Profile from './features/users/Profile'
 
 function App() {
-  useTitle('theForum')
+  useTitle('Forum')
 
   return (
     <Routes>
