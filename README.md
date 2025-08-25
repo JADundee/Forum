@@ -4,7 +4,6 @@
 ## Portfolio: WIP
 ## Email: jadundee@icloud.com
 
-# TODO
-## add auto complete to input elements 
-## Various CSS fixes
-## prep for deployment
+# Testing Profile:
+## Username: Test
+## Password: !123
