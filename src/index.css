@@ -511,13 +511,13 @@ a:hover, a:focus-visible {
   background: transparent;
   border: 2px solid var(--BUTTON);
   border-radius: 50%;
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   color: var(--BUTTON);
 }
 
@@ -527,13 +527,13 @@ a:hover, a:focus-visible {
   transform: scale(1.1);
 }
 
-.like-button--liked {
+.like-button.liked {
   background-color: var(--BUTTON);
   color: white;
   border-color: var(--BUTTON);
 }
 
-.like-button--liked:hover {
+.like-button.liked:hover {
   background-color: var(--BUTTON-HOVER);
   border-color: var(--BUTTON-HOVER);
 }
