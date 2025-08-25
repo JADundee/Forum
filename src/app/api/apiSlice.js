@@ -3,7 +3,7 @@ import { setCredentials } from "../../features/auth/authSlice";
 
 // Base query setup for all API requests, including attaching auth token if present
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://forum-ahrf.onrender.com",
+  baseUrl: "https://forum-ahrf-api.onrender.com",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.token;
