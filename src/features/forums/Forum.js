@@ -26,7 +26,9 @@ const Forum = ({ forumId, children }) => {
       <td className="table__cell">{forum.username}</td>
       <td className="table__cell table__created">{created}</td>
       <td className="table__cell table__updated">{updated}</td>
-      <td className="table__cell action-buttons">{children}</td> {/* Actions get passed in from parent */}
+      {children ? (
+        <td className="table__cell action-buttons">{children}</td>
+      ) : null}
     </tr>
   );
 };
